@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+.venv/
+venv/
+
+# Binaries and libraries
+*.dll
+*.so
+*.dylib
+*.exe
+*.pyd
+*.lib
+*.db
+*.zip
+
+# Vivado generated files
+Audio_Controller_Logic/Audio_Controller_Logic.cache/
+Audio_Controller_Logic/Audio_Controller_Logic.hw/
+Audio_Controller_Logic/Audio_Controller_Logic.ip_user_files/
+Audio_Controller_Logic/Audio_Controller_Logic.sim/
+Audio_Controller_Logic/Audio_Controller_Logic.runs/
+Audio_Controller_Logic/Audio_Controller_Logic.gen/
+Audio_Controller_Logic/.Xil/
+
+# Tools - third party distributions
+tools/memprocfs/.venv/
+tools/memprocfs/dist/
+tools/memprocfs/*.zip
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
