@@ -8,7 +8,11 @@
 //
 //  概述
 //  ----
-//  顶层集成模块，桥接物理 PCIe 接口到内部配置空间控制器。
+//  顶层集成模块，桥接物理 PCIe 接口到内部音频控制器逻辑。
+//  数据路径:
+//    RX: PCIe IP → bar0_hda_sim (BAR0 寄存器仿真，解析 MRd/MWr)
+//    TX: bar0_hda_sim (CplD 生成) → tlp_tag_randomizer (Tag 随机化) → PCIe IP
+//
 //  基于 Vivado 生成的 pcie_7x_0 IP (.veo) 完整端口列表，
 //  确保所有输入端口均显式连接，消除 BlackBox 未连接警告。
 //
@@ -61,6 +65,36 @@ module hda_pcie_top (
     // 配置管理接口
     wire [31:0] cfg_mgmt_do;
     wire        cfg_mgmt_rd_wr_done;
+
+    // PCIe IP AXI-Stream RX 输出 (IP → BAR0 仿真器)
+    wire [63:0] rx_tdata;
+    wire [ 7:0] rx_tkeep;
+    wire        rx_tlast;
+    wire        rx_tvalid;
+    wire        rx_tready;
+    wire [21:0] rx_tuser;
+
+    // BAR0 仿真器 TX 输出 → TLP Tag 随机化器输入
+    wire [63:0] bar_tx_tdata;
+    wire [ 7:0] bar_tx_tkeep;
+    wire        bar_tx_tlast;
+    wire        bar_tx_tvalid;
+    wire        bar_tx_tready;
+    wire [ 3:0] bar_tx_tuser;
+
+    // TLP Tag 随机化器输出 → PCIe IP TX 输入
+    wire [63:0] tag_tx_tdata;
+    wire [ 7:0] tag_tx_tkeep;
+    wire        tag_tx_tlast;
+    wire        tag_tx_tvalid;
+    wire        tag_tx_tready;
+    wire [ 3:0] tag_tx_tuser;
+
+    // Completer ID (Bus/Device/Function)
+    wire [ 7:0] cfg_bus_number;
+    wire [ 4:0] cfg_device_number;
+    wire [ 2:0] cfg_function_number;
+    wire [15:0] completer_id = {cfg_bus_number, cfg_device_number, cfg_function_number};
 
     // ===================================================================
     //  差分参考时钟缓冲器 (IBUFDS_GTE2)
@@ -115,25 +149,25 @@ module hda_pcie_top (
         .user_lnk_up                    (user_lnk_up),
         .user_app_rdy                   (),
 
-        // ---- AXI4-Stream 发送 (暂不使用，全部拉低) ----
-        .s_axis_tx_tdata                (64'h0),
-        .s_axis_tx_tkeep                (8'h0),
-        .s_axis_tx_tlast                (1'b0),
-        .s_axis_tx_tvalid               (1'b0),
-        .s_axis_tx_tready               (),
-        .s_axis_tx_tuser                (4'h0),
+        // ---- AXI4-Stream 发送 (经 Tag 随机化器输出) ----
+        .s_axis_tx_tdata                (tag_tx_tdata),
+        .s_axis_tx_tkeep                (tag_tx_tkeep),
+        .s_axis_tx_tlast                (tag_tx_tlast),
+        .s_axis_tx_tvalid               (tag_tx_tvalid),
+        .s_axis_tx_tready               (tag_tx_tready),
+        .s_axis_tx_tuser                (tag_tx_tuser),
         .tx_cfg_gnt                     (1'b1),
         .tx_buf_av                      (),
         .tx_cfg_req                     (),
         .tx_err_drop                    (),
 
-        // ---- AXI4-Stream 接收 (暂不使用) ----
-        .m_axis_rx_tdata                (),
-        .m_axis_rx_tkeep                (),
-        .m_axis_rx_tlast                (),
-        .m_axis_rx_tvalid               (),
-        .m_axis_rx_tready               (1'b1),
-        .m_axis_rx_tuser                (),
+        // ---- AXI4-Stream 接收 (送往 BAR0 仿真器) ----
+        .m_axis_rx_tdata                (rx_tdata),
+        .m_axis_rx_tkeep                (rx_tkeep),
+        .m_axis_rx_tlast                (rx_tlast),
+        .m_axis_rx_tvalid               (rx_tvalid),
+        .m_axis_rx_tready               (rx_tready),
+        .m_axis_rx_tuser                (rx_tuser),
         .rx_np_ok                       (1'b1),
         .rx_np_req                      (1'b1),
 
@@ -219,10 +253,10 @@ module hda_pcie_top (
         // 64 位 DSN，与 cfg 子模块中的 DEVICE_SERIAL_NUMBER 一致
         .cfg_dsn                        (64'hA7C3_E5F1_2D8C_49B6),
 
-        // ---- 配置总线号 ----
-        .cfg_bus_number                 (),
-        .cfg_device_number              (),
-        .cfg_function_number            (),
+        // ---- 配置总线号 (用于 CplD Completer ID) ----
+        .cfg_bus_number                 (cfg_bus_number),
+        .cfg_device_number              (cfg_device_number),
+        .cfg_function_number            (cfg_function_number),
         .cfg_ds_bus_number              (8'h0),
         .cfg_ds_device_number           (5'h0),
         .cfg_ds_function_number         (3'h0),
@@ -326,6 +360,63 @@ module hda_pcie_top (
         .cfg_wr_be      (4'h0),
         .cfg_rd_data    (),
         .cfg_rd_valid   ()
+    );
+
+    // ===================================================================
+    //  BAR0 HDA 寄存器交互仿真 (D2-3)
+    // ===================================================================
+    //
+    // 解析 RX 路径上的 Memory Read/Write TLP，返回符合 AE-9 HDA
+    // 规范的寄存器值。CplD 报文输出到 TX 路径。
+
+    bar0_hda_sim u_bar0_sim (
+        .clk                (user_clk),
+        .rst_n              (user_rst_n),
+        .completer_id       (completer_id),
+
+        // RX: 来自 PCIe IP
+        .m_axis_rx_tdata    (rx_tdata),
+        .m_axis_rx_tkeep    (rx_tkeep),
+        .m_axis_rx_tlast    (rx_tlast),
+        .m_axis_rx_tvalid   (rx_tvalid),
+        .m_axis_rx_tready   (rx_tready),
+        .m_axis_rx_tuser    (rx_tuser),
+
+        // TX: 输出到 Tag 随机化器
+        .s_axis_tx_tdata    (bar_tx_tdata),
+        .s_axis_tx_tkeep    (bar_tx_tkeep),
+        .s_axis_tx_tlast    (bar_tx_tlast),
+        .s_axis_tx_tvalid   (bar_tx_tvalid),
+        .s_axis_tx_tready   (bar_tx_tready),
+        .s_axis_tx_tuser    (bar_tx_tuser)
+    );
+
+    // ===================================================================
+    //  TLP Tag 随机化器 (D2-2)
+    // ===================================================================
+    //
+    // 拦截所有出站 TLP，将 Header 中的 Tag 字段替换为 LFSR 伪随机值，
+    // 消除 FPGA PCIe IP 默认的顺序递增 Tag 特征。
+
+    tlp_tag_randomizer u_tag_rand (
+        .clk                    (user_clk),
+        .rst_n                  (user_rst_n),
+
+        // 输入: 来自 BAR0 仿真器
+        .s_axis_tx_tdata_in     (bar_tx_tdata),
+        .s_axis_tx_tkeep_in     (bar_tx_tkeep),
+        .s_axis_tx_tlast_in     (bar_tx_tlast),
+        .s_axis_tx_tvalid_in    (bar_tx_tvalid),
+        .s_axis_tx_tready_in    (bar_tx_tready),
+        .s_axis_tx_tuser_in     (bar_tx_tuser),
+
+        // 输出: 送往 PCIe IP
+        .s_axis_tx_tdata_out    (tag_tx_tdata),
+        .s_axis_tx_tkeep_out    (tag_tx_tkeep),
+        .s_axis_tx_tlast_out    (tag_tx_tlast),
+        .s_axis_tx_tvalid_out   (tag_tx_tvalid),
+        .s_axis_tx_tready_out   (tag_tx_tready),
+        .s_axis_tx_tuser_out    (tag_tx_tuser)
     );
 
     // ===================================================================
