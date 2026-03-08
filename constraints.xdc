@@ -123,6 +123,20 @@ set_false_path -from [get_ports pcie_rst_n]
 
 set_false_path -to [get_ports led_status]
 
+# ---------------------------------------------------------------------------
+#  异步时钟域隔离 — PCIe 时钟 vs MMCM 24 MHz Wall Clock
+# ---------------------------------------------------------------------------
+#  pcie_sys_clk 域 (100 MHz REFCLK → PCIe IP 内部 user_clk 62.5 MHz)
+#  与 u_mmcm_walclk 产生的 24 MHz Wall Clock 是完全异步的两个时钟域。
+#  RTL 中已使用 toggle + 3 级同步器进行跨域处理，无需 Vivado 强行
+#  对齐这两个域之间的时序路径。
+#
+#  此约束消除 WNS 时序违规报告中 clk_24m 相关的跨域路径。
+
+set_clock_groups -asynchronous \
+    -group [get_clocks pcie_sys_clk] \
+    -group [get_clocks -of_objects [get_pins u_mmcm_walclk/CLKOUT0]]
+
 
 # ===========================================================================
 #  Bitstream 配置 (Flash 烧录参数)
@@ -133,6 +147,13 @@ set_property BITSTREAM.CONFIG.SPI_BUSWIDTH  4       [current_design]
 
 # 配置时钟频率: 50 MHz
 set_property BITSTREAM.CONFIG.CONFIGRATE    50      [current_design]
+
+# SPI Flash 下降沿采样 (增加时序余量, 提高可靠性)
+set_property BITSTREAM.CONFIG.SPI_FALL_EDGE YES     [current_design]
+
+# 注: PERSIST 已移除 — Artix-7 PCIe 设计中 SPI 引脚在配置完成后
+# 由 UNUSEDPIN=PULLUP 保护, 不需要 PERSIST (且 PERSIST 要求
+# CONFIG_MODE 引脚约束, 会触发 DRC PRST-1)。
 
 # 内部配置电压: 3.3V (匹配 Captain 开发板设计)
 set_property CONFIG_VOLTAGE                 3.3     [current_design]

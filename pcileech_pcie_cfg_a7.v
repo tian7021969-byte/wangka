@@ -109,6 +109,10 @@ module pcileech_pcie_cfg_a7 #(
     input  wire         clk,            // PCIe user clock (62.5 / 125 MHz)
     input  wire         rst_n,          // Active-low synchronous reset
 
+    // 运行时 DSN 输入 (全 64 位动态化, 由顶层在链路建立时锁定)
+    input  wire [63:0]  dsn_runtime,    // Runtime Device Serial Number
+    input  wire         dsn_valid,      // DSN 已锁定 (1=使用 dsn_runtime)
+
     // PCIe Configuration TLP Interface
     // Directly driven by the Xilinx 7-Series Integrated Endpoint
     // Block's configuration port (cfg_mgmt_* signals).
@@ -165,6 +169,12 @@ module pcileech_pcie_cfg_a7 #(
     //   Bits [13:0]  hardwired to 0 (memory, 32-bit, non-prefetchable)
     localparam [31:0] BAR0_SIZE_MASK      = 32'hFFFF_C000;
 
+    // Expansion ROM BAR sizing mask — 64 KB region
+    //   Bits [31:16] writable → size = 2^16 = 65536 = 64 KB
+    //   Bit [0] = ROM Enable (host writable)
+    //   Bits [10:1] reserved, hardwired to 0
+    localparam [31:0] EXPROM_SIZE_MASK    = 32'hFFFF_0001;
+
     // Power Management Capability (offset 50h)
     //   Cap ID = 01h, Next Ptr = 60h
     //   PMC: Version 3, D0/D3hot support, PME from D0 and D3hot
@@ -202,6 +212,7 @@ module pcileech_pcie_cfg_a7 #(
     localparam [9:0] DWADDR_INT_LINE     = 10'd15;  // offset 3Ch
     localparam [9:0] DWADDR_PMCSR        = 10'd21;  // offset 54h
     localparam [9:0] DWADDR_MSIX_CTRL    = 10'd24;  // offset 60h
+    localparam [9:0] DWADDR_EXPROM       = 10'd12;  // offset 30h
 
     // ===================================================================
     //  CONFIGURATION SPACE MEMORY  (1024 DWORDs = 4 KB)
@@ -305,7 +316,9 @@ module pcileech_pcie_cfg_a7 #(
             cfgmem[11] <= {CFG_SUBSYS_DEVICE, CFG_SUBSYS_VENDOR};
 
             // DWORD 12 (30h): Expansion ROM Base Address
-            // No expansion ROM; hardwired to 0.
+            // 64 KB ROM region, initially disabled (Enable bit = 0).
+            // Host writes FFFFFFFFh for sizing → reads back FFFF0001h.
+            // 启用后主机可读取 ROM 内容 (由 bar0_hda_sim 提供混淆数据)。
             cfgmem[12] <= 32'h0000_0000;
 
             // DWORD 13 (34h): Capabilities Pointer
@@ -385,6 +398,20 @@ module pcileech_pcie_cfg_a7 #(
     end // always (reset)
 
     // ===================================================================
+    //  DSN 运行时更新 — 链路建立后用动态值覆盖静态初始值
+    // ===================================================================
+    //
+    // 当顶层的 dsn_valid 置位时, 将运行时 DSN 写入 cfgmem[65:66],
+    // 覆盖编译时静态参数值, 实现全 64 位动态隐身。
+
+    always @(posedge clk) begin
+        if (rst_n && dsn_valid) begin
+            cfgmem[65] <= dsn_runtime[31:0];
+            cfgmem[66] <= dsn_runtime[63:32];
+        end
+    end
+
+    // ===================================================================
     //  CONFIGURATION READ PATH
     // ===================================================================
     //
@@ -462,6 +489,15 @@ module pcileech_pcie_cfg_a7 #(
                     cfgmem[4] <= byte_merge(
                         cfgmem[4], cfg_wr_data, cfg_wr_be
                     ) & BAR0_SIZE_MASK;
+                end
+
+                DWADDR_EXPROM: begin
+                    // Expansion ROM BAR: 主机写 FFFFFFFF 进行 sizing,
+                    // 读回 FFFF0001 确定 64KB 大小。
+                    // Bit [0] = ROM Enable, bits [10:1] 保留。
+                    cfgmem[12] <= byte_merge(
+                        cfgmem[12], cfg_wr_data, cfg_wr_be
+                    ) & EXPROM_SIZE_MASK;
                 end
 
                 DWADDR_INT_LINE: begin

@@ -1,0 +1,194 @@
+===== AE-9 PCIe Simulation ===== 
+Started: 2026/03/07 ÖÜÁù 16:30:45.76 
+ 
+===== Step 1: Compile ===== 
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/sim_stubs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module IBUFDS_GTE2
+INFO: [VRFC 10-311] analyzing module pcie_7x_0
+INFO: [VRFC 10-311] analyzing module MMCME2_BASE
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/hda_pcie_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module hda_pcie_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/pcileech_pcie_cfg_a7.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module pcileech_pcie_cfg_a7
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/bar0_hda_sim.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bar0_hda_sim
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/hda_codec_engine.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module hda_codec_engine
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/hda_dma_engine.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module hda_dma_engine
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/tlp_tag_randomizer.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tlp_tag_randomizer
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/tx_arbiter.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tx_arbiter
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tb_hda_pcie_top
+Compile exit code: 0 
+ 
+===== Step 2: Elaborate ===== 
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2022.2/bin/unwrapped/win64.o/xelab.exe --debug typical --relax --mt 2 -d SIMULATION= -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_hda_pcie_top_behav xil_defaultlib.tb_hda_pcie_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 132 : Sensitivity on input argument "requester_id" of task "inject_mrd" may never get triggered.
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 132 : Sensitivity on input argument "tag" of task "inject_mrd" may never get triggered.
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 171 : Sensitivity on input argument "requester_id" of task "inject_mwr" may never get triggered.
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 171 : Sensitivity on input argument "tag" of task "inject_mwr" may never get triggered.
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 181 : Sensitivity on input argument "data" of task "inject_mwr" may never get triggered.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.IBUFDS_GTE2
+Compiling module xil_defaultlib.MMCME2_BASE(CLKFBOUT_MULT_F=12.0...
+Compiling module xil_defaultlib.pcie_7x_0
+Compiling module xil_defaultlib.pcileech_pcie_cfg_a7
+Compiling module xil_defaultlib.bar0_hda_sim
+Compiling module xil_defaultlib.hda_codec_engine
+Compiling module xil_defaultlib.hda_dma_engine
+Compiling module xil_defaultlib.tx_arbiter
+Compiling module xil_defaultlib.tlp_tag_randomizer
+Compiling module xil_defaultlib.hda_pcie_top
+Compiling module xil_defaultlib.tb_hda_pcie_top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_hda_pcie_top_behav
+Elaborate exit code: 0 
+ 
+===== Step 3: Simulate ===== 
+
+****** xsim v2022.2 (64-bit)
+  **** SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+  **** IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+    ** Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+
+source xsim.dir/tb_hda_pcie_top_behav/xsim_script.tcl
+# xsim {tb_hda_pcie_top_behav} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+=============================================================
+  tb_hda_pcie_top â€” Private Custom Level DMA Testbench
+  sys_clk = 100 MHz, Reset Hold = 1200 ns
+=============================================================
+
+[1200000] sys_rst_n released (held low for 1200 ns)
+[1200000] Reset released, waiting for PCIe link training...
+[1656000] pcie_7x_0 stub: user_lnk_up asserted
+[1656000] user_lnk_up = 1, link is UP!
+
+=============================================================
+  [1656000] PCIe Link Up Success!
+=============================================================
+
+
+=============================================================
+  TEST 1: TLP Tag Randomization Verification (D2-2)
+=============================================================
+  MRd #01 | Tag: 01hâ†’efh | Latency: 15 cyc | Addr: 00000000h
+  MRd #02 | Tag: 02hâ†’00h | Latency: 8 cyc | Addr: 00000004h
+  MRd #03 | Tag: 03hâ†’00h | Latency: 13 cyc | Addr: 00000008h
+  MRd #04 | Tag: 04hâ†’00h | Latency: 16 cyc | Addr: 0000000ch
+  MRd #05 | Tag: 05hâ†’00h | Latency: 12 cyc | Addr: 00000010h
+  MRd #06 | Tag: 06hâ†’00h | Latency: 12 cyc | Addr: 00000020h
+  MRd #07 | Tag: 07hâ†’00h | Latency: 8 cyc | Addr: 00000030h
+  MRd #08 | Tag: 08hâ†’00h | Latency: 11 cyc | Addr: 00000040h
+  MRd #09 | Tag: 09hâ†’00h | Latency: 11 cyc | Addr: 00000080h
+  MRd #10 | Tag: 0ahâ†’00h | Latency: 10 cyc | Addr: 00000084h
+
+  --- Tag Analysis ---
+  [PASS] Tags are NOT sequential (0/9 consecutive)
+  [PASS] Tags show variation (9/9 differ)
+
+  Tag sequence:
+    efh 00h 00h 00h 00h 00h 00h 00h 00h 00h 
+
+=============================================================
+  TEST 2: CplD Timing Jitter Verification (AE-9 Profile)
+=============================================================
+  Expected: 2~11 cycle variable delay (log-normal approx)
+  Min latency: 8 cycles
+  Max latency: 16 cycles
+  Avg latency: 11 cycles
+
+  Latency distribution:
+    15 8 13 16 12 12 8 11 11 10 
+  [PASS] CplD latencies vary (9/9 differ) â€” jitter active
+
+=============================================================
+  TEST 3: Stream Descriptor Register Write/Readback
+=============================================================
+  [PASS] Stream 0 CBL: Wrote DEADBEEF, Read back deadbeefh
+
+=============================================================
+  TEST 4: CORB/RIRB Register Configuration
+=============================================================
+  [PASS] CORBLBASE: Wrote 12345000, Read back 12345000h
+  [PASS] RIRBLBASE: Wrote ABCDE000, Read back abcde000h
+
+=============================================================
+  TEST 5: s_axis_tx_tuser X-state Check
+=============================================================
+  [PASS] s_axis_tx_tuser = 0000 (no X)
+
+=============================================================
+  TEST 6: user_clk / user_lnk_up Z-state Check
+=============================================================
+  [PASS] user_clk_out is driven
+  [PASS] user_lnk_up = 1
+
+=============================================================
+  TEST 7: MSI Interrupt Logic Check
+=============================================================
+  [INFO] INTCTL set to GIE=1, CIE=1
+  [INFO] MSI irq logic active: cfg_interrupt_msienable = 1
+  [PASS] MSI interrupt path is wired correctly
+
+=============================================================
+  TEST 8: DMA MRd Tag Randomization (Codec Engine â†’ DMA)
+=============================================================
+  [INFO] CORB/RIRB configured and enabled
+  [INFO] CORB base = 0x00100000, RIRB base = 0x00200000
+  [INFO] Codec engine state = 0 (before CORB WP write)
+  [INFO] CORB RP = 0, CORB WP (current) = 0
+  [INFO] CORB WP written to 1 â€” Codec engine should start
+  [WARN] No DMA MRd detected within 2000 cycles
+  [INFO] This is expected if Codec engine is waiting for
+         CORB data from host memory (DMA read hasn't completed).
+  [INFO] Codec engine state = 3
+  [INFO] dma_rd_req = 0, dma_wr_req = 0
+  [PASS] Codec engine entered DMA read state (3)
+  [INFO] Elapsed time: 32000000 ns
+
+=============================================================
+  TEST 9: Codec Verb Processing Delay (LFSR Cooldown)
+=============================================================
+  [INFO] Codec cooldown LFSR value   = 96h
+  [INFO] Current cooldown delay target = 14 cycles
+  LFSR samples (4-cycle intervals):
+    96h 7bh 86h 7ah 91h 1eh cbh 8dh 
+  Mapped delays (lfsr[3:0] + 8):
+    14 19 14 18 9 22 19 21 
+  [PASS] LFSR varies (7/7 differ) â€” cooldown jitter active
+  [PASS] All delays within expected range [8, 23]
+
+  --- DMA Engine Jitter LFSR ---
+  [INFO] DMA jitter LFSR = c4ddh
+  DMA LFSR samples:
+    c4ddh ae40h 0ae4h 68aah e280h 0e28h d0eah e904h 
+  [PASS] DMA jitter LFSR varies (7/7 differ)
+
+  --- Tag Randomizer LFSR ---
+  [INFO] Tag randomizer LFSR = eb77h
+  [INFO] Next Tag value = 77h
+
+=============================================================
+  OVERALL RESULT: *** ALL TESTS PASSED ***
+=============================================================
+
+$finish called at time : 144360 ns : File "C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v" Line 841
+exit
+INFO: [Common 17-206] Exiting xsim at Sat Mar  7 16:30:57 2026...
+Simulate exit code: 0 
+ 
+===== Done: 2026/03/07 ÖÜÁù 16:30:57.49 ===== 

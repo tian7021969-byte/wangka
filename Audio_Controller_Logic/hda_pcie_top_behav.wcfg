@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wave_config>
+   <wave_state>
+   </wave_state>
+   <db_ref_list>
+      <db_ref path="hda_pcie_top_behav.wdb" id="1">
+         <top_modules>
+            <top_module name="glbl" />
+            <top_module name="hda_pcie_top" />
+         </top_modules>
+      </db_ref>
+   </db_ref_list>
+   <zoom_setting>
+      <ZoomStartTime time="40,999,995 ps"></ZoomStartTime>
+      <ZoomEndTime time="41,000,001 ps"></ZoomEndTime>
+      <Cursor1Time time="41,000,000 ps"></Cursor1Time>
+   </zoom_setting>
+   <column_width_setting>
+      <NameColumnWidth column_width="276"></NameColumnWidth>
+      <ValueColumnWidth column_width="120"></ValueColumnWidth>
+   </column_width_setting>
+   <WVObjectSize size="43" />
+   <wvobject fp_name="/hda_pcie_top/pcie_clk_p" type="logic">
+      <obj_property name="ElementShortName">pcie_clk_p</obj_property>
+      <obj_property name="ObjectShortName">pcie_clk_p</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/pcie_clk_n" type="logic">
+      <obj_property name="ElementShortName">pcie_clk_n</obj_property>
+      <obj_property name="ObjectShortName">pcie_clk_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/pcie_rst_n" type="logic">
+      <obj_property name="ElementShortName">pcie_rst_n</obj_property>
+      <obj_property name="ObjectShortName">pcie_rst_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/pcie_tx_p" type="logic">
+      <obj_property name="ElementShortName">pcie_tx_p</obj_property>
+      <obj_property name="ObjectShortName">pcie_tx_p</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/pcie_tx_n" type="logic">
+      <obj_property name="ElementShortName">pcie_tx_n</obj_property>
+      <obj_property name="ObjectShortName">pcie_tx_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/pcie_rx_p" type="logic">
+      <obj_property name="ElementShortName">pcie_rx_p</obj_property>
+      <obj_property name="ObjectShortName">pcie_rx_p</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/pcie_rx_n" type="logic">
+      <obj_property name="ElementShortName">pcie_rx_n</obj_property>
+      <obj_property name="ObjectShortName">pcie_rx_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/led_status" type="logic">
+      <obj_property name="ElementShortName">led_status</obj_property>
+      <obj_property name="ObjectShortName">led_status</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/pcie_sys_clk" type="logic">
+      <obj_property name="ElementShortName">pcie_sys_clk</obj_property>
+      <obj_property name="ObjectShortName">pcie_sys_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/user_clk" type="logic">
+      <obj_property name="ElementShortName">user_clk</obj_property>
+      <obj_property name="ObjectShortName">user_clk</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/user_reset" type="logic">
+      <obj_property name="ElementShortName">user_reset</obj_property>
+      <obj_property name="ObjectShortName">user_reset</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/user_lnk_up" type="logic">
+      <obj_property name="ElementShortName">user_lnk_up</obj_property>
+      <obj_property name="ObjectShortName">user_lnk_up</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/user_rst_n" type="logic">
+      <obj_property name="ElementShortName">user_rst_n</obj_property>
+      <obj_property name="ObjectShortName">user_rst_n</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/cfg_mgmt_do" type="array">
+      <obj_property name="ElementShortName">cfg_mgmt_do[31:0]</obj_property>
+      <obj_property name="ObjectShortName">cfg_mgmt_do[31:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/cfg_mgmt_rd_wr_done" type="logic">
+      <obj_property name="ElementShortName">cfg_mgmt_rd_wr_done</obj_property>
+      <obj_property name="ObjectShortName">cfg_mgmt_rd_wr_done</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/rx_tdata" type="array">
+      <obj_property name="ElementShortName">rx_tdata[63:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_tdata[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/rx_tkeep" type="array">
+      <obj_property name="ElementShortName">rx_tkeep[7:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_tkeep[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/rx_tlast" type="logic">
+      <obj_property name="ElementShortName">rx_tlast</obj_property>
+      <obj_property name="ObjectShortName">rx_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/rx_tvalid" type="logic">
+      <obj_property name="ElementShortName">rx_tvalid</obj_property>
+      <obj_property name="ObjectShortName">rx_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/rx_tready" type="logic">
+      <obj_property name="ElementShortName">rx_tready</obj_property>
+      <obj_property name="ObjectShortName">rx_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/rx_tuser" type="array">
+      <obj_property name="ElementShortName">rx_tuser[21:0]</obj_property>
+      <obj_property name="ObjectShortName">rx_tuser[21:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/bar_tx_tdata" type="array">
+      <obj_property name="ElementShortName">bar_tx_tdata[63:0]</obj_property>
+      <obj_property name="ObjectShortName">bar_tx_tdata[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/bar_tx_tkeep" type="array">
+      <obj_property name="ElementShortName">bar_tx_tkeep[7:0]</obj_property>
+      <obj_property name="ObjectShortName">bar_tx_tkeep[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/bar_tx_tlast" type="logic">
+      <obj_property name="ElementShortName">bar_tx_tlast</obj_property>
+      <obj_property name="ObjectShortName">bar_tx_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/bar_tx_tvalid" type="logic">
+      <obj_property name="ElementShortName">bar_tx_tvalid</obj_property>
+      <obj_property name="ObjectShortName">bar_tx_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/bar_tx_tready" type="logic">
+      <obj_property name="ElementShortName">bar_tx_tready</obj_property>
+      <obj_property name="ObjectShortName">bar_tx_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/bar_tx_tuser" type="array">
+      <obj_property name="ElementShortName">bar_tx_tuser[3:0]</obj_property>
+      <obj_property name="ObjectShortName">bar_tx_tuser[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/tag_tx_tdata" type="array">
+      <obj_property name="ElementShortName">tag_tx_tdata[63:0]</obj_property>
+      <obj_property name="ObjectShortName">tag_tx_tdata[63:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/tag_tx_tkeep" type="array">
+      <obj_property name="ElementShortName">tag_tx_tkeep[7:0]</obj_property>
+      <obj_property name="ObjectShortName">tag_tx_tkeep[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/tag_tx_tlast" type="logic">
+      <obj_property name="ElementShortName">tag_tx_tlast</obj_property>
+      <obj_property name="ObjectShortName">tag_tx_tlast</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/tag_tx_tvalid" type="logic">
+      <obj_property name="ElementShortName">tag_tx_tvalid</obj_property>
+      <obj_property name="ObjectShortName">tag_tx_tvalid</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/tag_tx_tready" type="logic">
+      <obj_property name="ElementShortName">tag_tx_tready</obj_property>
+      <obj_property name="ObjectShortName">tag_tx_tready</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/tag_tx_tuser" type="array">
+      <obj_property name="ElementShortName">tag_tx_tuser[3:0]</obj_property>
+      <obj_property name="ObjectShortName">tag_tx_tuser[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/cfg_bus_number" type="array">
+      <obj_property name="ElementShortName">cfg_bus_number[7:0]</obj_property>
+      <obj_property name="ObjectShortName">cfg_bus_number[7:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/cfg_device_number" type="array">
+      <obj_property name="ElementShortName">cfg_device_number[4:0]</obj_property>
+      <obj_property name="ObjectShortName">cfg_device_number[4:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/cfg_function_number" type="array">
+      <obj_property name="ElementShortName">cfg_function_number[2:0]</obj_property>
+      <obj_property name="ObjectShortName">cfg_function_number[2:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/completer_id" type="array">
+      <obj_property name="ElementShortName">completer_id[15:0]</obj_property>
+      <obj_property name="ObjectShortName">completer_id[15:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/u_pcie_ep/m_axis_rx_tuser" type="array">
+      <obj_property name="ElementShortName">m_axis_rx_tuser[21:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_rx_tuser[21:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/u_pcie_ep/m_axis_rx_tuser" type="array">
+      <obj_property name="ElementShortName">m_axis_rx_tuser[21:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_rx_tuser[21:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/u_pcie_ep/s_axis_tx_tuser" type="array">
+      <obj_property name="ElementShortName">s_axis_tx_tuser[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tx_tuser[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/u_pcie_ep/m_axis_rx_tuser" type="array">
+      <obj_property name="ElementShortName">m_axis_rx_tuser[21:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_rx_tuser[21:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/u_pcie_ep/s_axis_tx_tuser" type="array">
+      <obj_property name="ElementShortName">s_axis_tx_tuser[3:0]</obj_property>
+      <obj_property name="ObjectShortName">s_axis_tx_tuser[3:0]</obj_property>
+   </wvobject>
+   <wvobject fp_name="/hda_pcie_top/u_pcie_ep/m_axis_rx_tuser" type="array">
+      <obj_property name="ElementShortName">m_axis_rx_tuser[21:0]</obj_property>
+      <obj_property name="ObjectShortName">m_axis_rx_tuser[21:0]</obj_property>
+   </wvobject>
+</wave_config>

@@ -135,7 +135,7 @@
         "D2_Power_Dissipated_Factor": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "D3_Power_Dissipated": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
         "D3_Power_Dissipated_Factor": [ { "value": "0", "resolve_type": "user", "format": "long", "usage": "all" } ],
-        "DSN_Enabled": [ { "value": "true", "resolve_type": "user", "format": "bool", "usage": "all" } ],
+        "DSN_Enabled": [ { "value": "true", "value_src": "user", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "VC_Cap_Enabled": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "VC_Cap_Reject_Snoop": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
         "VSEC_Enabled": [ { "value": "false", "resolve_type": "user", "format": "bool", "usage": "all" } ],
