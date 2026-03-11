@@ -96,6 +96,11 @@ module bar0_hda_sim (
     reg [31:0] reg_gctl;        // 0x08
     reg [15:0] reg_wakeen;      // 0x0C
     reg [15:0] reg_statests;    // 0x0E (W1C)
+
+    // GCTL CRST 自动恢复: 驱动写 CRST=0 后, 硬件经过一定周期自动恢复 CRST=1
+    // 模拟 HDA 控制器硬件复位时序
+    reg [7:0] crst_recovery_cnt;
+    reg       crst_in_reset;    // 正在执行控制器复位
     reg [31:0] reg_intctl;      // 0x20
     reg [31:0] reg_intsts;      // 0x24
     reg [31:0] reg_ssync;       // 0x38
@@ -263,7 +268,14 @@ module bar0_hda_sim (
         begin
             case (dw_offset[7:0])
                 8'h02: begin // GCTL
-                    if (be[0]) reg_gctl[ 7: 0] <= data[ 7: 0];
+                    if (be[0]) begin
+                        // 检测 CRST 从 1 变为 0: 启动控制器复位
+                        if (reg_gctl[0] && !data[0]) begin
+                            crst_in_reset     <= 1'b1;
+                            crst_recovery_cnt <= 8'd32; // 约 32 周期后恢复
+                        end
+                        reg_gctl[ 7: 0] <= data[ 7: 0];
+                    end
                     if (be[1]) reg_gctl[15: 8] <= data[15: 8];
                     if (be[2]) reg_gctl[23:16] <= data[23:16];
                     if (be[3]) reg_gctl[31:24] <= data[31:24];
@@ -392,7 +404,11 @@ module bar0_hda_sim (
                      ST_RX_DRAIN   = 4'd7,  // 排空多拍 TLP 剩余数据
                      ST_TX_UR0     = 4'd8,  // 回 UR Completion 第一拍
                      ST_TX_UR1     = 4'd9,  // 回 UR Completion 第二拍
-                     ST_RX_MWR4_DATA = 4'd10; // 4DW MWr 数据拍
+                     ST_RX_MWR4_DATA = 4'd10, // 4DW MWr 数据拍
+                     ST_TX_CPL0_W  = 4'd11, // CPL0 等待握手 (数据已稳定)
+                     ST_TX_CPL1_W  = 4'd12, // CPL1 等待握手 (数据已稳定)
+                     ST_TX_UR0_W   = 4'd13, // UR0 等待握手
+                     ST_TX_UR1_W   = 4'd14; // UR1 等待握手
 
     reg [3:0] state;
 
@@ -476,21 +492,8 @@ module bar0_hda_sim (
     // Codec engine 更新 RIRB WP 和 CORB RP
     // 这里在状态机外同步更新
 
-    always @(posedge clk) begin
-        if (!rst_n) begin
-            // (初始化在主 reset 块)
-        end else begin
-            // 从 codec engine 同步 RIRB WP (仅在 codec engine 有更新时)
-            if (reg_rirbctl[1]) begin // RIRB DMA Enable
-                reg_rirbwp <= codec_rirb_wp;
-                reg_rirbsts <= codec_rirb_sts;
-            end
-            // 从 codec engine 同步 CORB RP
-            if (reg_corbctl[1] && !(reg_corbrp[15])) begin // CORB Run 且未 reset
-                reg_corbrp[7:0] <= codec_corb_rp[7:0];
-            end
-        end
-    end
+    // Codec Engine 同步逻辑已合并到主状态机 always 块末尾
+    // (避免多 always 块驱动 reg_rirbwp/reg_rirbsts/reg_corbrp)
 
     // ===================================================================
     //  主状态机
@@ -511,6 +514,8 @@ module bar0_hda_sim (
 
             // 寄存器初始化
             reg_gctl       <= 32'h0000_0001;  // CRST=1
+            crst_recovery_cnt <= 8'h0;
+            crst_in_reset     <= 1'b0;
             reg_wakeen     <= 16'h0;
             reg_statests   <= 16'h0001;       // SDIN0 codec detected
             reg_intctl     <= 32'h0;
@@ -671,7 +676,8 @@ module bar0_hda_sim (
                 end
 
                 // ============================================================
-                //  TX_CPL0: 发送 CplD 第一拍 (DW0 + DW1)
+                //  TX_CPL0: 设置 CplD 第一拍数据 (DW0 + DW1)
+                //  数据和 tvalid 在此拍设置, 下一拍等待握手
                 // ============================================================
                 ST_TX_CPL0: begin
                     s_axis_tx_tdata  <= {cpld_dw1, cpld_dw0};
@@ -679,14 +685,18 @@ module bar0_hda_sim (
                     s_axis_tx_tlast  <= 1'b0;
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
+                    state <= ST_TX_CPL0_W;
+                end
 
+                // TX_CPL0_W: 等待 AXI 握手 (tvalid 已经为 1, 数据已稳定)
+                ST_TX_CPL0_W: begin
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         state <= ST_TX_CPL1;
                     end
                 end
 
                 // ============================================================
-                //  TX_CPL1: 发送 CplD 第二拍 (DW2 + Data)
+                //  TX_CPL1: 设置 CplD 第二拍数据 (DW2 + Data)
                 // ============================================================
                 ST_TX_CPL1: begin
                     s_axis_tx_tdata  <= {reg_rd_data, cpld_dw2};
@@ -694,7 +704,11 @@ module bar0_hda_sim (
                     s_axis_tx_tlast  <= 1'b1;
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
+                    state <= ST_TX_CPL1_W;
+                end
 
+                // TX_CPL1_W: 等待 AXI 握手完成, 然后回 IDLE
+                ST_TX_CPL1_W: begin
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         s_axis_tx_tvalid <= 1'b0;
                         s_axis_tx_tlast  <= 1'b0;
@@ -704,7 +718,7 @@ module bar0_hda_sim (
                 end
 
                 // ============================================================
-                //  TX_UR0: 发送 UR Completion 第一拍 (DW0 + DW1)
+                //  TX_UR0: 设置 UR Completion 第一拍 (DW0 + DW1)
                 // ============================================================
                 ST_TX_UR0: begin
                     s_axis_tx_tdata  <= {ur_dw1, ur_dw0};
@@ -712,14 +726,18 @@ module bar0_hda_sim (
                     s_axis_tx_tlast  <= 1'b0;
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
+                    state <= ST_TX_UR0_W;
+                end
 
+                // TX_UR0_W: 等待握手
+                ST_TX_UR0_W: begin
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         state <= ST_TX_UR1;
                     end
                 end
 
                 // ============================================================
-                //  TX_UR1: 发送 UR Completion 第二拍 (DW2 + pad)
+                //  TX_UR1: 设置 UR Completion 第二拍 (DW2 + pad)
                 // ============================================================
                 ST_TX_UR1: begin
                     s_axis_tx_tdata  <= {32'h0, ur_dw2};
@@ -727,7 +745,11 @@ module bar0_hda_sim (
                     s_axis_tx_tlast  <= 1'b1;
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
+                    state <= ST_TX_UR1_W;
+                end
 
+                // TX_UR1_W: 等待握手完成, 回 IDLE
+                ST_TX_UR1_W: begin
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         s_axis_tx_tvalid <= 1'b0;
                         s_axis_tx_tlast  <= 1'b0;
@@ -739,9 +761,34 @@ module bar0_hda_sim (
                 default: state <= ST_IDLE;
             endcase
 
+            // ---- GCTL CRST 自动恢复逻辑 ----
+            // 驱动写 CRST=0 触发控制器复位, 硬件经过一定周期后
+            // 自动恢复 CRST=1 并重新报告 codec 存在 (STATESTS)
+            if (crst_in_reset) begin
+                if (crst_recovery_cnt == 8'd0) begin
+                    // 复位完成: 恢复 CRST=1, 重新报告 codec
+                    reg_gctl[0]    <= 1'b1;
+                    reg_statests   <= 16'h0001; // SDIN0 codec re-detected
+                    crst_in_reset  <= 1'b0;
+                end else begin
+                    crst_recovery_cnt <= crst_recovery_cnt - 8'd1;
+                end
+            end
+
             // ---- INTSTS 自动更新 ----
             reg_intsts[31] <= msi_irq_request;
             reg_intsts[30] <= (reg_rirbsts[0] && reg_rirbctl[0]);
+
+            // ---- Codec Engine 同步 (原独立 always 块合并到此处) ----
+            // 从 codec engine 同步 RIRB WP (仅在 RIRB DMA Enable 时)
+            if (reg_rirbctl[1]) begin
+                reg_rirbwp  <= codec_rirb_wp;
+                reg_rirbsts <= codec_rirb_sts;
+            end
+            // 从 codec engine 同步 CORB RP (CORB Run 且未 reset)
+            if (reg_corbctl[1] && !(reg_corbrp[15])) begin
+                reg_corbrp[7:0] <= codec_corb_rp[7:0];
+            end
         end
     end
 

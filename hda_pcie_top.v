@@ -664,37 +664,25 @@ module hda_pcie_top (
     // -----------------------------------------------------------------
     //  DMA 引擎临时禁用说明:
     //  当前架构中 PCIe IP RX 路径只连到 bar0_hda_sim，没有 TLP 路由
-    //  分发器区分 BAR0 MRd/MWr 和 DMA CplD。DMA 引擎发出 MRd 后，
-    //  返回的 CplD 会被 bar0_hda_sim 当作未知 TLP 处理 (回 UR 或
-    //  drain)，导致 DMA timeout → cfg_err_cpl_timeout → 系统卡死。
+    //  分发器将 DMA CplD 路由给 DMA 引擎。DMA 引擎发出 MRd 后，
+    //  返回的 CplD 会被 bar0_hda_sim 当作未知 TLP 处理，导致问题。
     //
-    //  修复: 将 DMA 请求输入接零，DMA 引擎永远不发 TLP，同时用
-    //  stub 信号让 Codec Engine 立即得到假的 DMA 完成响应，这样
-    //  Codec Engine 的 CORB/RIRB 处理流程能走完（虽然数据是假的，
-    //  但不会卡死，驱动能正常枚举和加载）。
+    //  修复策略: 完全禁用 Codec Engine 和 DMA 引擎。
+    //  Codec Engine 的 DMA 接口接常量，使其状态机永远不运行:
+    //    - dma_rd_done / dma_wr_done 永远为 0 (不给完成信号)
+    //    - Codec Engine 的 corb_ctl[1] (corb_run) 由驱动写入，
+    //      但即使进入 ST_DMA_RD_WAIT，也永远卡住不前进。
+    //      这是安全的：驱动发现 CORB RP 不变化会超时并报告
+    //      "no codec found"，但不会蓝屏。
+    //  
+    //  更安全的做法: 直接让 Codec Engine 永远不启动。
+    //  覆盖 corb_run / rirb_run 条件，让状态机卡在 ST_IDLE。
     // -----------------------------------------------------------------
 
-    // Codec Engine DMA 请求 stub: 立即回 done，返回空数据
-    // 这让 Codec Engine 状态机不会卡在 DMA_RD_WAIT / DMA_WR_WAIT
-    reg dma_rd_done_stub, dma_wr_done_stub;
-    reg [31:0] dma_rd_data_stub;
-
-    always @(posedge user_clk) begin
-        if (user_reset) begin
-            dma_rd_done_stub <= 1'b0;
-            dma_wr_done_stub <= 1'b0;
-            dma_rd_data_stub <= 32'h0;
-        end else begin
-            dma_rd_done_stub <= dma_rd_req;  // 1 周期后回 done
-            dma_wr_done_stub <= dma_wr_req;
-            dma_rd_data_stub <= 32'h0;       // 返回空数据 (Codec 会得到空 Verb)
-        end
-    end
-
-    // 连接 stub 到 Codec Engine
-    assign dma_rd_done = dma_rd_done_stub;
-    assign dma_rd_data = dma_rd_data_stub;
-    assign dma_wr_done = dma_wr_done_stub;
+    // DMA 接口全部接死: done 永远为 0, data 永远为 0
+    assign dma_rd_done = 1'b0;
+    assign dma_rd_data = 32'h0;
+    assign dma_wr_done = 1'b0;
 
     hda_dma_engine u_dma_eng (
         .clk            (user_clk),

@@ -93,7 +93,13 @@ module tlp_tag_randomizer (
     // ===================================================================
 
     assign handshake = s_axis_tx_tvalid_in && s_axis_tx_tready_out;
-    assign advance_lfsr = handshake && is_sof;
+
+    // 检测 TLP 类型: DW0 在 tdata[31:0], Type 字段在 bit[28:24]
+    // Completion TLP: Type = 01010 (0x0A)
+    // 只对非 Completion 的请求 TLP (MRd/MWr) 替换 Tag
+    wire is_completion = (s_axis_tx_tdata_in[28:24] == 5'b01010);
+    wire is_request_tlp = is_sof && s_axis_tx_tvalid_in && !is_completion;
+    assign advance_lfsr = handshake && is_request_tlp;
 
     assign s_axis_tx_tready_in = s_axis_tx_tready_out;
 
@@ -110,13 +116,18 @@ module tlp_tag_randomizer (
             s_axis_tx_tlast_out  <= s_axis_tx_tlast_in;
             s_axis_tx_tuser_out  <= s_axis_tx_tuser_in;
 
-            if (is_sof && s_axis_tx_tvalid_in) begin
+            if (is_request_tlp) begin
+                // 只对请求 TLP (MRd/MWr) 替换 Tag 字段
+                // DW1 格式: [63:48]=Requester ID, [47:40]=Tag, [39:32]=BE
                 s_axis_tx_tdata_out <= {
                     s_axis_tx_tdata_in[63:48],  // Requester ID
                     random_tag,                  // Tag ← LFSR
                     s_axis_tx_tdata_in[39:0]     // BE + DW0
                 };
             end else begin
+                // Completion TLP 和非首拍: 不修改, 原样透传
+                // CplD DW1: [47:45]=Status, [44]=BCM, [43:32]=Byte Count
+                // 这些字段绝不能被修改
                 s_axis_tx_tdata_out <= s_axis_tx_tdata_in;
             end
         end
