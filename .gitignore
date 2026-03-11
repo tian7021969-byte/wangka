@@ -32,3 +32,13 @@ tools/memprocfs/*.zip
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+# Temp debug output files
+_git_out.txt
+_git_out2.txt
+_git_status_out.txt
+_git_bin_hash.txt
+_dbg.txt
+_analysis.txt
+_verify_out.txt
+$null

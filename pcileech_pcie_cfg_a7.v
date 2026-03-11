@@ -28,8 +28,8 @@
 //  040h      Reserved                             16 B
 //  050h      Power Management Capability (PM)     8  B
 //  058h      Reserved                             8  B
-//  060h      MSI-X Capability                     12 B
-//  06Ch      Reserved                             148 B
+//  060h      MSI Capability                       16 B
+//  070h      Reserved                             144 B
 //  100h      PCIe Extended: Device Serial Number   12 B
 //  10Ch      Reserved to 3FFh                     ...
 //
@@ -38,7 +38,7 @@
 //  Standard capabilities (offset < 100h) are linked via Next Pointer:
 //
 //      Cap Ptr (034h) ──► 050h [PM Cap, ID=01h]
-//                               Next ──► 060h [MSI-X Cap, ID=11h]
+//                               Next ──► 060h [MSI Cap, ID=05h]
 //                                              Next ──► 000h (end)
 //
 //  Extended capabilities (offset >= 100h):
@@ -58,7 +58,7 @@
 //  ------------
 //  All registers are synchronous to the single clock input `clk`,
 //  which is the PCIe user clock derived from the Artix-7 integrated
-//  endpoint block (62.5 MHz for Gen1 x1, 125 MHz for Gen2 x1).
+//  endpoint block (62.5 MHz for Gen1 x1).
 //  No clock domain crossing exists within this module; the CDC
 //  boundary is handled by the Xilinx PCIe IP core's TLP interface.
 //
@@ -78,12 +78,12 @@
 //
 //  INTERRUPT ARCHITECTURE
 //  ----------------------
-//  The device advertises MSI-X with a 64-entry table (Table Size
-//  field = 003Fh, N-1 encoded per PCIe 3.0 §7.7.2.2):
-//      MSI-X Table : BAR0 + 2000h  (BIR = 0)
-//      MSI-X PBA   : BAR0 + 3000h  (BIR = 0)
-//  The MSI-X Enable and Function Mask bits in Message Control are
-//  host-writable; all other Message Control fields are read-only.
+//  The device advertises MSI with 64-bit addressing capability and
+//  1 message vector, matching the Xilinx PCIe IP core configuration.
+//  MSI Capability at offset 60h (Cap ID=05h):
+//      Message Control : 64-bit capable, 1 vector
+//      Message Address : BAR-independent, host-programmed
+//      Message Data    : host-programmed
 //
 //  POWER MANAGEMENT
 //  ----------------
@@ -169,11 +169,8 @@ module pcileech_pcie_cfg_a7 #(
     //   Bits [13:0]  hardwired to 0 (memory, 32-bit, non-prefetchable)
     localparam [31:0] BAR0_SIZE_MASK      = 32'hFFFF_C000;
 
-    // Expansion ROM BAR sizing mask — 64 KB region
-    //   Bits [31:16] writable → size = 2^16 = 65536 = 64 KB
-    //   Bit [0] = ROM Enable (host writable)
-    //   Bits [10:1] reserved, hardwired to 0
-    localparam [31:0] EXPROM_SIZE_MASK    = 32'hFFFF_0001;
+    // Expansion ROM — Disabled (匹配 PCIe IP 核配置)
+    // DWORD 12 (30h) 硬接线为 0, 不支持 Expansion ROM
 
     // Power Management Capability (offset 50h)
     //   Cap ID = 01h, Next Ptr = 60h
@@ -184,21 +181,13 @@ module pcileech_pcie_cfg_a7 #(
     localparam [ 7:0] PM_NEXT_PTR        = 8'h60;
     localparam [15:0] PM_CAPABILITIES    = 16'hC803;
 
-    // MSI-X Capability (offset 60h)
-    //   Cap ID = 11h, Next Ptr = 00h (end of chain)
-    //   Table Size = 003Fh (64 entries, N-1 encoded)
-    //   MSI-X Enable = 0 (host sets this)
-    //   Function Mask = 0
-    localparam [ 7:0] MSIX_CAP_ID       = 8'h11;
-    localparam [ 7:0] MSIX_NEXT_PTR     = 8'h00;
-    localparam [15:0] MSIX_MSG_CTRL     = 16'h003F;
-
-    // MSI-X Table: BAR0 + 2000h, BIR = 0
-    // The offset field is bits [31:3], BIR is bits [2:0]
-    localparam [31:0] MSIX_TABLE_OFFSET  = {29'h0000_1000, 3'b000};
-
-    // MSI-X PBA: BAR0 + 3000h, BIR = 0
-    localparam [31:0] MSIX_PBA_OFFSET    = {29'h0000_1800, 3'b000};
+    // MSI Capability (offset 60h)
+    //   Cap ID = 05h, Next Ptr = 00h (end of chain)
+    //   Message Control: 64-bit addressing capable, 1 vector allocated
+    //   匹配 PCIe IP 核实际配置 (MSI enabled, MSI-X disabled)
+    localparam [ 7:0] MSI_CAP_ID        = 8'h05;
+    localparam [ 7:0] MSI_NEXT_PTR      = 8'h00;
+    localparam [15:0] MSI_MSG_CTRL      = 16'h0080;  // 64-bit capable, 1 vector
 
     // PCIe Extended Capability: Device Serial Number (offset 100h)
     //   Cap ID = 0003h, Version 1, Next Cap Offset = 000h
@@ -211,8 +200,7 @@ module pcileech_pcie_cfg_a7 #(
     localparam [9:0] DWADDR_BAR0         = 10'd4;   // offset 10h
     localparam [9:0] DWADDR_INT_LINE     = 10'd15;  // offset 3Ch
     localparam [9:0] DWADDR_PMCSR        = 10'd21;  // offset 54h
-    localparam [9:0] DWADDR_MSIX_CTRL    = 10'd24;  // offset 60h
-    localparam [9:0] DWADDR_EXPROM       = 10'd12;  // offset 30h
+    localparam [9:0] DWADDR_MSI_CTRL     = 10'd24;  // offset 60h
 
     // ===================================================================
     //  CONFIGURATION SPACE MEMORY  (1024 DWORDs = 4 KB)
@@ -316,9 +304,8 @@ module pcileech_pcie_cfg_a7 #(
             cfgmem[11] <= {CFG_SUBSYS_DEVICE, CFG_SUBSYS_VENDOR};
 
             // DWORD 12 (30h): Expansion ROM Base Address
-            // 64 KB ROM region, initially disabled (Enable bit = 0).
-            // Host writes FFFFFFFFh for sizing → reads back FFFF0001h.
-            // 启用后主机可读取 ROM 内容 (由 bar0_hda_sim 提供混淆数据)。
+            // Disabled — 匹配 PCIe IP 核配置 (Expansion_Rom_Enabled=false)
+            // 硬接线为 0, BAR sizing 写入不生效
             cfgmem[12] <= 32'h0000_0000;
 
             // DWORD 13 (34h): Capabilities Pointer
@@ -355,27 +342,26 @@ module pcileech_pcie_cfg_a7 #(
             cfgmem[21] <= 32'h0000_0000;
 
             // -------------------------------------------------------
-            //  MSI-X CAPABILITY (offset 60h, DWORDs 24–26)
-            //  PCIe 3.0 §7.7.2
+            //  MSI CAPABILITY (offset 60h, DWORDs 24–27)
+            //  PCIe 3.0 §7.7.1
+            //  匹配 Xilinx PCIe IP 核实际配置 (MSI enabled, MSI-X disabled)
             // -------------------------------------------------------
 
             // DWORD 24 (60h): Message Control [31:16] | Next [15:8] | ID [7:0]
-            //
-            // Message Control register:
-            //   Bits [10:0]  Table Size = 003Fh → 64 entries (N-1)
-            //   Bit  [14]    Function Mask = 0
-            //   Bit  [15]    MSI-X Enable = 0 (host enables after config)
-            cfgmem[24] <= {MSIX_MSG_CTRL, MSIX_NEXT_PTR, MSIX_CAP_ID};
+            //   Message Control:
+            //     Bit [7]   = 64-bit Address Capable
+            //     Bits[6:4] = Multiple Message Capable = 000 (1 vector)
+            //     Bit [0]   = MSI Enable (host sets this)
+            cfgmem[24] <= {MSI_MSG_CTRL, MSI_NEXT_PTR, MSI_CAP_ID};
 
-            // DWORD 25 (64h): Table Offset [31:3] | Table BIR [2:0]
-            //   BIR = 0 → MSI-X table resides in BAR0 address space.
-            //   Offset = 2000h → table starts at BAR0 + 8192.
-            cfgmem[25] <= MSIX_TABLE_OFFSET;
+            // DWORD 25 (64h): Message Address (lower 32 bits, host-writable)
+            cfgmem[25] <= 32'h0000_0000;
 
-            // DWORD 26 (68h): PBA Offset [31:3] | PBA BIR [2:0]
-            //   BIR = 0 → Pending Bit Array in BAR0.
-            //   Offset = 3000h → PBA starts at BAR0 + 12288.
-            cfgmem[26] <= MSIX_PBA_OFFSET;
+            // DWORD 26 (68h): Message Upper Address (host-writable, 64-bit mode)
+            cfgmem[26] <= 32'h0000_0000;
+
+            // DWORD 27 (6Ch): Message Data (host-writable)
+            cfgmem[27] <= 32'h0000_0000;
 
             // -------------------------------------------------------
             //  EXTENDED CAPABILITY: DEVICE SERIAL NUMBER (offset 100h)
@@ -466,10 +452,19 @@ module pcileech_pcie_cfg_a7 #(
     //     transition between D0 (00b) and D3hot (11b).  Bit [8]
     //     (PME_En) and bit [15] (PME_Status) are also writable.
     //
-    //   DWORD 24 (60h) — MSI-X Message Control [31:16]
-    //     Only the upper 16 bits are writable (byte enable [3]).
-    //     Bit 31 = MSI-X Enable, Bit 30 = Function Mask.
+    //   DWORD 24 (60h) — MSI Message Control [31:16]
+    //     Bit 16 = MSI Enable (host sets/clears).
+    //     Bits [19:17] = Multiple Message Enable.
     //     Lower 16 bits (Cap ID, Next Ptr) are read-only.
+    //
+    //   DWORD 25 (64h) — MSI Message Address (lower 32 bits)
+    //     Fully host-writable.
+    //
+    //   DWORD 26 (68h) — MSI Message Upper Address
+    //     Fully host-writable (64-bit mode).
+    //
+    //   DWORD 27 (6Ch) — MSI Message Data
+    //     Lower 16 bits host-writable.
     //
     // Write ordering: the case statement tests addresses in ascending
     // order, matching the natural priority of the synthesis tool's
@@ -491,14 +486,7 @@ module pcileech_pcie_cfg_a7 #(
                     ) & BAR0_SIZE_MASK;
                 end
 
-                DWADDR_EXPROM: begin
-                    // Expansion ROM BAR: 主机写 FFFFFFFF 进行 sizing,
-                    // 读回 FFFF0001 确定 64KB 大小。
-                    // Bit [0] = ROM Enable, bits [10:1] 保留。
-                    cfgmem[12] <= byte_merge(
-                        cfgmem[12], cfg_wr_data, cfg_wr_be
-                    ) & EXPROM_SIZE_MASK;
-                end
+                // Expansion ROM (DWORD 12) — 不可写, 已 disabled
 
                 DWADDR_INT_LINE: begin
                     if (cfg_wr_be[0])
@@ -511,9 +499,34 @@ module pcileech_pcie_cfg_a7 #(
                     );
                 end
 
-                DWADDR_MSIX_CTRL: begin
+                DWADDR_MSI_CTRL: begin
+                    // MSI Message Control: upper 16 bits writable
+                    if (cfg_wr_be[2])
+                        cfgmem[24][23:16] <= cfg_wr_data[23:16];
                     if (cfg_wr_be[3])
-                        cfgmem[24][31:16] <= cfg_wr_data[31:16];
+                        cfgmem[24][31:24] <= cfg_wr_data[31:24];
+                end
+
+                // MSI Message Address (lower 32 bits)
+                10'd25: begin
+                    cfgmem[25] <= byte_merge(
+                        cfgmem[25], cfg_wr_data, cfg_wr_be
+                    );
+                end
+
+                // MSI Message Upper Address
+                10'd26: begin
+                    cfgmem[26] <= byte_merge(
+                        cfgmem[26], cfg_wr_data, cfg_wr_be
+                    );
+                end
+
+                // MSI Message Data (lower 16 bits only)
+                10'd27: begin
+                    if (cfg_wr_be[0])
+                        cfgmem[27][7:0]  <= cfg_wr_data[7:0];
+                    if (cfg_wr_be[1])
+                        cfgmem[27][15:8] <= cfg_wr_data[15:8];
                 end
 
                 default: ;

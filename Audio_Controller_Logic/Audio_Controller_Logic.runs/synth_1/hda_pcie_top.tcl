@@ -95,6 +95,7 @@ read_verilog -library xil_defaultlib {
   C:/Users/dukehhu/Desktop/amd/hda_codec_engine.v
   C:/Users/dukehhu/Desktop/amd/hda_dma_engine.v
   C:/Users/dukehhu/Desktop/amd/tx_arbiter.v
+  C:/Users/dukehhu/Desktop/amd/tlp_rx_router.v
 }
 read_ip -quiet C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.srcs/sources_1/ip/pcie_7x_0/pcie_7x_0.xci
 set_property used_in_implementation false [get_files -all c:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/source/pcie_7x_0-PCIE_X0Y0.xdc]

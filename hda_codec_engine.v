@@ -260,8 +260,15 @@ module hda_codec_engine (
     endfunction
 
     // ===================================================================
-    //  主状态机
+    //  主状态机 — DMA 模式
     // ===================================================================
+    //
+    // 完整 DMA 流程:
+    //   1. 检测到 CORB WP != RP → 有新命令
+    //   2. DMA MRd 读取主机 CORB 内存中的 Verb 命令
+    //   3. 用 decode_verb() 生成 CA0132 响应
+    //   4. DMA MWr 将响应写入主机 RIRB 内存
+    //   5. 递增 RIRB WP, 触发中断
 
     always @(posedge clk) begin
         if (!rst_n) begin
@@ -293,9 +300,7 @@ module hda_codec_engine (
                 end
 
                 ST_CHECK_CORB: begin
-                    // 检查 CORB 是否有新命令
                     if (corb_rp[7:0] != corb_wp[7:0]) begin
-                        // 有新命令，发起 DMA 读
                         state <= ST_DMA_RD_REQ;
                     end else begin
                         state <= ST_IDLE;
@@ -303,8 +308,7 @@ module hda_codec_engine (
                 end
 
                 ST_DMA_RD_REQ: begin
-                    // 计算下一个 CORB entry 地址
-                    // CORB entry = 4 bytes (1 DWORD), 地址 = base + (rp+1)*4
+                    // CORB entry = 4 bytes, 地址 = base + (rp+1)*4
                     dma_rd_req  <= 1'b1;
                     dma_rd_addr <= {corb_base_hi, corb_base_lo} +
                                    {48'h0, (corb_rp[7:0] + 8'd1), 2'b00};
@@ -324,7 +328,7 @@ module hda_codec_engine (
                 ST_PROCESS: begin
                     // 解码 Verb 并生成响应
                     verb_resp <= decode_verb(cmd_nid, cmd_verb, param_id);
-                    // 模拟 Codec 处理延迟 (LFSR 随机 8~23 周期)
+                    // 模拟 Codec 处理延迟
                     cooldown_cnt <= cd_random_delay;
                     state <= ST_COOLDOWN;
                 end
@@ -338,7 +342,7 @@ module hda_codec_engine (
                 end
 
                 ST_DMA_WR_REQ: begin
-                    // RIRB entry = 8 bytes: [63:32]=Resp EX (codec addr), [31:0]=Response
+                    // RIRB entry = 8 bytes: [63:32]=Resp EX, [31:0]=Response
                     dma_wr_req  <= 1'b1;
                     dma_wr_addr <= {rirb_base_hi, rirb_base_lo} +
                                    {48'h0, (rirb_wp[7:0] + 8'd1), 3'b000};
@@ -358,10 +362,10 @@ module hda_codec_engine (
                     // 设置 RIRB 中断状态
                     rirb_sts <= rirb_sts | 8'h01; // RINTFL
                     // 触发中断
-                    if (rirb_ctl[0]) begin // RINTCTL enable
+                    if (rirb_ctl[0]) begin
                         irq_rirb <= 1'b1;
                     end
-                    // 回到检查是否还有更多命令
+                    // 检查是否还有更多命令
                     state <= ST_CHECK_CORB;
                 end
 

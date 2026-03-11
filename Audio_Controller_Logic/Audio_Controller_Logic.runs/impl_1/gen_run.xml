@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773240950">
+<GenRun Id="impl_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773243973">
   <File Type="ROUTE-PWR" Name="hda_pcie_top_power_routed.rpt"/>
   <File Type="PA-TCL" Name="hda_pcie_top.tcl"/>
   <File Type="BITSTR-MMI" Name="hda_pcie_top.mmi"/>
@@ -131,6 +131,13 @@
       </FileInfo>
     </File>
     <File Path="$PPRDIR/../tx_arbiter.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../tlp_rx_router.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>

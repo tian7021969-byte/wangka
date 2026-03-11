@@ -1,8 +1,0 @@
-﻿git : To https://github.com/tian7021969-byte/amd.git
-所在位置 行:1 字符: 46
-+ ... ion 'c:\Users\dukehhu\Desktop\amd'; git push origin main 2>&1 | Out-F ...
-+                                         ~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (To https://gith...69-byte/amd.git:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
-   411b7b9..c4faed8  main -> main

@@ -816,8 +816,10 @@ module bar0_hda_sim (
                 reg_rirbwp  <= codec_rirb_wp;
                 reg_rirbsts <= codec_rirb_sts;
             end
-            // 从 codec engine 同步 CORB RP (CORB Run 且未 reset)
-            if (reg_corbctl[1] && !(reg_corbrp[15])) begin
+            // 从 codec engine 同步 CORB RP:
+            //   - 仅在 CORB Run 且未处于 Reset 状态
+            //   - 且当前周期状态机不在写寄存器 (避免覆盖主机的 CORBRP reset 操作)
+            if (reg_corbctl[1] && !(reg_corbrp[15]) && (state != ST_RX_DATA)) begin
                 reg_corbrp[7:0] <= codec_corb_rp[7:0];
             end
         end

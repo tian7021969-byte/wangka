@@ -9,7 +9,7 @@
 //  私人定制级 DMA 完整实现
 //  -----------------------
 //  数据路径:
-//    RX: PCIe IP → bar0_hda_sim (BAR0 寄存器, AE-9 CplD 时序抖动)
+//    RX: PCIe IP (Gen1 x1) → bar0_hda_sim (BAR0 寄存器, AE-9 CplD 时序抖动)
 //                → hda_codec_engine (CORB/RIRB Verb 处理)
 //                → hda_dma_engine (Bus Master DMA)
 //    TX: bar0_hda_sim (CplD) ─┐
@@ -54,13 +54,29 @@ module hda_pcie_top (
     wire [31:0] cfg_mgmt_do;
     wire        cfg_mgmt_rd_wr_done;
 
-    // PCIe IP RX (→ BAR0)
+    // PCIe IP RX (→ TLP 路由器)
     wire [63:0] rx_tdata;
     wire [ 7:0] rx_tkeep;
     wire        rx_tlast;
     wire        rx_tvalid;
     wire        rx_tready;
     wire [21:0] rx_tuser;
+
+    // TLP 路由器 → BAR0
+    wire [63:0] routed_bar_rx_tdata;
+    wire [ 7:0] routed_bar_rx_tkeep;
+    wire        routed_bar_rx_tlast;
+    wire        routed_bar_rx_tvalid;
+    wire        routed_bar_rx_tready;
+    wire [21:0] routed_bar_rx_tuser;
+
+    // TLP 路由器 → DMA 引擎
+    wire [63:0] routed_dma_rx_tdata;
+    wire [ 7:0] routed_dma_rx_tkeep;
+    wire        routed_dma_rx_tlast;
+    wire        routed_dma_rx_tvalid;
+    wire        routed_dma_rx_tready;
+    wire [21:0] routed_dma_rx_tuser;
 
     // BAR0 TX → TX 仲裁器 端口 0
     wire [63:0] bar_tx_tdata;
@@ -586,13 +602,13 @@ module hda_pcie_top (
         .completer_id       (completer_id),
         .jitter_seed        (lfsr_seed_latched),
 
-        // RX
-        .m_axis_rx_tdata    (rx_tdata),
-        .m_axis_rx_tkeep    (rx_tkeep),
-        .m_axis_rx_tlast    (rx_tlast),
-        .m_axis_rx_tvalid   (rx_tvalid),
-        .m_axis_rx_tready   (rx_tready),
-        .m_axis_rx_tuser    (rx_tuser),
+        // RX (来自 TLP 路由器, 仅 MRd/MWr)
+        .m_axis_rx_tdata    (routed_bar_rx_tdata),
+        .m_axis_rx_tkeep    (routed_bar_rx_tkeep),
+        .m_axis_rx_tlast    (routed_bar_rx_tlast),
+        .m_axis_rx_tvalid   (routed_bar_rx_tvalid),
+        .m_axis_rx_tready   (routed_bar_rx_tready),
+        .m_axis_rx_tuser    (routed_bar_rx_tuser),
 
         // TX → TX 仲裁器 端口 0
         .s_axis_tx_tdata    (bar_tx_tdata),
@@ -652,49 +668,29 @@ module hda_pcie_top (
     );
 
     // ===================================================================
-    //  HDA DMA 引擎 (Bus Master)
+    //  HDA DMA 引擎 (Bus Master) — 已启用
     // ===================================================================
-
-    // -----------------------------------------------------------------
-    //  DMA 引擎临时禁用说明:
-    //  当前架构中 PCIe IP RX 路径只连到 bar0_hda_sim，没有 TLP 路由
-    //  分发器将 DMA CplD 路由给 DMA 引擎。DMA 引擎发出 MRd 后，
-    //  返回的 CplD 会被 bar0_hda_sim 当作未知 TLP 处理，导致问题。
     //
-    //  修复策略: 完全禁用 Codec Engine 和 DMA 引擎。
-    //  Codec Engine 的 DMA 接口接常量，使其状态机永远不运行:
-    //    - dma_rd_done / dma_wr_done 永远为 0 (不给完成信号)
-    //    - Codec Engine 的 corb_ctl[1] (corb_run) 由驱动写入，
-    //      但即使进入 ST_DMA_RD_WAIT，也永远卡住不前进。
-    //      这是安全的：驱动发现 CORB RP 不变化会超时并报告
-    //      "no codec found"，但不会蓝屏。
-    //  
-    //  更安全的做法: 直接让 Codec Engine 永远不启动。
-    //  覆盖 corb_run / rirb_run 条件，让状态机卡在 ST_IDLE。
-    // -----------------------------------------------------------------
-
-    // DMA 接口全部接死: done 永远为 0, data 永远为 0
-    assign dma_rd_done = 1'b0;
-    assign dma_rd_data = 32'h0;
-    assign dma_wr_done = 1'b0;
+    //  通过 TLP 路由器接收 CplD, 不再与 BAR0 竞争 RX 通路。
+    //  Codec Engine 通过 DMA 读取 CORB 命令、写入 RIRB 响应。
 
     hda_dma_engine u_dma_eng (
         .clk            (user_clk),
         .rst_n          (user_rst_n),
         .requester_id   (completer_id),
 
-        // DMA 请求全部接零 — 不产生任何 PCIe TLP
-        .dma_rd_req     (1'b0),
-        .dma_rd_addr    (64'h0),
-        .dma_rd_done    (),         // 不使用
-        .dma_rd_data    (),         // 不使用
+        // DMA 请求 — 连接 Codec Engine
+        .dma_rd_req     (dma_rd_req),
+        .dma_rd_addr    (dma_rd_addr),
+        .dma_rd_done    (dma_rd_done),
+        .dma_rd_data    (dma_rd_data),
 
-        .dma_wr_req     (1'b0),
-        .dma_wr_addr    (64'h0),
-        .dma_wr_data    (64'h0),
-        .dma_wr_done    (),         // 不使用
+        .dma_wr_req     (dma_wr_req),
+        .dma_wr_addr    (dma_wr_addr),
+        .dma_wr_data    (dma_wr_data),
+        .dma_wr_done    (dma_wr_done),
 
-        // TX → TX 仲裁器 端口 1 (DMA 不发 TLP，tvalid 始终为 0)
+        // TX → TX 仲裁器 端口 1
         .s_axis_tx_tdata    (dma_tx_tdata),
         .s_axis_tx_tkeep    (dma_tx_tkeep),
         .s_axis_tx_tlast    (dma_tx_tlast),
@@ -702,16 +698,53 @@ module hda_pcie_top (
         .s_axis_tx_tready   (dma_tx_tready),
         .s_axis_tx_tuser    (dma_tx_tuser),
 
-        // DMA RX — 不使用
-        .m_axis_rx_tdata    (64'h0),
-        .m_axis_rx_tkeep    (8'h0),
-        .m_axis_rx_tlast    (1'b0),
-        .m_axis_rx_tvalid   (1'b0),
-        .m_axis_rx_tready   (),
-        .m_axis_rx_tuser    (22'h0),
+        // DMA RX — 来自 TLP 路由器 (仅 CplD)
+        .m_axis_rx_tdata    (routed_dma_rx_tdata),
+        .m_axis_rx_tkeep    (routed_dma_rx_tkeep),
+        .m_axis_rx_tlast    (routed_dma_rx_tlast),
+        .m_axis_rx_tvalid   (routed_dma_rx_tvalid),
+        .m_axis_rx_tready   (routed_dma_rx_tready),
+        .m_axis_rx_tuser    (routed_dma_rx_tuser),
 
         .cpl_timeout    (dma_cpl_timeout),
         .lfsr_seed      (lfsr_seed_latched)
+    );
+
+    // ===================================================================
+    //  RX TLP 路由分发器
+    // ===================================================================
+    //
+    //  将 PCIe IP 的 RX 通路按 TLP 类型分发:
+    //    - MRd/MWr → BAR0 (bar0_hda_sim)
+    //    - CplD    → DMA 引擎 (hda_dma_engine)
+
+    tlp_rx_router u_rx_router (
+        .clk            (user_clk),
+        .rst_n          (user_rst_n),
+
+        // 上游: PCIe IP RX
+        .rx_tdata       (rx_tdata),
+        .rx_tkeep       (rx_tkeep),
+        .rx_tlast       (rx_tlast),
+        .rx_tvalid      (rx_tvalid),
+        .rx_tready      (rx_tready),
+        .rx_tuser       (rx_tuser),
+
+        // 下游端口 0: BAR0
+        .bar_rx_tdata   (routed_bar_rx_tdata),
+        .bar_rx_tkeep   (routed_bar_rx_tkeep),
+        .bar_rx_tlast   (routed_bar_rx_tlast),
+        .bar_rx_tvalid  (routed_bar_rx_tvalid),
+        .bar_rx_tready  (routed_bar_rx_tready),
+        .bar_rx_tuser   (routed_bar_rx_tuser),
+
+        // 下游端口 1: DMA 引擎
+        .dma_rx_tdata   (routed_dma_rx_tdata),
+        .dma_rx_tkeep   (routed_dma_rx_tkeep),
+        .dma_rx_tlast   (routed_dma_rx_tlast),
+        .dma_rx_tvalid  (routed_dma_rx_tvalid),
+        .dma_rx_tready  (routed_dma_rx_tready),
+        .dma_rx_tuser   (routed_dma_rx_tuser)
     );
 
     // ===================================================================
