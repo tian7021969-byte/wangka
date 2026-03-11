@@ -661,22 +661,58 @@ module hda_pcie_top (
     //  HDA DMA 引擎 (Bus Master)
     // ===================================================================
 
+    // -----------------------------------------------------------------
+    //  DMA 引擎临时禁用说明:
+    //  当前架构中 PCIe IP RX 路径只连到 bar0_hda_sim，没有 TLP 路由
+    //  分发器区分 BAR0 MRd/MWr 和 DMA CplD。DMA 引擎发出 MRd 后，
+    //  返回的 CplD 会被 bar0_hda_sim 当作未知 TLP 处理 (回 UR 或
+    //  drain)，导致 DMA timeout → cfg_err_cpl_timeout → 系统卡死。
+    //
+    //  修复: 将 DMA 请求输入接零，DMA 引擎永远不发 TLP，同时用
+    //  stub 信号让 Codec Engine 立即得到假的 DMA 完成响应，这样
+    //  Codec Engine 的 CORB/RIRB 处理流程能走完（虽然数据是假的，
+    //  但不会卡死，驱动能正常枚举和加载）。
+    // -----------------------------------------------------------------
+
+    // Codec Engine DMA 请求 stub: 立即回 done，返回空数据
+    // 这让 Codec Engine 状态机不会卡在 DMA_RD_WAIT / DMA_WR_WAIT
+    reg dma_rd_done_stub, dma_wr_done_stub;
+    reg [31:0] dma_rd_data_stub;
+
+    always @(posedge user_clk) begin
+        if (user_reset) begin
+            dma_rd_done_stub <= 1'b0;
+            dma_wr_done_stub <= 1'b0;
+            dma_rd_data_stub <= 32'h0;
+        end else begin
+            dma_rd_done_stub <= dma_rd_req;  // 1 周期后回 done
+            dma_wr_done_stub <= dma_wr_req;
+            dma_rd_data_stub <= 32'h0;       // 返回空数据 (Codec 会得到空 Verb)
+        end
+    end
+
+    // 连接 stub 到 Codec Engine
+    assign dma_rd_done = dma_rd_done_stub;
+    assign dma_rd_data = dma_rd_data_stub;
+    assign dma_wr_done = dma_wr_done_stub;
+
     hda_dma_engine u_dma_eng (
         .clk            (user_clk),
         .rst_n          (user_rst_n),
         .requester_id   (completer_id),
 
-        .dma_rd_req     (dma_rd_req),
-        .dma_rd_addr    (dma_rd_addr),
-        .dma_rd_done    (dma_rd_done),
-        .dma_rd_data    (dma_rd_data),
+        // DMA 请求全部接零 — 不产生任何 PCIe TLP
+        .dma_rd_req     (1'b0),
+        .dma_rd_addr    (64'h0),
+        .dma_rd_done    (),         // 不使用
+        .dma_rd_data    (),         // 不使用
 
-        .dma_wr_req     (dma_wr_req),
-        .dma_wr_addr    (dma_wr_addr),
-        .dma_wr_data    (dma_wr_data),
-        .dma_wr_done    (dma_wr_done),
+        .dma_wr_req     (1'b0),
+        .dma_wr_addr    (64'h0),
+        .dma_wr_data    (64'h0),
+        .dma_wr_done    (),         // 不使用
 
-        // TX → TX 仲裁器 端口 1
+        // TX → TX 仲裁器 端口 1 (DMA 不发 TLP，tvalid 始终为 0)
         .s_axis_tx_tdata    (dma_tx_tdata),
         .s_axis_tx_tkeep    (dma_tx_tkeep),
         .s_axis_tx_tlast    (dma_tx_tlast),
@@ -684,7 +720,7 @@ module hda_pcie_top (
         .s_axis_tx_tready   (dma_tx_tready),
         .s_axis_tx_tuser    (dma_tx_tuser),
 
-        // DMA RX (CplD 接收) — 简化: 不使用独立 RX 通路
+        // DMA RX — 不使用
         .m_axis_rx_tdata    (64'h0),
         .m_axis_rx_tkeep    (8'h0),
         .m_axis_rx_tlast    (1'b0),

@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-| Date             : Wed Mar 11 19:41:05 2026
+| Date             : Wed Mar 11 19:54:05 2026
 | Host             : DUKEHHU-PC0 running 64-bit major release  (build 9200)
 | Command          : report_power -file hda_pcie_top_power_routed.rpt -pb hda_pcie_top_power_summary_routed.pb -rpx hda_pcie_top_power_routed.rpx
 | Design           : hda_pcie_top
@@ -30,10 +30,10 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.570        |
+| Total On-Chip Power (W)  | 0.569        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
-| Dynamic (W)              | 0.468        |
+| Dynamic (W)              | 0.466        |
 | Device Static (W)        | 0.103        |
 | Effective TJA (C/W)      | 2.7          |
 | Max Ambient (C)          | 83.5         |
@@ -52,15 +52,15 @@ Table of Contents
 +-------------------------+-----------+----------+-----------+-----------------+
 | On-Chip                 | Power (W) | Used     | Available | Utilization (%) |
 +-------------------------+-----------+----------+-----------+-----------------+
-| Clocks                  |     0.016 |       12 |       --- |             --- |
-| Slice Logic             |     0.005 |     8459 |       --- |             --- |
-|   LUT as Logic          |     0.004 |     3149 |     47200 |            6.67 |
-|   Register              |    <0.001 |     3930 |     94400 |            4.16 |
+| Clocks                  |     0.015 |       12 |       --- |             --- |
+| Slice Logic             |     0.004 |     7960 |       --- |             --- |
+|   LUT as Logic          |     0.004 |     2982 |     47200 |            6.32 |
 |   F7/F8 Muxes           |    <0.001 |      833 |     63400 |            1.31 |
-|   CARRY4                |    <0.001 |       50 |     15850 |            0.32 |
+|   Register              |    <0.001 |     3646 |     94400 |            3.86 |
 |   LUT as Shift Register |    <0.001 |       11 |     19000 |            0.06 |
-|   Others                |     0.000 |      102 |       --- |             --- |
-| Signals                 |     0.007 |     6466 |       --- |             --- |
+|   CARRY4                |    <0.001 |       18 |     15850 |            0.11 |
+|   Others                |     0.000 |      100 |       --- |             --- |
+| Signals                 |     0.007 |     6121 |       --- |             --- |
 | Block RAM               |     0.010 |        8 |       105 |            7.62 |
 | MMCM                    |     0.211 |        2 |         6 |           33.33 |
 | I/O                     |    <0.001 |        2 |       285 |            0.70 |
@@ -68,7 +68,7 @@ Table of Contents
 | Hard IPs                |     0.042 |        1 |       --- |             --- |
 |   PCIE                  |     0.042 |        1 |         1 |          100.00 |
 | Static Power            |     0.103 |          |           |                 |
-| Total                   |     0.570 |          |           |                 |
+| Total                   |     0.569 |          |           |                 |
 +-------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -78,7 +78,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.117 |       0.102 |      0.016 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.116 |       0.100 |      0.016 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.135 |       0.117 |      0.018 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.004 |       0.000 |      0.004 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |
@@ -156,7 +156,7 @@ Table of Contents
 +--------------+-----------+
 | Name         | Power (W) |
 +--------------+-----------+
-| hda_pcie_top |     0.468 |
+| hda_pcie_top |     0.466 |
 |   u_bar0_sim |     0.011 |
 |   u_pcie_ep  |     0.350 |
 |     inst     |     0.350 |
