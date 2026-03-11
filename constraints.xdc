@@ -54,7 +54,7 @@ set_property PACKAGE_PIN E6 [get_ports { pcie_clk_n }]
 #  内部上拉电阻确保 FPGA 在板级上电时序完成之前（主机尚未拉低
 #  PERST# 时）不会看到误复位。Bank 34 VCCO 为 3.3V，使用 LVCMOS33。
 
-set_property PACKAGE_PIN J1         [get_ports { pcie_rst_n }]
+set_property PACKAGE_PIN K18         [get_ports { pcie_rst_n }]
 set_property IOSTANDARD  LVCMOS33   [get_ports { pcie_rst_n }]
 set_property PULLUP      true       [get_ports { pcie_rst_n }]
 
@@ -89,7 +89,7 @@ set_property PULLUP      true       [get_ports { pcie_rst_n }]
 #
 #  Bank 34, LVCMOS33, 默认 8 mA 驱动能力。
 
-set_property PACKAGE_PIN G1         [get_ports { led_status }]
+set_property PACKAGE_PIN Y4         [get_ports { led_status }]
 set_property IOSTANDARD  LVCMOS33   [get_ports { led_status }]
 
 
