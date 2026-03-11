@@ -7,3 +7,5 @@ set_property src_info {type:XDC file:1 line:57 export:INPUT save:INPUT read:READ
 set_property PACKAGE_PIN C13        [get_ports { pcie_rst_n }]
 set_property src_info {type:XDC file:1 line:92 export:INPUT save:INPUT read:READ} [current_design]
 set_property PACKAGE_PIN G21        [get_ports { led_status }]
+set_property src_info {type:XDC file:1 line:152 export:INPUT save:INPUT read:READ} [current_design]
+set_false_path -from [get_pins u_pcie_ep/inst/inst/user_reset_out_reg/C] -to   [get_cells rst_24m_sync_reg*]

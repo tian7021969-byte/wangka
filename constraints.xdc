@@ -124,18 +124,33 @@ set_false_path -from [get_ports pcie_rst_n]
 set_false_path -to [get_ports led_status]
 
 # ---------------------------------------------------------------------------
-#  异步时钟域隔离 — PCIe 时钟 vs MMCM 24 MHz Wall Clock
+#  异步时钟域隔离 — userclk1 (62.5 MHz) vs clk_24m (24 MHz)
 # ---------------------------------------------------------------------------
-#  pcie_sys_clk 域 (100 MHz REFCLK → PCIe IP 内部 user_clk 62.5 MHz)
-#  与 u_mmcm_walclk 产生的 24 MHz Wall Clock 是完全异步的两个时钟域。
-#  RTL 中已使用 toggle + 3 级同步器进行跨域处理，无需 Vivado 强行
-#  对齐这两个域之间的时序路径。
+#  PCIe IP 内部派生时钟 userclk1 (62.5 MHz) 与 MMCM 产生的 clk_24m
+#  (24 MHz) 是异步时钟域。RTL 中使用 toggle + 3 级同步器跨域处理。
 #
-#  此约束消除 WNS 时序违规报告中 clk_24m 相关的跨域路径。
+#  注意: 必须直接引用 userclk1 而非 pcie_sys_clk，因为 Vivado 的
+#  set_clock_groups 在引用源时钟时不一定传播到所有派生时钟。
+#  使用 get_clocks -include_generated_clocks 确保覆盖所有派生时钟。
 
 set_clock_groups -asynchronous \
-    -group [get_clocks pcie_sys_clk] \
+    -group [get_clocks -include_generated_clocks pcie_sys_clk] \
     -group [get_clocks -of_objects [get_pins u_mmcm_walclk/CLKOUT0]]
+
+# ---------------------------------------------------------------------------
+#  跨域同步器路径约束 (CDC) — 补充保护
+# ---------------------------------------------------------------------------
+#  即使 set_clock_groups 已覆盖，仍显式约束 CDC 同步器路径，
+#  确保 Vivado 不会对这些路径做 setup/hold 检查。
+#
+#  1. clk24_toggle → clk24_sync[0]: 跨域 toggle 同步器
+#  2. user_reset → rst_24m_sync[*]/PRE: 异步复位跨域
+
+set_false_path -from [get_cells clk24_toggle_reg*] \
+              -to   [get_cells clk24_sync_reg[0]]
+
+set_false_path -from [get_pins u_pcie_ep/inst/inst/user_reset_out_reg/C] \
+              -to   [get_cells rst_24m_sync_reg*]
 
 
 # ===========================================================================
