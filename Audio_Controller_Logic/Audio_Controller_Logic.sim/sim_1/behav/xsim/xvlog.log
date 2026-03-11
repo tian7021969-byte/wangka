@@ -1,0 +1,20 @@
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/sim_stubs.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module IBUFDS_GTE2
+INFO: [VRFC 10-311] analyzing module pcie_7x_0
+INFO: [VRFC 10-311] analyzing module MMCME2_BASE
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/hda_pcie_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module hda_pcie_top
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/pcileech_pcie_cfg_a7.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module pcileech_pcie_cfg_a7
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/bar0_hda_sim.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module bar0_hda_sim
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/hda_codec_engine.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module hda_codec_engine
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/hda_dma_engine.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module hda_dma_engine
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/tlp_tag_randomizer.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tlp_tag_randomizer
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/tx_arbiter.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tx_arbiter
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module tb_hda_pcie_top

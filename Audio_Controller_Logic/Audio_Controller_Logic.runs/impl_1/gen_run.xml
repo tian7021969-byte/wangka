@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<GenRun Id="impl_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1772872741">
+  <File Type="ROUTE-PWR" Name="hda_pcie_top_power_routed.rpt"/>
+  <File Type="PA-TCL" Name="hda_pcie_top.tcl"/>
+  <File Type="BITSTR-MMI" Name="hda_pcie_top.mmi"/>
+  <File Type="OPT-METHODOLOGY-DRC" Name="hda_pcie_top_methodology_drc_opted.rpt"/>
+  <File Type="INIT-TIMING" Name="hda_pcie_top_timing_summary_init.rpt"/>
+  <File Type="ROUTE-PWR-SUM" Name="hda_pcie_top_power_summary_routed.pb"/>
+  <File Type="REPORTS-TCL" Name="hda_pcie_top_reports.tcl"/>
+  <File Type="OPT-TIMING" Name="hda_pcie_top_timing_summary_opted.rpt"/>
+  <File Type="OPT-DCP" Name="hda_pcie_top_opt.dcp"/>
+  <File Type="OPT-DRC" Name="hda_pcie_top_drc_opted.rpt"/>
+  <File Type="OPT-HWDEF" Name="hda_pcie_top.hwdef"/>
+  <File Type="PWROPT-DCP" Name="hda_pcie_top_pwropt.dcp"/>
+  <File Type="PWROPT-DRC" Name="hda_pcie_top_drc_pwropted.rpt"/>
+  <File Type="PWROPT-TIMING" Name="hda_pcie_top_timing_summary_pwropted.rpt"/>
+  <File Type="PLACE-DCP" Name="hda_pcie_top_placed.dcp"/>
+  <File Type="PLACE-IO" Name="hda_pcie_top_io_placed.rpt"/>
+  <File Type="PLACE-CLK" Name="hda_pcie_top_clock_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL" Name="hda_pcie_top_utilization_placed.rpt"/>
+  <File Type="PLACE-UTIL-PB" Name="hda_pcie_top_utilization_placed.pb"/>
+  <File Type="PLACE-CTRL" Name="hda_pcie_top_control_sets_placed.rpt"/>
+  <File Type="PLACE-SIMILARITY" Name="hda_pcie_top_incremental_reuse_placed.rpt"/>
+  <File Type="PLACE-PRE-SIMILARITY" Name="hda_pcie_top_incremental_reuse_pre_placed.rpt"/>
+  <File Type="BG-BIN" Name="hda_pcie_top.bin"/>
+  <File Type="PLACE-TIMING" Name="hda_pcie_top_timing_summary_placed.rpt"/>
+  <File Type="POSTPLACE-PWROPT-DCP" Name="hda_pcie_top_postplace_pwropt.dcp"/>
+  <File Type="BITSTR-MSK" Name="hda_pcie_top.msk"/>
+  <File Type="POSTPLACE-PWROPT-TIMING" Name="hda_pcie_top_timing_summary_postplace_pwropted.rpt"/>
+  <File Type="PHYSOPT-DCP" Name="hda_pcie_top_physopt.dcp"/>
+  <File Type="PHYSOPT-DRC" Name="hda_pcie_top_drc_physopted.rpt"/>
+  <File Type="BITSTR-RBT" Name="hda_pcie_top.rbt"/>
+  <File Type="PHYSOPT-TIMING" Name="hda_pcie_top_timing_summary_physopted.rpt"/>
+  <File Type="ROUTE-ERROR-DCP" Name="hda_pcie_top_routed_error.dcp"/>
+  <File Type="ROUTE-DCP" Name="hda_pcie_top_routed.dcp"/>
+  <File Type="ROUTE-BLACKBOX-DCP" Name="hda_pcie_top_routed_bb.dcp"/>
+  <File Type="ROUTE-DRC" Name="hda_pcie_top_drc_routed.rpt"/>
+  <File Type="ROUTE-DRC-PB" Name="hda_pcie_top_drc_routed.pb"/>
+  <File Type="ROUTE-DRC-RPX" Name="hda_pcie_top_drc_routed.rpx"/>
+  <File Type="ROUTE-METHODOLOGY-DRC" Name="hda_pcie_top_methodology_drc_routed.rpt"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-RPX" Name="hda_pcie_top_methodology_drc_routed.rpx"/>
+  <File Type="ROUTE-METHODOLOGY-DRC-PB" Name="hda_pcie_top_methodology_drc_routed.pb"/>
+  <File Type="ROUTE-PWR-RPX" Name="hda_pcie_top_power_routed.rpx"/>
+  <File Type="ROUTE-STATUS" Name="hda_pcie_top_route_status.rpt"/>
+  <File Type="ROUTE-STATUS-PB" Name="hda_pcie_top_route_status.pb"/>
+  <File Type="ROUTE-TIMINGSUMMARY" Name="hda_pcie_top_timing_summary_routed.rpt"/>
+  <File Type="ROUTE-TIMING-PB" Name="hda_pcie_top_timing_summary_routed.pb"/>
+  <File Type="ROUTE-TIMING-RPX" Name="hda_pcie_top_timing_summary_routed.rpx"/>
+  <File Type="ROUTE-SIMILARITY" Name="hda_pcie_top_incremental_reuse_routed.rpt"/>
+  <File Type="ROUTE-CLK" Name="hda_pcie_top_clock_utilization_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW" Name="hda_pcie_top_bus_skew_routed.rpt"/>
+  <File Type="ROUTE-BUS-SKEW-PB" Name="hda_pcie_top_bus_skew_routed.pb"/>
+  <File Type="ROUTE-BUS-SKEW-RPX" Name="hda_pcie_top_bus_skew_routed.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-DCP" Name="hda_pcie_top_postroute_physopt.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-BLACKBOX-DCP" Name="hda_pcie_top_postroute_physopt_bb.dcp"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING" Name="hda_pcie_top_timing_summary_postroute_physopted.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-PB" Name="hda_pcie_top_timing_summary_postroute_physopted.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-TIMING-RPX" Name="hda_pcie_top_timing_summary_postroute_physopted.rpx"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW" Name="hda_pcie_top_bus_skew_postroute_physopted.rpt"/>
+  <File Type="BG-BIT" Name="hda_pcie_top.bit"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-PB" Name="hda_pcie_top_bus_skew_postroute_physopted.pb"/>
+  <File Type="POSTROUTE-PHYSOPT-BUS-SKEW-RPX" Name="hda_pcie_top_bus_skew_postroute_physopted.rpx"/>
+  <File Type="BITSTR-NKY" Name="hda_pcie_top.nky"/>
+  <File Type="BITSTR-BMM" Name="hda_pcie_top_bd.bmm"/>
+  <File Type="PDI-FILE" Name="hda_pcie_top.pdi"/>
+  <File Type="RCFI_FILE" Name="hda_pcie_top.rcfi"/>
+  <File Type="CFI_FILE" Name="hda_pcie_top.cfi"/>
+  <File Type="RNPI_FILE" Name="hda_pcie_top.rnpi"/>
+  <File Type="NPI_FILE" Name="hda_pcie_top.npi"/>
+  <File Type="RBD_FILE" Name="hda_pcie_top.rbd"/>
+  <File Type="BITSTR-LTX" Name="debug_nets.ltx"/>
+  <File Type="BITSTR-LTX" Name="hda_pcie_top.ltx"/>
+  <File Type="BITSTR-SYSDEF" Name="hda_pcie_top.sysdef"/>
+  <File Type="BG-BGN" Name="hda_pcie_top.bgn"/>
+  <File Type="BG-DRC" Name="hda_pcie_top.drc"/>
+  <File Type="RDI-RDI" Name="hda_pcie_top.vdi"/>
+  <File Type="WBT-USG" Name="usage_statistics_webtalk.html"/>
+  <File Type="ROUTE-RQS" Name="hda_pcie_top_routed.rqs"/>
+  <File Type="POSTROUTE-PHYSOPT-RQS" Name="hda_pcie_top_postroute_physopted.rqs"/>
+  <File Type="ROUTE-RQS-RPT" Name="route_report_qor_suggestions_0.rpt"/>
+  <File Type="POSTROUTE-PHYSOPT-RQS-RPT" Name="postroute_physopt_report_qor_suggestions_0.rpt"/>
+  <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
+    <Filter Type="Srcs"/>
+    <File Path="$PSRCDIR/sources_1/ip/pcie_7x_0/pcie_7x_0.xci">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../bar0_hda_sim.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../pcileech_pcie_cfg_a7.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../tlp_tag_randomizer.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../hda_pcie_top.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../hda_codec_engine.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../hda_dma_engine.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../tx_arbiter.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="DesignMode" Val="RTL"/>
+      <Option Name="TopModule" Val="hda_pcie_top"/>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">
+    <Filter Type="Constrs"/>
+    <File Path="$PPRDIR/../constraints.xdc">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="ConstrsType" Val="XDC"/>
+    </Config>
+  </FileSet>
+  <FileSet Name="utils" Type="Utils" RelSrcDir="$PSRCDIR/utils_1">
+    <Filter Type="Utils"/>
+    <File Path="$PSRCDIR/utils_1/imports/synth_1/hda_pcie_top.dcp">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedInSteps" Val="synth_1"/>
+        <Attr Name="AutoDcp" Val="1"/>
+      </FileInfo>
+    </File>
+    <Config>
+      <Option Name="TopAutoSet" Val="TRUE"/>
+    </Config>
+  </FileSet>
+  <Strategy Version="1" Minor="2">
+    <StratHandle Name="Vivado Implementation Defaults" Flow="Vivado Implementation 2022"/>
+    <Step Id="init_design"/>
+    <Step Id="opt_design"/>
+    <Step Id="power_opt_design"/>
+    <Step Id="place_design"/>
+    <Step Id="post_place_power_opt_design"/>
+    <Step Id="phys_opt_design"/>
+    <Step Id="route_design"/>
+    <Step Id="post_route_phys_opt_design"/>
+    <Step Id="write_bitstream">
+      <Option Id="BinFile">1</Option>
+    </Step>
+  </Strategy>
+</GenRun>

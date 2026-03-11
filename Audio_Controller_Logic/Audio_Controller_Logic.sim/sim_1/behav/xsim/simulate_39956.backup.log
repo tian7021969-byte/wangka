@@ -1,0 +1,41 @@
+#-----------------------------------------------------------
+# xsim v2022.2 (64-bit)
+# SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
+# IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
+# Start of session at: Sat Mar  7 16:19:15 2026
+# Process ID: 39956
+# Current directory: C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.sim/sim_1/behav/xsim
+# Command line: xsim.exe -log simulate.log -mode tcl -source {xsim.dir/tb_hda_pcie_top_behav/xsim_script.tcl}
+# Log file: C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.sim/sim_1/behav/xsim/simulate.log
+# Journal file: C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.sim/sim_1/behav/xsim\xsim.jou
+# Running On: DUKEHHU-PC0, OS: Windows, CPU Frequency: 2112 MHz, CPU Physical cores: 16, Host memory: 34013 MB
+#-----------------------------------------------------------
+source xsim.dir/tb_hda_pcie_top_behav/xsim_script.tcl
+# xsim {tb_hda_pcie_top_behav} -autoloadwcfg -runall
+Time resolution is 1 ps
+run -all
+
+=============================================================
+  tb_hda_pcie_top — Private Custom Level DMA Testbench
+  sys_clk = 100 MHz, Reset Hold = 1200 ns
+=============================================================
+
+[1200000] sys_rst_n released (held low for 1200 ns)
+[1200000] Reset released, waiting for PCIe link training...
+[1656000] pcie_7x_0 stub: user_lnk_up asserted
+[1656000] user_lnk_up = 1, link is UP!
+
+=============================================================
+  [1656000] PCIe Link Up Success!
+=============================================================
+
+
+=============================================================
+  TEST 1: TLP Tag Randomization Verification (D2-2)
+=============================================================
+INFO: [Common 17-41] Interrupt caught. Command should exit soon.
+run: Time (s): cpu = 00:00:00 ; elapsed = 00:05:37 . Memory (MB): peak = 240.219 ; gain = 0.000
+INFO: [Common 17-344] 'run' was cancelled
+exit
+INFO: xsimkernel Simulation Memory Usage: 70364 KB (Peak: 70364 KB), Simulation CPU Usage: 70077 ms
+INFO: [Common 17-206] Exiting xsim at Sat Mar  7 16:24:57 2026...

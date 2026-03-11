@@ -1,0 +1,61 @@
+Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+| Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
+| Date         : Sat Mar  7 16:40:26 2026
+| Host         : DUKEHHU-PC0 running 64-bit major release  (build 9200)
+| Command      : report_methodology -file hda_pcie_top_methodology_drc_routed.rpt -pb hda_pcie_top_methodology_drc_routed.pb -rpx hda_pcie_top_methodology_drc_routed.rpx
+| Design       : hda_pcie_top
+| Device       : xc7a75tfgg484-2
+| Speed File   : -2
+| Design State : Fully Routed
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Report Methodology
+
+Table of Contents
+-----------------
+1. REPORT SUMMARY
+2. REPORT DETAILS
+
+1. REPORT SUMMARY
+-----------------
+            Netlist: netlist
+          Floorplan: design_1
+      Design limits: <entire design considered>
+             Max violations: <unlimited>
+             Violations found: 2
++-----------+----------+------------------------------+------------+
+| Rule      | Severity | Description                  | Violations |
++-----------+----------+------------------------------+------------+
+| LUTAR-1   | Warning  | LUT drives async reset alert | 1          |
+| TIMING-16 | Warning  | Large setup violation        | 1          |
++-----------+----------+------------------------------+------------+
+
+2. REPORT DETAILS
+-----------------
+LUTAR-1#1 Warning
+LUT drives async reset alert  
+LUT cell u_pcie_ep/inst/inst/user_reset_out_i_1, with 2 or more inputs, drives asynchronous preset/clear pin(s) u_pcie_ep/inst/inst/user_reset_int_reg/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_1/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_10/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_11/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_12/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_13/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_14/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_3/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_4/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_5/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_6/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_7/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_8/PRE,
+u_pcie_ep/inst/inst/user_reset_out_reg_replica_9/PRE
+ (the first 15 of 25 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+Related violations: <none>
+
+TIMING-16#1 Warning
+Large setup violation  
+There is a large setup violation of -4.120 ns between clk24_toggle_reg_replica/C (clocked by clk_24m) and clk24_sync_reg[0]/D (clocked by userclk1). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+Related violations: <none>
+
+

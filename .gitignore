@@ -16,13 +16,7 @@ venv/
 *.db
 *.zip
 
-# Vivado generated files
-Audio_Controller_Logic/Audio_Controller_Logic.cache/
-Audio_Controller_Logic/Audio_Controller_Logic.hw/
-Audio_Controller_Logic/Audio_Controller_Logic.ip_user_files/
-Audio_Controller_Logic/Audio_Controller_Logic.sim/
-Audio_Controller_Logic/Audio_Controller_Logic.runs/
-Audio_Controller_Logic/Audio_Controller_Logic.gen/
+# Vivado temp files (keep runs/impl for bitstream output)
 Audio_Controller_Logic/.Xil/
 
 # Tools - third party distributions

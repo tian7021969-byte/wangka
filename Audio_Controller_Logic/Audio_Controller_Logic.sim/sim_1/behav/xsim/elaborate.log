@@ -1,0 +1,28 @@
+Vivado Simulator v2022.2
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: C:/Xilinx/Vivado/2022.2/bin/unwrapped/win64.o/xelab.exe --debug typical --relax --mt 2 -d SIMULATION= -L xil_defaultlib -L unisims_ver -L unimacro_ver -L secureip -L xpm --snapshot tb_hda_pcie_top_behav xil_defaultlib.tb_hda_pcie_top xil_defaultlib.glbl -log elaborate.log 
+Using 2 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 132 : Sensitivity on input argument "requester_id" of task "inject_mrd" may never get triggered.
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 132 : Sensitivity on input argument "tag" of task "inject_mrd" may never get triggered.
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 171 : Sensitivity on input argument "requester_id" of task "inject_mwr" may never get triggered.
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 171 : Sensitivity on input argument "tag" of task "inject_mwr" may never get triggered.
+WARNING: [XSIM 43-4328] File: C:/Users/dukehhu/Desktop/amd/tb_hda_pcie_top.v Line: 181 : Sensitivity on input argument "data" of task "inject_mwr" may never get triggered.
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling module xil_defaultlib.IBUFDS_GTE2
+Compiling module xil_defaultlib.MMCME2_BASE(CLKFBOUT_MULT_F=12.0...
+Compiling module xil_defaultlib.pcie_7x_0
+Compiling module xil_defaultlib.pcileech_pcie_cfg_a7
+Compiling module xil_defaultlib.bar0_hda_sim
+Compiling module xil_defaultlib.hda_codec_engine
+Compiling module xil_defaultlib.hda_dma_engine
+Compiling module xil_defaultlib.tx_arbiter
+Compiling module xil_defaultlib.tlp_tag_randomizer
+Compiling module xil_defaultlib.hda_pcie_top
+Compiling module xil_defaultlib.tb_hda_pcie_top
+Compiling module xil_defaultlib.glbl
+Built simulation snapshot tb_hda_pcie_top_behav
