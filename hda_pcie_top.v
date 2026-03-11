@@ -759,6 +759,8 @@ module hda_pcie_top (
     //  链路状态指示灯
     // ===================================================================
 
-    assign led_status = user_lnk_up;
+    // Captain DMA 75T V3.0: user_ld1_n (G21) 低电平有效
+    // user_lnk_up=1 → LED 输出 0 → LED 亮
+    assign led_status = ~user_lnk_up;
 
 endmodule

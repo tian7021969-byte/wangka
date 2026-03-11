@@ -194,11 +194,11 @@ module hda_dma_engine (
                         10'd1                   // Length = 1 DW
                     };
                     s_axis_tx_tkeep  <= 8'hFF;
-                    s_axis_tx_tlast  <= pending_is_64bit ? 1'b0 : 1'b0;
+                    s_axis_tx_tlast  <= 1'b0;
                     s_axis_tx_tvalid <= 1'b1;
-                    s_axis_tx_tuser  <= 4'b0100; // SOF
+                    s_axis_tx_tuser  <= 4'b0000;
 
-                    if (s_axis_tx_tready) begin
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         state <= ST_RD_HDR1;
                     end
                 end
@@ -217,7 +217,7 @@ module hda_dma_engine (
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
 
-                    if (s_axis_tx_tready) begin
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         s_axis_tx_tvalid <= 1'b0;
                         s_axis_tx_tlast  <= 1'b0;
                         m_axis_rx_tready <= 1'b1;
@@ -280,9 +280,9 @@ module hda_dma_engine (
                     s_axis_tx_tkeep  <= 8'hFF;
                     s_axis_tx_tlast  <= 1'b0;
                     s_axis_tx_tvalid <= 1'b1;
-                    s_axis_tx_tuser  <= 4'b0100; // SOF
+                    s_axis_tx_tuser  <= 4'b0000;
 
-                    if (s_axis_tx_tready)
+                    if (s_axis_tx_tvalid && s_axis_tx_tready)
                         state <= ST_WR_HDR1;
                 end
 
@@ -303,7 +303,7 @@ module hda_dma_engine (
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
 
-                    if (s_axis_tx_tready)
+                    if (s_axis_tx_tvalid && s_axis_tx_tready)
                         state <= ST_WR_DATA;
                 end
 
@@ -320,7 +320,7 @@ module hda_dma_engine (
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
 
-                    if (s_axis_tx_tready) begin
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         s_axis_tx_tvalid <= 1'b0;
                         s_axis_tx_tlast  <= 1'b0;
                         state <= ST_WR_DONE;

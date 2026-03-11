@@ -609,14 +609,17 @@ module bar0_hda_sim (
                 end
 
                 // ---- 发送 CplD 第一拍 ----
+                // AXI-Stream 握手: tvalid && tready 同时为 1 才算传输完成
+                // 必须等 tvalid 已经被驱动为 1 后再检查 tready
                 ST_TX_CPL0: begin
                     s_axis_tx_tdata  <= {cpld_dw1, cpld_dw0};
                     s_axis_tx_tkeep  <= 8'hFF;
                     s_axis_tx_tlast  <= 1'b0;
                     s_axis_tx_tvalid <= 1'b1;
-                    s_axis_tx_tuser  <= 4'b0100;
+                    s_axis_tx_tuser  <= 4'b0000;
 
-                    if (s_axis_tx_tready) begin
+                    // 仅当 tvalid 已经为 1 (上一拍已设置) 且 tready=1 时才前进
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         state <= ST_TX_CPL1;
                     end
                 end
@@ -629,7 +632,7 @@ module bar0_hda_sim (
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
 
-                    if (s_axis_tx_tready) begin
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         s_axis_tx_tvalid <= 1'b0;
                         s_axis_tx_tlast  <= 1'b0;
                         m_axis_rx_tready <= 1'b1;

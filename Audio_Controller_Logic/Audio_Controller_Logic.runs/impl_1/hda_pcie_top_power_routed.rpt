@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ----------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-| Date             : Wed Mar 11 16:31:59 2026
+| Date             : Wed Mar 11 17:06:05 2026
 | Host             : DUKEHHU-PC0 running 64-bit major release  (build 9200)
 | Command          : report_power -file hda_pcie_top_power_routed.rpt -pb hda_pcie_top_power_summary_routed.pb -rpx hda_pcie_top_power_routed.rpx
 | Design           : hda_pcie_top
@@ -53,14 +53,14 @@ Table of Contents
 | On-Chip                 | Power (W) | Used     | Available | Utilization (%) |
 +-------------------------+-----------+----------+-----------+-----------------+
 | Clocks                  |     0.015 |       12 |       --- |             --- |
-| Slice Logic             |     0.003 |     6646 |       --- |             --- |
+| Slice Logic             |     0.003 |     6660 |       --- |             --- |
 |   LUT as Logic          |     0.002 |     2063 |     47200 |            4.37 |
 |   Register              |    <0.001 |     3916 |     94400 |            4.15 |
-|   F7/F8 Muxes           |    <0.001 |      188 |     63400 |            0.30 |
+|   F7/F8 Muxes           |    <0.001 |      209 |     63400 |            0.33 |
 |   CARRY4                |    <0.001 |       50 |     15850 |            0.32 |
 |   LUT as Shift Register |    <0.001 |       11 |     19000 |            0.06 |
 |   Others                |     0.000 |      102 |       --- |             --- |
-| Signals                 |     0.005 |     6025 |       --- |             --- |
+| Signals                 |     0.005 |     6000 |       --- |             --- |
 | Block RAM               |     0.010 |        8 |       105 |            7.62 |
 | MMCM                    |     0.211 |        2 |         6 |           33.33 |
 | I/O                     |    <0.001 |        2 |       285 |            0.70 |
