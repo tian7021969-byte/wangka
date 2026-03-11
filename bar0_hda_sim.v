@@ -269,6 +269,12 @@ module bar0_hda_sim (
                         if (reg_gctl[0] && !data[0]) begin
                             reg_statests <= 16'h0000;
                         end
+                        // 检测 CRST 从 0→1: 控制器退出复位, 报告 codec 存在
+                        // HDA spec: 退出复位后, 控制器检测 SDI 线上的 codec
+                        // 并在 STATESTS 对应位置位 (bit 0 = SDI0 上有 codec)
+                        if (!reg_gctl[0] && data[0]) begin
+                            reg_statests <= 16'h0001; // SDI0 检测到 CA0132 Codec
+                        end
                         reg_gctl[ 7: 0] <= data[ 7: 0];
                     end
                     if (be[1]) reg_gctl[15: 8] <= data[15: 8];
@@ -314,14 +320,15 @@ module bar0_hda_sim (
                     // CORBWP: 主机可写低 8 位
                     if (be[0]) reg_corbwp[ 7:0] <= data[ 7:0];
                     if (be[1]) reg_corbwp[15:8] <= data[15:8];
-                    // CORBRP: bit 15 是 Reset, 低 8 位由硬件管理
-                    if (be[2] && data[23]) begin
+                    // CORBRP: bit 15 (= data[31], be[3]) 是 Reset 位
+                    // 低 8 位 (data[23:16]) 由硬件管理, 主机不可写
+                    if (be[3] && data[31]) begin
                         // CORBRP Reset: 主机写 1 到 bit 15, 硬件清零 RP
-                        reg_corbrp <= 16'h8000; // 置位 reset 标志
+                        reg_corbrp <= 16'h8000; // 置位 reset 标志, RP=0
                     end
-                    if (be[2] && !data[23]) begin
+                    if (be[3] && !data[31]) begin
                         // 主机写 0 到 bit 15: 清除 reset, RP 有效
-                        reg_corbrp <= 16'h0000;
+                        reg_corbrp <= {1'b0, reg_corbrp[14:0]}; // 仅清 Reset 位, 保留 RP 值
                     end
                 end
                 8'h13: begin // CORBCTL / CORBST / CORBSIZE
@@ -343,10 +350,8 @@ module bar0_hda_sim (
                     if (be[3]) reg_rirbubase[31:24] <= data[31:24];
                 end
                 8'h16: begin // RIRBWP (low 16) / RINTCNT (high 16)
-                    // RIRBWP: bit 15 = reset (写 1 清零 WP)
-                    if (be[0] && data[7]) begin
-                        // 此处不直接写 WP, WP 由 codec engine 管理
-                    end
+                    // RIRBWP: bit 15 (data[15], be[1]) = Reset, 写 1 清零 WP
+                    // 低 8 位由硬件管理 (codec engine), 主机不可写
                     if (be[1] && data[15]) begin
                         reg_rirbwp <= 16'h0000; // Reset WP
                     end
@@ -516,7 +521,7 @@ module bar0_hda_sim (
             // 寄存器初始化
             reg_gctl       <= 32'h0000_0000;  // CRST=0 (控制器上电处于复位状态, 符合 HDA spec)
             reg_wakeen     <= 16'h0;
-            reg_statests   <= 16'h0000;       // 无 codec (DMA 未实现, 禁止触发 CORB/RIRB 通信)
+            reg_statests   <= 16'h0000;       // CRST=0 时无 codec (CRST 0→1 后自动置 bit 0)
             reg_intctl     <= 32'h0;
             reg_intsts     <= 32'h0;
             reg_ssync      <= 32'h0;
@@ -798,7 +803,7 @@ module bar0_hda_sim (
             // ---- GCTL CRST 说明 ----
             // CRST 完全由主机驱动控制:
             //   驱动写 CRST=0 → 控制器进入复位 (STATESTS 清零)
-            //   驱动写 CRST=1 → 控制器退出复位 (不报告 codec, DMA 未实现)
+            //   驱动写 CRST=1 → 控制器退出复位 (STATESTS[0]=1, 报告 SDI0 codec)
             // 不做自动恢复, 避免与驱动轮询 CRST 竞争
 
             // ---- INTSTS 自动更新 ----
