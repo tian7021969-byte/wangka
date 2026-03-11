@@ -7,7 +7,7 @@
 //
 //  测试项目:
 //    TEST 1: TLP Tag 随机化验证 (D2-2)
-//    TEST 2: CplD 时序抖动验证 (AE-9 模式, 2~11 周期可变延迟)
+//    TEST 2: CplD 时序抖动验证 (AE-9 模式, 2~6 周期可变延迟)
 //    TEST 3: 流描述符寄存器读写测试
 //    TEST 4: CORB/RIRB 寄存器配置测试
 //    TEST 5: s_axis_tx_tuser X-state 检查
@@ -359,7 +359,7 @@ module tb_hda_pcie_top;
         $display("=============================================================");
         $display("  TEST 2: CplD Timing Jitter Verification (AE-9 Profile)");
         $display("=============================================================");
-        $display("  Expected: 2~11 cycle variable delay (log-normal approx)");
+        $display("  Expected: 2~6 cycle variable delay (LFSR-driven)");
         $display("  Min latency: %0d cycles", min_lat);
         $display("  Max latency: %0d cycles", max_lat);
         $display("  Avg latency: %0d cycles", sum_lat / NUM_TLPS);

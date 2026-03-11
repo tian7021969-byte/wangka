@@ -11,20 +11,13 @@
 //    - 全部 HDA 标准全局寄存器
 //    - CORB/RIRB 缓冲区寄存器 (完整控制位)
 //    - 8 个 Stream Descriptor 寄存器组 (可读可写)
-//    - Wall Clock Counter (24 MHz 近似)
+//    - Wall Clock Counter (24 MHz 精确)
 //
-//  CplD 时序抖动 (模仿 AE-9)
-//  ---------------------------
-//  真实 Creative AE-9 的 CplD 响应延迟并非固定值，而是受 ASIC 内部
-//  总线仲裁、FIFO 填充水位、并行事务数的影响，呈现出 2~11 个
-//  user_clk 周期的可变延迟。本模块使用独立 LFSR 生成随机延迟值，
-//  在 ST_TX_JITTER 状态等待后才发送 CplD，模拟此行为。
-//
-//  实测 AE-9 CplD 延迟分布特征:
-//    - 最小延迟: 约 2 周期 (FIFO 直通)
-//    - 典型延迟: 4~6 周期
-//    - 最大延迟: 约 11 周期 (总线竞争)
-//    - 分布形状: 近似对数正态 (log-normal)
+//  TLP 处理:
+//    - 3DW / 4DW Memory Read  → CplD 回复
+//    - 3DW / 4DW Memory Write → 寄存器写入
+//    - 未知 Non-Posted TLP    → UR Completion (防止主机 CPU 挂死)
+//    - 未知 Posted TLP        → 静默丢弃 (drain)
 //
 // ===========================================================================
 
@@ -193,13 +186,8 @@ module bar0_hda_sim (
     end
 
     // ===================================================================
-    //  CplD 时序抖动 LFSR (模仿 AE-9 响应延迟特征)
+    //  LFSR (保留用于非 HDA 区域读取混淆)
     // ===================================================================
-    //
-    // 16-bit Galois LFSR, 多项式 x^16 + x^15 + x^13 + x^4 + 1
-    // 输出映射到 2~11 周期延迟:
-    //   delay = (lfsr[3:0] % 10) + 2
-    // 这模拟了 AE-9 的 CplD 延迟分布
 
     reg [15:0] jitter_lfsr;
     wire jitter_fb = jitter_lfsr[0];
@@ -211,38 +199,6 @@ module bar0_hda_sim (
             jitter_lfsr <= {1'b0, jitter_lfsr[15:1]}
                          ^ (jitter_fb ? 16'hB400 : 16'h0000);
     end
-
-    // AE-9 CplD 延迟: 2~11 周期 (对数正态近似)
-    // lfsr[3:0] 均匀分布 0~15, 通过分段映射模拟对数正态:
-    //   0-3  → 2-3  (25% 快速响应)
-    //   4-9  → 4-6  (37.5% 典型响应)
-    //   10-13→ 7-9  (25% 稍慢响应)
-    //   14-15→ 10-11(12.5% 高延迟)
-
-    reg [3:0] cpld_delay;
-
-    always @(*) begin
-        case (jitter_lfsr[3:0])
-            4'd0:    cpld_delay = 4'd2;
-            4'd1:    cpld_delay = 4'd2;
-            4'd2:    cpld_delay = 4'd3;
-            4'd3:    cpld_delay = 4'd3;
-            4'd4:    cpld_delay = 4'd4;
-            4'd5:    cpld_delay = 4'd4;
-            4'd6:    cpld_delay = 4'd5;
-            4'd7:    cpld_delay = 4'd5;
-            4'd8:    cpld_delay = 4'd6;
-            4'd9:    cpld_delay = 4'd6;
-            4'd10:   cpld_delay = 4'd7;
-            4'd11:   cpld_delay = 4'd8;
-            4'd12:   cpld_delay = 4'd9;
-            4'd13:   cpld_delay = 4'd9;
-            4'd14:   cpld_delay = 4'd10;
-            4'd15:   cpld_delay = 4'd11;
-        endcase
-    end
-
-    reg [3:0] jitter_cnt;
 
     // ===================================================================
     //  寄存器读取逻辑
@@ -429,9 +385,14 @@ module bar0_hda_sim (
     localparam [3:0] ST_IDLE       = 4'd0,
                      ST_RX_HDR1    = 4'd1,
                      ST_RX_DATA    = 4'd2,
-                     ST_TX_JITTER  = 4'd3,  // AE-9 时序抖动等待
+                     ST_CPL_WAIT   = 4'd3,  // CplD 发送前抖动延迟 (模拟真实设备时序)
                      ST_TX_CPL0    = 4'd4,
-                     ST_TX_CPL1    = 4'd5;
+                     ST_TX_CPL1    = 4'd5,
+                     ST_RX_HDR2    = 4'd6,  // 4DW TLP 第三拍 (地址低32位)
+                     ST_RX_DRAIN   = 4'd7,  // 排空多拍 TLP 剩余数据
+                     ST_TX_UR0     = 4'd8,  // 回 UR Completion 第一拍
+                     ST_TX_UR1     = 4'd9,  // 回 UR Completion 第二拍
+                     ST_RX_MWR4_DATA = 4'd10; // 4DW MWr 数据拍
 
     reg [3:0] state;
 
@@ -447,10 +408,19 @@ module bar0_hda_sim (
     reg [31:0] lat_addr;
     reg [31:0] lat_wr_data;
 
+    // 3DW: Fmt[1:0]=00(no data)/10(data), Type=00000
+    // 4DW: Fmt[1:0]=01(no data)/11(data), Type=00000
     wire is_mrd_3dw = (lat_fmt == 2'b00) && (lat_type == 5'b00000);
+    wire is_mrd_4dw = (lat_fmt == 2'b01) && (lat_type == 5'b00000);
     wire is_mwr_3dw = (lat_fmt == 2'b10) && (lat_type == 5'b00000);
+    wire is_mwr_4dw = (lat_fmt == 2'b11) && (lat_type == 5'b00000);
+    wire is_non_posted = (lat_fmt[1] == 1'b0) && (lat_type == 5'b00000); // MRd (需要 Completion)
 
     reg [31:0] reg_rd_data;
+
+    // CplD 抖动延迟计数器 — 模拟真实 AE-9 的 2~6 周期 CplD 响应延迟
+    reg [2:0] cpld_wait_cnt;
+    reg [2:0] cpld_wait_target;  // LFSR 生成的目标延迟值
 
     // ===================================================================
     //  CplD TLP 字段计算
@@ -476,6 +446,27 @@ module bar0_hda_sim (
         lat_requester_id,
         lat_tag,
         1'b0, lower_addr
+    };
+
+    // UR (Unsupported Request) Completion — 无数据
+    // Fmt=000(3DW no data), Type=01010(Cpl), Status=001(UR)
+    wire [31:0] ur_dw0 = {
+        1'b0, 2'b00, 5'b01010,             // Fmt=3DW no data, Type=Cpl
+        1'b0, lat_tc, 4'b0000,
+        1'b0, 1'b0, 2'b00, 2'b00,
+        10'd0                               // Length=0 (no data)
+    };
+
+    wire [31:0] ur_dw1 = {
+        completer_id,
+        3'b001, 1'b0,                      // Status=001 (UR)
+        12'd0                               // Byte Count=0
+    };
+
+    wire [31:0] ur_dw2 = {
+        lat_requester_id,
+        lat_tag,
+        8'h00                               // Lower Address=0
     };
 
     // ===================================================================
@@ -515,7 +506,8 @@ module bar0_hda_sim (
             s_axis_tx_tvalid <= 1'b0;
             s_axis_tx_tuser  <= 4'h0;
             reg_rd_data      <= 32'h0;
-            jitter_cnt       <= 4'h0;
+            cpld_wait_cnt    <= 3'd0;
+            cpld_wait_target <= 3'd2;
 
             // 寄存器初始化
             reg_gctl       <= 32'h0000_0001;  // CRST=1
@@ -557,6 +549,9 @@ module bar0_hda_sim (
         end else begin
             case (state)
 
+                // ============================================================
+                //  IDLE: 等待 RX TLP 第一拍 (DW0 + DW1)
+                // ============================================================
                 ST_IDLE: begin
                     s_axis_tx_tvalid <= 1'b0;
                     m_axis_rx_tready <= 1'b1;
@@ -574,43 +569,119 @@ module bar0_hda_sim (
                     end
                 end
 
+                // ============================================================
+                //  RX_HDR1: 第二拍 — 根据 Fmt 分派
+                //  3DW: [31:0]=Address, [63:32]=Data(MWr) 或 pad(MRd)
+                //  4DW: [31:0]=Addr_Hi, [63:32]=Addr_Lo → 还需一拍
+                // ============================================================
                 ST_RX_HDR1: begin
                     if (m_axis_rx_tvalid && m_axis_rx_tready) begin
-                        lat_addr <= {m_axis_rx_tdata[31:2], 2'b00};
 
                         if (is_mrd_3dw) begin
+                            // 3DW MRd: 地址在 [31:0], 进入抖动延迟后回 CplD
+                            lat_addr <= {m_axis_rx_tdata[31:2], 2'b00};
                             reg_rd_data <= read_register(m_axis_rx_tdata[15:2]);
                             m_axis_rx_tready <= 1'b0;
-                            // 采样 AE-9 抖动延迟
-                            jitter_cnt <= cpld_delay;
-                            state <= ST_TX_JITTER;
+                            // 用 LFSR 低 3 位生成 2~6 周期延迟
+                            cpld_wait_target <= jitter_lfsr[2:0] < 3'd2 ? 3'd2 :
+                                                jitter_lfsr[2:0] > 3'd6 ? 3'd6 :
+                                                jitter_lfsr[2:0];
+                            cpld_wait_cnt <= 3'd0;
+                            state <= ST_CPL_WAIT;
+
+                        end else if (is_mrd_4dw) begin
+                            // 4DW MRd: Addr_Hi=[31:0], Addr_Lo=[63:32]
+                            lat_addr <= {m_axis_rx_tdata[63:34], 2'b00};
+                            reg_rd_data <= read_register(m_axis_rx_tdata[47:34]);
+                            m_axis_rx_tready <= 1'b0;
+                            cpld_wait_target <= jitter_lfsr[2:0] < 3'd2 ? 3'd2 :
+                                                jitter_lfsr[2:0] > 3'd6 ? 3'd6 :
+                                                jitter_lfsr[2:0];
+                            cpld_wait_cnt <= 3'd0;
+                            state <= ST_CPL_WAIT;
+
                         end else if (is_mwr_3dw) begin
+                            // 3DW MWr: Address=[31:0], Data=[63:32]
+                            lat_addr    <= {m_axis_rx_tdata[31:2], 2'b00};
                             lat_wr_data <= m_axis_rx_tdata[63:32];
                             state <= ST_RX_DATA;
+
+                        end else if (is_mwr_4dw) begin
+                            // 4DW MWr: Addr_Hi=[31:0], Addr_Lo=[63:32]
+                            lat_addr <= {m_axis_rx_tdata[63:34], 2'b00};
+                            state <= ST_RX_MWR4_DATA;
+
                         end else begin
-                            if (m_axis_rx_tlast)
-                                state <= ST_IDLE;
+                            // 不认识的 TLP 类型
+                            if (lat_fmt[1] == 1'b0 && lat_type != 5'b00000) begin
+                                // Non-Posted 且不是 MRd → 必须回 UR Completion
+                                // 先排空 RX 剩余数据
+                                if (m_axis_rx_tlast) begin
+                                    m_axis_rx_tready <= 1'b0;
+                                    state <= ST_TX_UR0;
+                                end else begin
+                                    state <= ST_RX_DRAIN;
+                                end
+                            end else begin
+                                // Posted 或其他: 排空后回 IDLE
+                                if (m_axis_rx_tlast)
+                                    state <= ST_IDLE;
+                                else
+                                    state <= ST_RX_DRAIN;
+                            end
                         end
                     end
                 end
 
+                // ============================================================
+                //  RX_DATA: 3DW MWr 写入寄存器
+                // ============================================================
                 ST_RX_DATA: begin
                     write_register(lat_addr[15:2], lat_wr_data, lat_first_be);
                     state <= ST_IDLE;
                 end
 
-                // ---- AE-9 CplD 时序抖动等待 ----
-                ST_TX_JITTER: begin
-                    if (jitter_cnt == 4'd0) begin
+                // ============================================================
+                //  CPL_WAIT: CplD 发送前抖动延迟
+                //  模拟真实 AE-9 的 CplD 响应时序 (2~6 周期)
+                //  RX 通路已释放 (tready=0 防止新 TLP), 不阻塞上游
+                // ============================================================
+                ST_CPL_WAIT: begin
+                    cpld_wait_cnt <= cpld_wait_cnt + 1'b1;
+                    if (cpld_wait_cnt >= cpld_wait_target) begin
                         state <= ST_TX_CPL0;
-                    end else begin
-                        jitter_cnt <= jitter_cnt - 4'd1;
                     end
                 end
 
-                // ---- 发送 CplD 第一拍 ----
-                // AXI-Stream 握手: tvalid && tready 同时为 1 才算传输完成
-                // 必须等 tvalid 已经被驱动为 1 后再检查 tready
+                // ============================================================
+                //  RX_MWR4_DATA: 4DW MWr 第三拍 — 读取数据
+                // ============================================================
+                ST_RX_MWR4_DATA: begin
+                    if (m_axis_rx_tvalid && m_axis_rx_tready) begin
+                        lat_wr_data <= m_axis_rx_tdata[31:0];
+                        state <= ST_RX_DATA;
+                    end
+                end
+
+                // ============================================================
+                //  RX_DRAIN: 排空多拍 TLP 的剩余数据
+                //  等到 tlast 再决定下一步
+                // ============================================================
+                ST_RX_DRAIN: begin
+                    if (m_axis_rx_tvalid && m_axis_rx_tready && m_axis_rx_tlast) begin
+                        // 排空完毕 — 如果是 Non-Posted 需要回 UR
+                        if (is_non_posted) begin
+                            m_axis_rx_tready <= 1'b0;
+                            state <= ST_TX_UR0;
+                        end else begin
+                            state <= ST_IDLE;
+                        end
+                    end
+                end
+
+                // ============================================================
+                //  TX_CPL0: 发送 CplD 第一拍 (DW0 + DW1)
+                // ============================================================
                 ST_TX_CPL0: begin
                     s_axis_tx_tdata  <= {cpld_dw1, cpld_dw0};
                     s_axis_tx_tkeep  <= 8'hFF;
@@ -618,16 +689,50 @@ module bar0_hda_sim (
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
 
-                    // 仅当 tvalid 已经为 1 (上一拍已设置) 且 tready=1 时才前进
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         state <= ST_TX_CPL1;
                     end
                 end
 
-                // ---- 发送 CplD 第二拍 ----
+                // ============================================================
+                //  TX_CPL1: 发送 CplD 第二拍 (DW2 + Data)
+                // ============================================================
                 ST_TX_CPL1: begin
                     s_axis_tx_tdata  <= {reg_rd_data, cpld_dw2};
                     s_axis_tx_tkeep  <= 8'hFF;
+                    s_axis_tx_tlast  <= 1'b1;
+                    s_axis_tx_tvalid <= 1'b1;
+                    s_axis_tx_tuser  <= 4'b0000;
+
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
+                        s_axis_tx_tvalid <= 1'b0;
+                        s_axis_tx_tlast  <= 1'b0;
+                        m_axis_rx_tready <= 1'b1;
+                        state <= ST_IDLE;
+                    end
+                end
+
+                // ============================================================
+                //  TX_UR0: 发送 UR Completion 第一拍 (DW0 + DW1)
+                // ============================================================
+                ST_TX_UR0: begin
+                    s_axis_tx_tdata  <= {ur_dw1, ur_dw0};
+                    s_axis_tx_tkeep  <= 8'hFF;
+                    s_axis_tx_tlast  <= 1'b0;
+                    s_axis_tx_tvalid <= 1'b1;
+                    s_axis_tx_tuser  <= 4'b0000;
+
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
+                        state <= ST_TX_UR1;
+                    end
+                end
+
+                // ============================================================
+                //  TX_UR1: 发送 UR Completion 第二拍 (DW2 + pad)
+                // ============================================================
+                ST_TX_UR1: begin
+                    s_axis_tx_tdata  <= {32'h0, ur_dw2};
+                    s_axis_tx_tkeep  <= 8'h0F;  // 只有低 32 位有效
                     s_axis_tx_tlast  <= 1'b1;
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
@@ -644,9 +749,7 @@ module bar0_hda_sim (
             endcase
 
             // ---- INTSTS 自动更新 ----
-            // 全局中断状态 bit[31] = OR of all enabled interrupts
             reg_intsts[31] <= msi_irq_request;
-            // Controller interrupt status bit[30]
             reg_intsts[30] <= (reg_rirbsts[0] && reg_rirbctl[0]);
         end
     end
