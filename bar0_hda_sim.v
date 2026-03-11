@@ -578,27 +578,18 @@ module bar0_hda_sim (
                     if (m_axis_rx_tvalid && m_axis_rx_tready) begin
 
                         if (is_mrd_3dw) begin
-                            // 3DW MRd: 地址在 [31:0], 进入抖动延迟后回 CplD
+                            // 3DW MRd: 地址在 [31:0], 直接回 CplD
                             lat_addr <= {m_axis_rx_tdata[31:2], 2'b00};
                             reg_rd_data <= read_register(m_axis_rx_tdata[15:2]);
                             m_axis_rx_tready <= 1'b0;
-                            // 用 LFSR 低 3 位生成 2~6 周期延迟
-                            cpld_wait_target <= jitter_lfsr[2:0] < 3'd2 ? 3'd2 :
-                                                jitter_lfsr[2:0] > 3'd6 ? 3'd6 :
-                                                jitter_lfsr[2:0];
-                            cpld_wait_cnt <= 3'd0;
-                            state <= ST_CPL_WAIT;
+                            state <= ST_TX_CPL0;
 
                         end else if (is_mrd_4dw) begin
                             // 4DW MRd: Addr_Hi=[31:0], Addr_Lo=[63:32]
                             lat_addr <= {m_axis_rx_tdata[63:34], 2'b00};
                             reg_rd_data <= read_register(m_axis_rx_tdata[47:34]);
                             m_axis_rx_tready <= 1'b0;
-                            cpld_wait_target <= jitter_lfsr[2:0] < 3'd2 ? 3'd2 :
-                                                jitter_lfsr[2:0] > 3'd6 ? 3'd6 :
-                                                jitter_lfsr[2:0];
-                            cpld_wait_cnt <= 3'd0;
-                            state <= ST_CPL_WAIT;
+                            state <= ST_TX_CPL0;
 
                         end else if (is_mwr_3dw) begin
                             // 3DW MWr: Address=[31:0], Data=[63:32]

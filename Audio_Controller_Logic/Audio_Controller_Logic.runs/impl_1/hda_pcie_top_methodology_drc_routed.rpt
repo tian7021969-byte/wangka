@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-| Date         : Wed Mar 11 19:18:58 2026
+| Date         : Wed Mar 11 19:41:03 2026
 | Host         : DUKEHHU-PC0 running 64-bit major release  (build 9200)
 | Command      : report_methodology -file hda_pcie_top_methodology_drc_routed.rpt -pb hda_pcie_top_methodology_drc_routed.pb -rpx hda_pcie_top_methodology_drc_routed.rpx
 | Design       : hda_pcie_top
@@ -50,12 +50,12 @@ u_pcie_ep/inst/inst/user_reset_out_reg_replica_6/PRE,
 u_pcie_ep/inst/inst/user_reset_out_reg_replica_7/PRE,
 u_pcie_ep/inst/inst/user_reset_out_reg_replica_8/PRE,
 u_pcie_ep/inst/inst/user_reset_out_reg_replica_9/PRE
- (the first 15 of 21 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
+ (the first 15 of 23 listed). The LUT may glitch and trigger an unexpected reset, even if it is a properly timed path.
 Related violations: <none>
 
 TIMING-16#1 Warning
 Large setup violation  
-There is a large setup violation of -4.122 ns between clk24_toggle_reg_replica/C (clocked by clk_24m) and clk24_sync_reg[0]/D (clocked by userclk1). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
+There is a large setup violation of -4.119 ns between clk24_toggle_reg_replica/C (clocked by clk_24m) and clk24_sync_reg[0]/D (clocked by userclk1). Large setup violations at the end of those stages might be difficult to fix during the post-placement implementation flow and could be the result of non-optimal XDC constraints or non-optimal design architecture
 Related violations: <none>
 
 
