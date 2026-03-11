@@ -514,7 +514,7 @@ module bar0_hda_sim (
             rx_tlast_seen    <= 1'b0;
 
             // 寄存器初始化
-            reg_gctl       <= 32'h0000_0001;  // CRST=1
+            reg_gctl       <= 32'h0000_0000;  // CRST=0 (控制器上电处于复位状态, 符合 HDA spec)
             reg_wakeen     <= 16'h0;
             reg_statests   <= 16'h0000;       // 无 codec (DMA 未实现, 禁止触发 CORB/RIRB 通信)
             reg_intctl     <= 32'h0;
@@ -734,26 +734,21 @@ module bar0_hda_sim (
                     state <= ST_TX_CPL0_W;
                 end
 
-                // TX_CPL0_W: 等待 AXI 握手 (tvalid 已经为 1, 数据已稳定)
+                // TX_CPL0_W: 等待第一拍握手
+                // 握手成功时立即设置第二拍数据 (消除 bubble)
                 ST_TX_CPL0_W: begin
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
-                        state <= ST_TX_CPL1;
+                        // 第一拍已被接收, 立即设置第二拍
+                        s_axis_tx_tdata  <= {reg_rd_data, cpld_dw2};
+                        s_axis_tx_tkeep  <= 8'hFF;
+                        s_axis_tx_tlast  <= 1'b1;
+                        s_axis_tx_tvalid <= 1'b1;
+                        s_axis_tx_tuser  <= 4'b0000;
+                        state <= ST_TX_CPL1_W;
                     end
                 end
 
-                // ============================================================
-                //  TX_CPL1: 设置 CplD 第二拍数据 (DW2 + Data)
-                // ============================================================
-                ST_TX_CPL1: begin
-                    s_axis_tx_tdata  <= {reg_rd_data, cpld_dw2};
-                    s_axis_tx_tkeep  <= 8'hFF;
-                    s_axis_tx_tlast  <= 1'b1;
-                    s_axis_tx_tvalid <= 1'b1;
-                    s_axis_tx_tuser  <= 4'b0000;
-                    state <= ST_TX_CPL1_W;
-                end
-
-                // TX_CPL1_W: 等待 AXI 握手完成, 然后回 IDLE
+                // TX_CPL1_W: 等待第二拍握手完成, 然后回 IDLE
                 ST_TX_CPL1_W: begin
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         s_axis_tx_tvalid <= 1'b0;
@@ -775,23 +770,16 @@ module bar0_hda_sim (
                     state <= ST_TX_UR0_W;
                 end
 
-                // TX_UR0_W: 等待握手
+                // TX_UR0_W: 等待握手, 握手成功立即设置第二拍
                 ST_TX_UR0_W: begin
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
-                        state <= ST_TX_UR1;
+                        s_axis_tx_tdata  <= {32'h0, ur_dw2};
+                        s_axis_tx_tkeep  <= 8'h0F;
+                        s_axis_tx_tlast  <= 1'b1;
+                        s_axis_tx_tvalid <= 1'b1;
+                        s_axis_tx_tuser  <= 4'b0000;
+                        state <= ST_TX_UR1_W;
                     end
-                end
-
-                // ============================================================
-                //  TX_UR1: 设置 UR Completion 第二拍 (DW2 + pad)
-                // ============================================================
-                ST_TX_UR1: begin
-                    s_axis_tx_tdata  <= {32'h0, ur_dw2};
-                    s_axis_tx_tkeep  <= 8'h0F;  // 只有低 32 位有效
-                    s_axis_tx_tlast  <= 1'b1;
-                    s_axis_tx_tvalid <= 1'b1;
-                    s_axis_tx_tuser  <= 4'b0000;
-                    state <= ST_TX_UR1_W;
                 end
 
                 // TX_UR1_W: 等待握手完成, 回 IDLE

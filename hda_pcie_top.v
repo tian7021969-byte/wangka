@@ -231,20 +231,14 @@ module hda_pcie_top (
     // D3hot 检测: powerstate == 2'b11 表示 D3hot
     assign in_d3hot = (cfg_pmcsr_powerstate_w == 2'b11);
 
-    // TX Gate: D3hot 期间强制拉低所有 TX tvalid,
-    // 防止 Tag 随机化器和仲裁器在电源状态转换时锁死。
-    // D0 恢复后 user_reset 会重置整条通路, 此处仅做安全门控。
-    wire        gated_tag_tx_tvalid;
-    wire [63:0] gated_tag_tx_tdata;
-    wire [ 7:0] gated_tag_tx_tkeep;
-    wire        gated_tag_tx_tlast;
-    wire [ 3:0] gated_tag_tx_tuser;
-
-    assign gated_tag_tx_tvalid = in_d3hot ? 1'b0 : tag_tx_tvalid;
-    assign gated_tag_tx_tdata  = tag_tx_tdata;
-    assign gated_tag_tx_tkeep  = tag_tx_tkeep;
-    assign gated_tag_tx_tlast  = tag_tx_tlast;
-    assign gated_tag_tx_tuser  = tag_tx_tuser;
+    // TX 直连 — PCIe IP 在 D3hot 时自动停止接收 Memory TLP,
+    // 外部不需要额外门控。之前的 D3hot gate 在 tvalid/tready 上
+    // 可能造成语义不一致 (tready 仍传回上游但 tvalid 被拦截)。
+    wire        gated_tag_tx_tvalid = tag_tx_tvalid;
+    wire [63:0] gated_tag_tx_tdata  = tag_tx_tdata;
+    wire [ 7:0] gated_tag_tx_tkeep  = tag_tx_tkeep;
+    wire        gated_tag_tx_tlast  = tag_tx_tlast;
+    wire [ 3:0] gated_tag_tx_tuser  = tag_tx_tuser;
 
     // ===================================================================
     //  IBUFDS_GTE2

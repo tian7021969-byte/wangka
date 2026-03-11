@@ -49,9 +49,6 @@ module tlp_tag_randomizer (
     // 种子来自外部 (wall clock 低位 XOR 链路建立时刻)
     // 确保种子非零: 如果 lfsr_seed 为 0, 强制为 0xBEEF
 
-    // ===================================================================
-    //  前向声明 (forward declarations)
-    // ===================================================================
     wire handshake;
     wire advance_lfsr;
     wire is_sof;
@@ -89,8 +86,12 @@ module tlp_tag_randomizer (
     assign is_sof = sof_tracker;
 
     // ===================================================================
-    //  Tag 替换逻辑
+    //  Tag 替换逻辑 — 纯组合透传 (零延迟)
     // ===================================================================
+    //
+    //  之前使用寄存器输出 (1 拍延迟)，在某些 AXI 反压场景下
+    //  可能导致 CplD 被延迟或上游 handshake 语义不一致。
+    //  改为纯组合逻辑透传，消除所有延迟风险。
 
     assign handshake = s_axis_tx_tvalid_in && s_axis_tx_tready_out;
 
@@ -101,35 +102,26 @@ module tlp_tag_randomizer (
     wire is_request_tlp = is_sof && s_axis_tx_tvalid_in && !is_completion;
     assign advance_lfsr = handshake && is_request_tlp;
 
+    // tready 直通
     assign s_axis_tx_tready_in = s_axis_tx_tready_out;
 
-    always @(posedge clk) begin
-        if (!rst_n) begin
-            s_axis_tx_tdata_out  <= 64'h0;
-            s_axis_tx_tkeep_out  <= 8'h0;
-            s_axis_tx_tlast_out  <= 1'b0;
-            s_axis_tx_tvalid_out <= 1'b0;
-            s_axis_tx_tuser_out  <= 4'h0;
-        end else if (s_axis_tx_tready_out) begin
-            s_axis_tx_tvalid_out <= s_axis_tx_tvalid_in;
-            s_axis_tx_tkeep_out  <= s_axis_tx_tkeep_in;
-            s_axis_tx_tlast_out  <= s_axis_tx_tlast_in;
-            s_axis_tx_tuser_out  <= s_axis_tx_tuser_in;
+    // 纯组合逻辑输出 — 零延迟透传
+    always @(*) begin
+        s_axis_tx_tkeep_out  = s_axis_tx_tkeep_in;
+        s_axis_tx_tlast_out  = s_axis_tx_tlast_in;
+        s_axis_tx_tvalid_out = s_axis_tx_tvalid_in;
+        s_axis_tx_tuser_out  = s_axis_tx_tuser_in;
 
-            if (is_request_tlp) begin
-                // 只对请求 TLP (MRd/MWr) 替换 Tag 字段
-                // DW1 格式: [63:48]=Requester ID, [47:40]=Tag, [39:32]=BE
-                s_axis_tx_tdata_out <= {
-                    s_axis_tx_tdata_in[63:48],  // Requester ID
-                    random_tag,                  // Tag ← LFSR
-                    s_axis_tx_tdata_in[39:0]     // BE + DW0
-                };
-            end else begin
-                // Completion TLP 和非首拍: 不修改, 原样透传
-                // CplD DW1: [47:45]=Status, [44]=BCM, [43:32]=Byte Count
-                // 这些字段绝不能被修改
-                s_axis_tx_tdata_out <= s_axis_tx_tdata_in;
-            end
+        if (is_request_tlp) begin
+            // 只对请求 TLP (MRd/MWr) 首拍替换 Tag 字段
+            s_axis_tx_tdata_out = {
+                s_axis_tx_tdata_in[63:48],  // Requester ID
+                random_tag,                  // Tag ← LFSR
+                s_axis_tx_tdata_in[39:0]     // BE + DW0
+            };
+        end else begin
+            // Completion TLP 和非首拍: 不修改, 原样透传
+            s_axis_tx_tdata_out = s_axis_tx_tdata_in;
         end
     end
 
