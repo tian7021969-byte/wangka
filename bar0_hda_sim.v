@@ -97,10 +97,6 @@ module bar0_hda_sim (
     reg [15:0] reg_wakeen;      // 0x0C
     reg [15:0] reg_statests;    // 0x0E (W1C)
 
-    // GCTL CRST 自动恢复: 驱动写 CRST=0 后, 硬件经过一定周期自动恢复 CRST=1
-    // 模拟 HDA 控制器硬件复位时序
-    reg [7:0] crst_recovery_cnt;
-    reg       crst_in_reset;    // 正在执行控制器复位
     reg [31:0] reg_intctl;      // 0x20
     reg [31:0] reg_intsts;      // 0x24
     reg [31:0] reg_ssync;       // 0x38
@@ -269,10 +265,9 @@ module bar0_hda_sim (
             case (dw_offset[7:0])
                 8'h02: begin // GCTL
                     if (be[0]) begin
-                        // 检测 CRST 从 1 变为 0: 启动控制器复位
+                        // 检测 CRST 从 1→0: 清零 STATESTS (驱动发起控制器复位)
                         if (reg_gctl[0] && !data[0]) begin
-                            crst_in_reset     <= 1'b1;
-                            crst_recovery_cnt <= 8'd32; // 约 32 周期后恢复
+                            reg_statests <= 16'h0000;
                         end
                         reg_gctl[ 7: 0] <= data[ 7: 0];
                     end
@@ -514,10 +509,8 @@ module bar0_hda_sim (
 
             // 寄存器初始化
             reg_gctl       <= 32'h0000_0001;  // CRST=1
-            crst_recovery_cnt <= 8'h0;
-            crst_in_reset     <= 1'b0;
             reg_wakeen     <= 16'h0;
-            reg_statests   <= 16'h0001;       // SDIN0 codec detected
+            reg_statests   <= 16'h0000;       // 无 codec (DMA 未实现, 禁止触发 CORB/RIRB 通信)
             reg_intctl     <= 32'h0;
             reg_intsts     <= 32'h0;
             reg_ssync      <= 32'h0;
@@ -761,19 +754,11 @@ module bar0_hda_sim (
                 default: state <= ST_IDLE;
             endcase
 
-            // ---- GCTL CRST 自动恢复逻辑 ----
-            // 驱动写 CRST=0 触发控制器复位, 硬件经过一定周期后
-            // 自动恢复 CRST=1 并重新报告 codec 存在 (STATESTS)
-            if (crst_in_reset) begin
-                if (crst_recovery_cnt == 8'd0) begin
-                    // 复位完成: 恢复 CRST=1, 重新报告 codec
-                    reg_gctl[0]    <= 1'b1;
-                    reg_statests   <= 16'h0001; // SDIN0 codec re-detected
-                    crst_in_reset  <= 1'b0;
-                end else begin
-                    crst_recovery_cnt <= crst_recovery_cnt - 8'd1;
-                end
-            end
+            // ---- GCTL CRST 说明 ----
+            // CRST 完全由主机驱动控制:
+            //   驱动写 CRST=0 → 控制器进入复位 (STATESTS 清零)
+            //   驱动写 CRST=1 → 控制器退出复位 (不报告 codec, DMA 未实现)
+            // 不做自动恢复, 避免与驱动轮询 CRST 竞争
 
             // ---- INTSTS 自动更新 ----
             reg_intsts[31] <= msi_irq_request;
