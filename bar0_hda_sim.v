@@ -389,23 +389,25 @@ module bar0_hda_sim (
     //  TLP 解析状态机
     // ===================================================================
 
-    localparam [3:0] ST_IDLE       = 4'd0,
-                     ST_RX_HDR1    = 4'd1,
-                     ST_RX_DATA    = 4'd2,
-                     ST_CPL_WAIT   = 4'd3,  // CplD 发送前抖动延迟 (模拟真实设备时序)
-                     ST_TX_CPL0    = 4'd4,
-                     ST_TX_CPL1    = 4'd5,
-                     ST_RX_HDR2    = 4'd6,  // 4DW TLP 第三拍 (地址低32位)
-                     ST_RX_DRAIN   = 4'd7,  // 排空多拍 TLP 剩余数据
-                     ST_TX_UR0     = 4'd8,  // 回 UR Completion 第一拍
-                     ST_TX_UR1     = 4'd9,  // 回 UR Completion 第二拍
-                     ST_RX_MWR4_DATA = 4'd10, // 4DW MWr 数据拍
-                     ST_TX_CPL0_W  = 4'd11, // CPL0 等待握手 (数据已稳定)
-                     ST_TX_CPL1_W  = 4'd12, // CPL1 等待握手 (数据已稳定)
-                     ST_TX_UR0_W   = 4'd13, // UR0 等待握手
-                     ST_TX_UR1_W   = 4'd14; // UR1 等待握手
+    localparam [4:0] ST_IDLE       = 5'd0,
+                     ST_RX_HDR1    = 5'd1,
+                     ST_RX_DATA    = 5'd2,
+                     ST_CPL_WAIT   = 5'd3,
+                     ST_TX_CPL0    = 5'd4,
+                     ST_TX_CPL1    = 5'd5,
+                     ST_RX_HDR2    = 5'd6,
+                     ST_RX_DRAIN   = 5'd7,
+                     ST_TX_UR0     = 5'd8,
+                     ST_TX_UR1     = 5'd9,
+                     ST_RX_MWR4_DATA = 5'd10,
+                     ST_TX_CPL0_W  = 5'd11,
+                     ST_TX_CPL1_W  = 5'd12,
+                     ST_TX_UR0_W   = 5'd13,
+                     ST_TX_UR1_W   = 5'd14,
+                     ST_RX_DRAIN_POST = 5'd15, // 排空后回 IDLE (Posted TLP)
+                     ST_RX_DRAIN_UR   = 5'd16; // 排空后回 UR (Non-Posted TLP)
 
-    reg [3:0] state;
+    reg [4:0] state;
 
     // 锁存的 TLP Header 字段
     reg [ 1:0] lat_fmt;
@@ -428,6 +430,9 @@ module bar0_hda_sim (
     wire is_non_posted = (lat_fmt[1] == 1'b0) && (lat_type == 5'b00000); // MRd (需要 Completion)
 
     reg [31:0] reg_rd_data;
+
+    // RX tlast 锁存 — 追踪当前 TLP 是否已完整接收
+    reg        rx_tlast_seen;
 
     // CplD 抖动延迟计数器 — 模拟真实 AE-9 的 2~6 周期 CplD 响应延迟
     reg [2:0] cpld_wait_cnt;
@@ -506,6 +511,7 @@ module bar0_hda_sim (
             reg_rd_data      <= 32'h0;
             cpld_wait_cnt    <= 3'd0;
             cpld_wait_target <= 3'd2;
+            rx_tlast_seen    <= 1'b0;
 
             // 寄存器初始化
             reg_gctl       <= 32'h0000_0001;  // CRST=1
@@ -553,6 +559,7 @@ module bar0_hda_sim (
                 ST_IDLE: begin
                     s_axis_tx_tvalid <= 1'b0;
                     m_axis_rx_tready <= 1'b1;
+                    rx_tlast_seen    <= 1'b0;
 
                     if (m_axis_rx_tvalid && m_axis_rx_tready) begin
                         lat_fmt    <= m_axis_rx_tdata[30:29];
@@ -563,6 +570,7 @@ module bar0_hda_sim (
                         lat_tag          <= m_axis_rx_tdata[47:40];
                         lat_last_be      <= m_axis_rx_tdata[39:36];
                         lat_first_be     <= m_axis_rx_tdata[35:32];
+                        rx_tlast_seen    <= m_axis_rx_tlast;
                         state <= ST_RX_HDR1;
                     end
                 end
@@ -571,63 +579,93 @@ module bar0_hda_sim (
                 //  RX_HDR1: 第二拍 — 根据 Fmt 分派
                 //  3DW: [31:0]=Address, [63:32]=Data(MWr) 或 pad(MRd)
                 //  4DW: [31:0]=Addr_Hi, [63:32]=Addr_Lo → 还需一拍
+                //
+                //  关键: 必须确认 tlast 状态，未排空的 TLP 必须 drain
                 // ============================================================
                 ST_RX_HDR1: begin
                     if (m_axis_rx_tvalid && m_axis_rx_tready) begin
 
                         if (is_mrd_3dw) begin
-                            // 3DW MRd: 地址在 [31:0], 直接回 CplD
+                            // 3DW MRd Length=1: 应该在本拍 tlast=1
                             lat_addr <= {m_axis_rx_tdata[31:2], 2'b00};
                             reg_rd_data <= read_register(m_axis_rx_tdata[15:2]);
-                            m_axis_rx_tready <= 1'b0;
-                            state <= ST_TX_CPL0;
+                            rx_tlast_seen <= m_axis_rx_tlast;
+                            if (m_axis_rx_tlast) begin
+                                // TLP 已完整接收，安全发送 CplD
+                                m_axis_rx_tready <= 1'b0;
+                                state <= ST_TX_CPL0;
+                            end else begin
+                                // 异常: 3DW MRd 多于预期的拍数，先排空
+                                state <= ST_RX_DRAIN;
+                            end
 
                         end else if (is_mrd_4dw) begin
                             // 4DW MRd: Addr_Hi=[31:0], Addr_Lo=[63:32]
                             lat_addr <= {m_axis_rx_tdata[63:34], 2'b00};
                             reg_rd_data <= read_register(m_axis_rx_tdata[47:34]);
-                            m_axis_rx_tready <= 1'b0;
-                            state <= ST_TX_CPL0;
+                            rx_tlast_seen <= m_axis_rx_tlast;
+                            if (m_axis_rx_tlast) begin
+                                // 4DW MRd Length=1 在 64bit 接口上可能 2 拍结束
+                                m_axis_rx_tready <= 1'b0;
+                                state <= ST_TX_CPL0;
+                            end else begin
+                                // 还有更多数据拍，排空后再回 CplD
+                                state <= ST_RX_DRAIN;
+                            end
 
                         end else if (is_mwr_3dw) begin
                             // 3DW MWr: Address=[31:0], Data=[63:32]
                             lat_addr    <= {m_axis_rx_tdata[31:2], 2'b00};
                             lat_wr_data <= m_axis_rx_tdata[63:32];
-                            state <= ST_RX_DATA;
+                            rx_tlast_seen <= m_axis_rx_tlast;
+                            if (m_axis_rx_tlast) begin
+                                // 完整 TLP，直接写寄存器
+                                state <= ST_RX_DATA;
+                            end else begin
+                                // 多 DWORD MWr: 写第一个，然后排空其余
+                                state <= ST_RX_DATA;
+                            end
 
                         end else if (is_mwr_4dw) begin
                             // 4DW MWr: Addr_Hi=[31:0], Addr_Lo=[63:32]
                             lat_addr <= {m_axis_rx_tdata[63:34], 2'b00};
+                            rx_tlast_seen <= m_axis_rx_tlast;
                             state <= ST_RX_MWR4_DATA;
 
                         end else begin
                             // 不认识的 TLP 类型
+                            rx_tlast_seen <= m_axis_rx_tlast;
                             if (lat_fmt[1] == 1'b0 && lat_type != 5'b00000) begin
                                 // Non-Posted 且不是 MRd → 必须回 UR Completion
-                                // 先排空 RX 剩余数据
                                 if (m_axis_rx_tlast) begin
                                     m_axis_rx_tready <= 1'b0;
                                     state <= ST_TX_UR0;
                                 end else begin
-                                    state <= ST_RX_DRAIN;
+                                    state <= ST_RX_DRAIN_UR;
                                 end
                             end else begin
                                 // Posted 或其他: 排空后回 IDLE
                                 if (m_axis_rx_tlast)
                                     state <= ST_IDLE;
                                 else
-                                    state <= ST_RX_DRAIN;
+                                    state <= ST_RX_DRAIN_POST;
                             end
                         end
                     end
                 end
 
                 // ============================================================
-                //  RX_DATA: 3DW MWr 写入寄存器
+                //  RX_DATA: MWr 写入寄存器，然后确保 TLP 完整排空
                 // ============================================================
                 ST_RX_DATA: begin
                     write_register(lat_addr[15:2], lat_wr_data, lat_first_be);
-                    state <= ST_IDLE;
+                    if (rx_tlast_seen) begin
+                        // TLP 已完整接收
+                        state <= ST_IDLE;
+                    end else begin
+                        // 还有未排空的数据拍，必须排空
+                        state <= ST_RX_DRAIN_POST;
+                    end
                 end
 
                 // ============================================================
@@ -648,23 +686,38 @@ module bar0_hda_sim (
                 ST_RX_MWR4_DATA: begin
                     if (m_axis_rx_tvalid && m_axis_rx_tready) begin
                         lat_wr_data <= m_axis_rx_tdata[31:0];
+                        rx_tlast_seen <= m_axis_rx_tlast;
                         state <= ST_RX_DATA;
                     end
                 end
 
                 // ============================================================
-                //  RX_DRAIN: 排空多拍 TLP 的剩余数据
-                //  等到 tlast 再决定下一步
+                //  RX_DRAIN: 旧状态，保留兼容性 (4DW MRd 排空后发 CplD)
+                //  等到 tlast 后发 CplD
                 // ============================================================
                 ST_RX_DRAIN: begin
                     if (m_axis_rx_tvalid && m_axis_rx_tready && m_axis_rx_tlast) begin
-                        // 排空完毕 — 如果是 Non-Posted 需要回 UR
-                        if (is_non_posted) begin
-                            m_axis_rx_tready <= 1'b0;
-                            state <= ST_TX_UR0;
-                        end else begin
-                            state <= ST_IDLE;
-                        end
+                        m_axis_rx_tready <= 1'b0;
+                        state <= ST_TX_CPL0;
+                    end
+                end
+
+                // ============================================================
+                //  RX_DRAIN_POST: 排空 Posted TLP 后回 IDLE
+                // ============================================================
+                ST_RX_DRAIN_POST: begin
+                    if (m_axis_rx_tvalid && m_axis_rx_tready && m_axis_rx_tlast) begin
+                        state <= ST_IDLE;
+                    end
+                end
+
+                // ============================================================
+                //  RX_DRAIN_UR: 排空 Non-Posted TLP 后回 UR
+                // ============================================================
+                ST_RX_DRAIN_UR: begin
+                    if (m_axis_rx_tvalid && m_axis_rx_tready && m_axis_rx_tlast) begin
+                        m_axis_rx_tready <= 1'b0;
+                        state <= ST_TX_UR0;
                     end
                 end
 
