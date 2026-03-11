@@ -1,7 +1,7 @@
 # ===========================================================================
 #
 #  constraints.xdc
-#  Creative Sound Blaster AE-9 — Xilinx Artix-7 75T Captain 开发板
+#  Creative Sound Blaster AE-9 — Xilinx Artix-7 Captain DMA 75T V3.0
 #  引脚分配与时序约束
 #
 # ===========================================================================
@@ -32,29 +32,29 @@
 # ===========================================================================
 #
 #  来自 PCIe 金手指连接器的 100 MHz 参考时钟，路由至 GTP Bank 216 的
-#  专用 MGTREFCLK0 引脚对 (F6/E6)。
+#  专用 MGTREFCLK0 引脚对 (F10/E10)。
 #
 #  这些是 MGT Quad 内的专用模拟引脚，不需要也不允许设置 IOSTANDARD，
 #  IBUFDS_GTE2 原语会在内部处理差分输入终端。
 #
-#  PCIe IP 核会根据此 REFCLK 的位置 (Bank 216) 自动将 GTP 收发器通道
+#  PCIe IP 核会根据此 REFCLK 的位置自动将 GTP 收发器通道
 #  (TX/RX) 放置在同一 Quad 内的正确位置，无需手动指定数据通道引脚。
 
-set_property PACKAGE_PIN F6 [get_ports { pcie_clk_p }]
-set_property PACKAGE_PIN E6 [get_ports { pcie_clk_n }]
+set_property PACKAGE_PIN F10 [get_ports { pcie_clk_p }]
+set_property PACKAGE_PIN E10 [get_ports { pcie_clk_n }]
 
 
 # ===========================================================================
 #  PCIe 基本复位信号 (PERST#)
 # ===========================================================================
 #
-#  来自 PCIe 连接器的低电平有效复位信号。在 Captain 75T 开发板上，
-#  该信号路由至 Bank 34 的通用 I/O 引脚 J1。
+#  来自 PCIe 连接器的低电平有效复位信号。在 Captain DMA 75T V3.0 上，
+#  该信号路由至引脚 C13。
 #
 #  内部上拉电阻确保 FPGA 在板级上电时序完成之前（主机尚未拉低
-#  PERST# 时）不会看到误复位。Bank 34 VCCO 为 3.3V，使用 LVCMOS33。
+#  PERST# 时）不会看到误复位。LVCMOS33 电平标准。
 
-set_property PACKAGE_PIN K18         [get_ports { pcie_rst_n }]
+set_property PACKAGE_PIN C13        [get_ports { pcie_rst_n }]
 set_property IOSTANDARD  LVCMOS33   [get_ports { pcie_rst_n }]
 set_property PULLUP      true       [get_ports { pcie_rst_n }]
 
@@ -66,16 +66,16 @@ set_property PULLUP      true       [get_ports { pcie_rst_n }]
 #  注意: 此处 **不设置** PACKAGE_PIN 约束!
 #
 #  GTP 收发器的 TX/RX 差分对属于 GTPE2_CHANNEL 原语的内部端口，
-#  由 PCIe IP 核在综合/实现时自动放置到 REFCLK (F6/E6) 所在的
-#  Bank 216 GTP Quad 中。
+#  由 PCIe IP 核在综合/实现时自动放置到 REFCLK (F10/E10) 所在的
+#  GTP Quad 中。
 #
 #  如果在 XDC 中对 pcie_tx_p/n 或 pcie_rx_p/n 使用 set_property
 #  PACKAGE_PIN，会导致 [Vivado 12-1141] 错误，因为 Vivado 无法
 #  同时满足用户指定的 LOC 和 IP 内部的相对放置约束。
 #
-#  对于 FGG484 封装 Bank 216 GTP Quad，实际物理引脚为:
-#    MGTPTXP0 = D2,  MGTPTXN0 = D1
-#    MGTPRXP0 = E2,  MGTPRXN0 = E1
+#  对于 FGG484 封装 GTP Quad (REFCLK F10/E10)，实际物理引脚为:
+#    MGTPTXP0 = B6,  MGTPTXN0 = A6
+#    MGTPRXP0 = B8,  MGTPRXN0 = A8
 #  这些引脚由 IP 核自动使用，仅作参考记录。
 
 
@@ -83,13 +83,13 @@ set_property PULLUP      true       [get_ports { pcie_rst_n }]
 #  状态指示灯 — 链路连接指示 (LED)
 # ===========================================================================
 #
-#  由 PCIe IP 的 user_lnk_up 信号驱动（高电平有效）:
+#  由 PCIe IP 的 user_lnk_up 信号驱动（低电平有效）:
 #    LED 亮 = PCIe 链路训练完成，设备已被主机枚举
 #    LED 灭 = 链路断开、训练中、或处于 D3hot 电源状态
 #
-#  Bank 34, LVCMOS33, 默认 8 mA 驱动能力。
+#  Captain DMA 75T V3.0 的 user_ld1_n 引脚 G21，低电平有效，LVCMOS33。
 
-set_property PACKAGE_PIN Y4         [get_ports { led_status }]
+set_property PACKAGE_PIN G21        [get_ports { led_status }]
 set_property IOSTANDARD  LVCMOS33   [get_ports { led_status }]
 
 
