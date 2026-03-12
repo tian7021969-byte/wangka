@@ -1,10 +1,10 @@
 // Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-// Date        : Fri Mar 13 00:38:39 2026
+// Date        : Fri Mar 13 00:16:57 2026
 // Host        : DUKEHHU-PC0 running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim
-//               c:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/pcie_7x_0_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim -rename_top pcie_7x_0 -prefix
+//               pcie_7x_0_ pcie_7x_0_sim_netlist.v
 // Design      : pcie_7x_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -810,16 +810,16 @@ module pcie_7x_0
   (* c_msi_cap_on = "TRUE" *) 
   (* c_msi_mult_msg_extn = "0" *) 
   (* c_msi_per_vctr_mask_cap = "FALSE" *) 
-  (* c_msix_cap_on = "TRUE" *) 
+  (* c_msix_cap_on = "FALSE" *) 
   (* c_msix_next_ptr = "00" *) 
   (* c_msix_pba_bir = "0" *) 
-  (* c_msix_pba_offset = "0000E800" *) 
+  (* c_msix_pba_offset = "0" *) 
   (* c_msix_table_bir = "0" *) 
-  (* c_msix_table_offset = "0000E000" *) 
-  (* c_msix_table_size = "003" *) 
+  (* c_msix_table_offset = "0" *) 
+  (* c_msix_table_size = "000" *) 
   (* c_pci_cfg_space_addr = "3F" *) 
   (* c_pcie_blk_locn = "0" *) 
-  (* c_pcie_cap_next_ptr = "9C" *) 
+  (* c_pcie_cap_next_ptr = "00" *) 
   (* c_pcie_cap_slot_implemented = "FALSE" *) 
   (* c_pcie_dbg_ports = "TRUE" *) 
   (* c_pcie_fast_config = "0" *) 
@@ -935,7 +935,7 @@ module pcie_7x_0
   (* subsys_ven_id = "1849" *) 
   (* ven_id = "8086" *) 
   (* xrom_bar = "00000000" *) 
-  pcie_7x_0_pcie2_top inst
+  pcie_7x_0_pcie_7x_0_pcie2_top inst
        (.cfg_aer_ecrc_check_en(cfg_aer_ecrc_check_en),
         .cfg_aer_ecrc_gen_en(cfg_aer_ecrc_gen_en),
         .cfg_aer_interrupt_msgnum(cfg_aer_interrupt_msgnum),
@@ -1233,7 +1233,7 @@ module pcie_7x_0
         .user_reset_out(user_reset_out));
 endmodule
 
-module pcie_7x_0_axi_basic_rx
+module pcie_7x_0_pcie_7x_0_axi_basic_rx
    (E,
     trn_rsrc_dsc_d,
     m_axis_rx_tvalid_reg,
@@ -1322,7 +1322,7 @@ module pcie_7x_0_axi_basic_rx
   wire trn_rsrc_dsc_prev0;
   wire user_clk;
 
-  pcie_7x_0_axi_basic_rx_null_gen rx_null_gen_inst
+  pcie_7x_0_pcie_7x_0_axi_basic_rx_null_gen rx_null_gen_inst
        (.D({rx_null_gen_inst_n_0,rx_null_gen_inst_n_1}),
         .Q({Q[30:29],Q[15],Q[1:0]}),
         .S({rx_null_gen_inst_n_7,rx_null_gen_inst_n_8}),
@@ -1341,7 +1341,7 @@ module pcie_7x_0_axi_basic_rx
         .\reg_pkt_len_counter_reg[3]_0 (rx_null_gen_inst_n_3),
         .\reg_tkeep[7]_i_7_0 (rx_null_gen_inst_n_2),
         .user_clk(user_clk));
-  pcie_7x_0_axi_basic_rx_pipeline rx_pipeline_inst
+  pcie_7x_0_pcie_7x_0_axi_basic_rx_pipeline rx_pipeline_inst
        (.D({rx_null_gen_inst_n_0,rx_null_gen_inst_n_1}),
         .E(E),
         .Q(Q),
@@ -1380,7 +1380,7 @@ module pcie_7x_0_axi_basic_rx
         .user_reset_out_reg(rx_pipeline_inst_n_8));
 endmodule
 
-module pcie_7x_0_axi_basic_rx_null_gen
+module pcie_7x_0_pcie_7x_0_axi_basic_rx_null_gen
    (D,
     \reg_tkeep[7]_i_7_0 ,
     \reg_pkt_len_counter_reg[3]_0 ,
@@ -1905,7 +1905,7 @@ module pcie_7x_0_axi_basic_rx_null_gen
         .O(\reg_pkt_len_counter_reg[0]_0 ));
 endmodule
 
-module pcie_7x_0_axi_basic_rx_pipeline
+module pcie_7x_0_pcie_7x_0_axi_basic_rx_pipeline
    (E,
     trn_rsrc_dsc_d,
     m_axis_rx_tvalid_reg_0,
@@ -3842,7 +3842,7 @@ module pcie_7x_0_axi_basic_rx_pipeline
         .R(SR));
 endmodule
 
-module pcie_7x_0_axi_basic_top
+module pcie_7x_0_pcie_7x_0_axi_basic_top
    (E,
     trn_rsrc_dsc_d,
     m_axis_rx_tvalid_reg,
@@ -4010,7 +4010,7 @@ module pcie_7x_0_axi_basic_top
   wire tx_cfg_gnt;
   wire user_clk;
 
-  pcie_7x_0_axi_basic_rx rx_inst
+  pcie_7x_0_pcie_7x_0_axi_basic_rx rx_inst
        (.E(E),
         .Q(Q),
         .SR(SR),
@@ -4035,7 +4035,7 @@ module pcie_7x_0_axi_basic_top
         .trn_rsrc_dsc_d(trn_rsrc_dsc_d),
         .trn_rsrc_dsc_prev0(trn_rsrc_dsc_prev0),
         .user_clk(user_clk));
-  pcie_7x_0_axi_basic_tx tx_inst
+  pcie_7x_0_pcie_7x_0_axi_basic_tx tx_inst
        (.SR(SR),
         .cfg_pcie_link_state(cfg_pcie_link_state),
         .cfg_pm_turnoff_ok_n(cfg_pm_turnoff_ok_n),
@@ -4071,7 +4071,7 @@ module pcie_7x_0_axi_basic_top
         .user_clk(user_clk));
 endmodule
 
-module pcie_7x_0_axi_basic_tx
+module pcie_7x_0_pcie_7x_0_axi_basic_tx
    (reg_tcfg_gnt,
     tready_thrtl_reg,
     trn_teof,
@@ -4177,7 +4177,7 @@ module pcie_7x_0_axi_basic_tx
   wire tx_cfg_gnt;
   wire user_clk;
 
-  pcie_7x_0_axi_basic_tx_thrtl_ctl \thrtl_ctl_enabled.tx_thrl_ctl_inst 
+  pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl \thrtl_ctl_enabled.tx_thrl_ctl_inst 
        (.SR(SR),
         .axi_in_packet(axi_in_packet),
         .cfg_pcie_link_state(cfg_pcie_link_state),
@@ -4208,7 +4208,7 @@ module pcie_7x_0_axi_basic_tx
         .trn_tdst_rdy(trn_tdst_rdy),
         .tx_cfg_gnt(tx_cfg_gnt),
         .user_clk(user_clk));
-  pcie_7x_0_axi_basic_tx_pipeline tx_pipeline_inst
+  pcie_7x_0_pcie_7x_0_axi_basic_tx_pipeline tx_pipeline_inst
        (.SR(SR),
         .axi_in_packet(axi_in_packet),
         .axi_in_packet_reg_0(\thrtl_ctl_enabled.tx_thrl_ctl_inst_n_4 ),
@@ -4231,7 +4231,7 @@ module pcie_7x_0_axi_basic_tx
         .user_clk(user_clk));
 endmodule
 
-module pcie_7x_0_axi_basic_tx_pipeline
+module pcie_7x_0_pcie_7x_0_axi_basic_tx_pipeline
    (trn_teof,
     trn_tsrc_rdy,
     trn_trem,
@@ -4776,7 +4776,7 @@ module pcie_7x_0_axi_basic_tx_pipeline
         .R(SR));
 endmodule
 
-module pcie_7x_0_axi_basic_tx_thrtl_ctl
+module pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl
    (reg_tcfg_gnt,
     tready_thrtl_reg_0,
     ppm_L1_thrtl,
@@ -5367,7 +5367,7 @@ module pcie_7x_0_axi_basic_tx_thrtl_ctl
         .S(SR));
 endmodule
 
-module pcie_7x_0_core_top
+module pcie_7x_0_pcie_7x_0_core_top
    (pl_ltssm_state,
     int_oobclk_out,
     user_reset_out,
@@ -5914,7 +5914,7 @@ module pcie_7x_0_core_top
   wire user_reset_out;
 
   assign user_lnk_up = user_lnk_up_int;
-  pcie_7x_0_gt_top gt_top_i
+  pcie_7x_0_pcie_7x_0_gt_top gt_top_i
        (.INT_DCLK_OUT(ext_ch_gt_drpclk),
         .INT_MMCM_LOCK_OUT(int_mmcm_lock_out),
         .INT_QPLLLOCK_OUT(int_qplllock_out),
@@ -6122,7 +6122,7 @@ module pcie_7x_0_core_top
     pcie_block_i_i_37
        (.I0(cfg_mgmt_byte_en[0]),
         .O(pcie_block_i_i_37_n_0));
-  pcie_7x_0_pcie_top pcie_top_i
+  pcie_7x_0_pcie_7x_0_pcie_top pcie_top_i
        (.SR(user_reset_out),
         .bridge_reset_int(bridge_reset_int),
         .cfg_aer_ecrc_check_en(cfg_aer_ecrc_check_en),
@@ -6371,7 +6371,7 @@ module pcie_7x_0_core_top
         .Q(user_reset_out));
 endmodule
 
-module pcie_7x_0_gt_common
+module pcie_7x_0_pcie_7x_0_gt_common
    (cpllrst,
     \gtp_common.gtpe2_common_i ,
     int_qplloutclk_out,
@@ -6413,7 +6413,7 @@ module pcie_7x_0_gt_common
   wire qpll_drp_we;
   wire sys_clk;
 
-  pcie_7x_0_qpll_drp qpll_drp_i
+  pcie_7x_0_pcie_7x_0_qpll_drp qpll_drp_i
        (.D(qpll_drp_do),
         .Q(Q),
         .SR(SR),
@@ -6425,7 +6425,7 @@ module pcie_7x_0_gt_common
         .qpll_drp_rdy(qpll_drp_rdy),
         .qpll_drp_we(qpll_drp_we),
         .qplllock_reg1_reg_0(\gtp_common.gtpe2_common_i ));
-  pcie_7x_0_qpll_wrapper qpll_wrapper_i
+  pcie_7x_0_pcie_7x_0_qpll_wrapper qpll_wrapper_i
        (.D(qpll_drp_do),
         .PLL0RESET0(PLL0RESET0),
         .cpllrst(cpllrst),
@@ -6442,7 +6442,7 @@ module pcie_7x_0_gt_common
         .sys_clk(sys_clk));
 endmodule
 
-module pcie_7x_0_gt_rx_valid_filter_7x
+module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
    (gt_rxvalid_q_reg_0,
     pipe_rx0_elec_idle,
     pipe_rx0_phy_status,
@@ -6955,7 +6955,7 @@ module pcie_7x_0_gt_rx_valid_filter_7x
         .R(SR));
 endmodule
 
-module pcie_7x_0_gt_top
+module pcie_7x_0_pcie_7x_0_gt_top
    (sys_rst_n,
     p_0_in_0,
     pipe_clk,
@@ -7080,7 +7080,7 @@ module pcie_7x_0_gt_top
   wire user_clk;
 
   assign rate_in_reg1_reg0 = pipe_tx_rate;
-  pcie_7x_0_gt_rx_valid_filter_7x \gt_rx_valid_filter[0].GT_RX_VALID_FILTER_7x_inst 
+  pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x \gt_rx_valid_filter[0].GT_RX_VALID_FILTER_7x_inst 
        (.D(gt_rx_data_k_wire_filter),
         .Q(pl_ltssm_state_q),
         .RXSTATUS({pipe_wrapper_i_n_12,pipe_wrapper_i_n_13,pipe_wrapper_i_n_14}),
@@ -7117,7 +7117,7 @@ module pcie_7x_0_gt_top
         .D(pipe_wrapper_i_n_35),
         .Q(phy_rdy_n),
         .R(1'b0));
-  pcie_7x_0_pipe_wrapper pipe_wrapper_i
+  pcie_7x_0_pcie_7x_0_pipe_wrapper pipe_wrapper_i
        (.CLK(INT_DCLK_OUT),
         .D(gt_rx_data_k_wire_filter),
         .RXSTATUS({pipe_wrapper_i_n_12,pipe_wrapper_i_n_13,pipe_wrapper_i_n_14}),
@@ -7205,7 +7205,7 @@ module pcie_7x_0_gt_top
         .Q(reg_clock_locked));
 endmodule
 
-module pcie_7x_0_gt_wrapper
+module pcie_7x_0_pcie_7x_0_gt_wrapper
    (\gtp_channel.gtpe2_channel_i_0 ,
     pci_exp_txn,
     pci_exp_txp,
@@ -7955,7 +7955,7 @@ module pcie_7x_0_gt_wrapper
         .TXUSRCLK2(\gtp_channel.gtpe2_channel_i_11 ));
 endmodule
 
-module pcie_7x_0_gtp_cpllpd_ovrd
+module pcie_7x_0_pcie_7x_0_gtp_cpllpd_ovrd
    (cpllpd,
     cpllrst,
     gt_cpllpdrefclk);
@@ -8078,7 +8078,7 @@ module pcie_7x_0_gtp_cpllpd_ovrd
         .Q31(\cpllreset_wait_reg[95]_srl32_n_1 ));
 endmodule
 
-module pcie_7x_0_gtp_pipe_drp
+module pcie_7x_0_pcie_7x_0_gtp_pipe_drp
    (done,
     DRPDI,
     DRPADDR,
@@ -9018,7 +9018,7 @@ module pcie_7x_0_gtp_pipe_drp
         .R(SR));
 endmodule
 
-module pcie_7x_0_gtp_pipe_rate
+module pcie_7x_0_pcie_7x_0_gtp_pipe_rate
    (pclk_sel_reg_0,
     DRP_X160,
     DRP_START0,
@@ -9699,7 +9699,7 @@ module pcie_7x_0_gtp_pipe_rate
         .O(DRP_X160));
 endmodule
 
-module pcie_7x_0_gtp_pipe_reset
+module pcie_7x_0_pcie_7x_0_gtp_pipe_reset
    (reset_n_reg2_reg,
     SR,
     rst_drp_start,
@@ -10517,10 +10517,10 @@ endmodule
 (* c_ll_ack_timeout_function = "0" *) (* c_ll_replay_timeout = "0000" *) (* c_ll_replay_timeout_enable = "FALSE" *) 
 (* c_ll_replay_timeout_func = "1" *) (* c_lnk_bndwdt_notif = "FALSE" *) (* c_msi = "0" *) 
 (* c_msi_64b_addr = "TRUE" *) (* c_msi_cap_on = "TRUE" *) (* c_msi_mult_msg_extn = "0" *) 
-(* c_msi_per_vctr_mask_cap = "FALSE" *) (* c_msix_cap_on = "TRUE" *) (* c_msix_next_ptr = "00" *) 
-(* c_msix_pba_bir = "0" *) (* c_msix_pba_offset = "0000E800" *) (* c_msix_table_bir = "0" *) 
-(* c_msix_table_offset = "0000E000" *) (* c_msix_table_size = "003" *) (* c_pci_cfg_space_addr = "3F" *) 
-(* c_pcie_blk_locn = "0" *) (* c_pcie_cap_next_ptr = "9C" *) (* c_pcie_cap_slot_implemented = "FALSE" *) 
+(* c_msi_per_vctr_mask_cap = "FALSE" *) (* c_msix_cap_on = "FALSE" *) (* c_msix_next_ptr = "00" *) 
+(* c_msix_pba_bir = "0" *) (* c_msix_pba_offset = "0" *) (* c_msix_table_bir = "0" *) 
+(* c_msix_table_offset = "0" *) (* c_msix_table_size = "000" *) (* c_pci_cfg_space_addr = "3F" *) 
+(* c_pcie_blk_locn = "0" *) (* c_pcie_cap_next_ptr = "00" *) (* c_pcie_cap_slot_implemented = "FALSE" *) 
 (* c_pcie_dbg_ports = "TRUE" *) (* c_pcie_fast_config = "0" *) (* c_perf_level_high = "TRUE" *) 
 (* c_phantom_functions = "0" *) (* c_pm_cap_next_ptr = "48" *) (* c_pme_support = "0F" *) 
 (* c_rbar_base_ptr = "000" *) (* c_rbar_cap_control_encodedbar0 = "00" *) (* c_rbar_cap_control_encodedbar1 = "00" *) 
@@ -10560,7 +10560,7 @@ endmodule
 (* pwr_dis_d3_state = "00" *) (* rev_id = "03" *) (* slot_clk = "TRUE" *) 
 (* subsys_id = "1539" *) (* subsys_ven_id = "1849" *) (* ven_id = "8086" *) 
 (* xrom_bar = "00000000" *) 
-module pcie_7x_0_pcie2_top
+module pcie_7x_0_pcie_7x_0_pcie2_top
    (pci_exp_txn,
     pci_exp_txp,
     pci_exp_rxn,
@@ -11838,7 +11838,7 @@ module pcie_7x_0_pcie2_top
   assign user_clk_out = int_userclk1_out;
   GND GND
        (.G(\<const0> ));
-  pcie_7x_0_core_top inst
+  pcie_7x_0_pcie_7x_0_core_top inst
        (.cfg_aer_ecrc_check_en(cfg_aer_ecrc_check_en),
         .cfg_aer_ecrc_gen_en(cfg_aer_ecrc_gen_en),
         .cfg_aer_interrupt_msgnum(cfg_aer_interrupt_msgnum),
@@ -12008,7 +12008,7 @@ module pcie_7x_0_pcie2_top
         .user_reset_out(user_reset_out));
 endmodule
 
-module pcie_7x_0_pcie_7x
+module pcie_7x_0_pcie_7x_0_pcie_7x
    (user_reset_int_reg,
     src_in,
     cfg_mgmt_rd_wr_done,
@@ -13184,12 +13184,12 @@ module pcie_7x_0_pcie_7x
     .MSIX_BASE_PTR(8'h9C),
     .MSIX_CAP_ID(8'h11),
     .MSIX_CAP_NEXTPTR(8'h00),
-    .MSIX_CAP_ON("TRUE"),
+    .MSIX_CAP_ON("FALSE"),
     .MSIX_CAP_PBA_BIR(0),
-    .MSIX_CAP_PBA_OFFSET(29'h00001D00),
+    .MSIX_CAP_PBA_OFFSET(29'h00000000),
     .MSIX_CAP_TABLE_BIR(0),
-    .MSIX_CAP_TABLE_OFFSET(29'h00001C00),
-    .MSIX_CAP_TABLE_SIZE(11'h003),
+    .MSIX_CAP_TABLE_OFFSET(29'h00000000),
+    .MSIX_CAP_TABLE_SIZE(11'h000),
     .MSI_BASE_PTR(8'h48),
     .MSI_CAP_64_BIT_ADDR_CAPABLE("TRUE"),
     .MSI_CAP_ID(8'h05),
@@ -13206,7 +13206,7 @@ module pcie_7x_0_pcie_7x
     .PCIE_CAP_CAPABILITY_ID(8'h10),
     .PCIE_CAP_CAPABILITY_VERSION(4'h2),
     .PCIE_CAP_DEVICE_PORT_TYPE(4'h0),
-    .PCIE_CAP_NEXTPTR(8'h9C),
+    .PCIE_CAP_NEXTPTR(8'h00),
     .PCIE_CAP_ON("TRUE"),
     .PCIE_CAP_RSVD_15_14(0),
     .PCIE_CAP_SLOT_IMPLEMENTED("FALSE"),
@@ -13899,7 +13899,7 @@ module pcie_7x_0_pcie_7x
     pcie_block_i_i_9
        (.I0(cfg_err_locked),
         .O(pcie_block_i_i_9_n_0));
-  pcie_7x_0_pcie_bram_top_7x pcie_bram_top
+  pcie_7x_0_pcie_7x_0_pcie_bram_top_7x pcie_bram_top
        (.MIMRXRADDR(mim_rx_raddr[10:0]),
         .MIMRXWADDR(mim_rx_waddr[10:0]),
         .MIMTXRADDR(mim_tx_raddr[10:0]),
@@ -13987,7 +13987,7 @@ module pcie_7x_0_pcie_7x
         .O(user_reset_int_reg));
 endmodule
 
-module pcie_7x_0_pcie_bram_7x
+module pcie_7x_0_pcie_7x_0_pcie_bram_7x
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14022,7 +14022,7 @@ module pcie_7x_0_pcie_bram_7x
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_bram_7x_1
+module pcie_7x_0_pcie_7x_0_pcie_bram_7x_1
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14057,7 +14057,7 @@ module pcie_7x_0_pcie_bram_7x_1
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_bram_7x_10
+module pcie_7x_0_pcie_7x_0_pcie_bram_7x_10
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14092,7 +14092,7 @@ module pcie_7x_0_pcie_bram_7x_10
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_bram_7x_2
+module pcie_7x_0_pcie_7x_0_pcie_bram_7x_2
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14127,7 +14127,7 @@ module pcie_7x_0_pcie_bram_7x_2
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_bram_7x_3
+module pcie_7x_0_pcie_7x_0_pcie_bram_7x_3
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14162,7 +14162,7 @@ module pcie_7x_0_pcie_bram_7x_3
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_bram_7x_7
+module pcie_7x_0_pcie_7x_0_pcie_bram_7x_7
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14197,7 +14197,7 @@ module pcie_7x_0_pcie_bram_7x_7
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_bram_7x_8
+module pcie_7x_0_pcie_7x_0_pcie_bram_7x_8
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14232,7 +14232,7 @@ module pcie_7x_0_pcie_bram_7x_8
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_bram_7x_9
+module pcie_7x_0_pcie_7x_0_pcie_bram_7x_9
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14266,7 +14266,7 @@ module pcie_7x_0_pcie_bram_7x_9
         .user_clk(user_clk));
 endmodule
 
-module pcie_7x_0_pcie_bram_top_7x
+module pcie_7x_0_pcie_7x_0_pcie_bram_top_7x
    (rdata,
     \genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
@@ -14308,7 +14308,7 @@ module pcie_7x_0_pcie_bram_top_7x
   wire user_clk;
   wire [68:0]wdata;
 
-  pcie_7x_0_pcie_brams_7x pcie_brams_rx
+  pcie_7x_0_pcie_7x_0_pcie_brams_7x pcie_brams_rx
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ),
@@ -14316,7 +14316,7 @@ module pcie_7x_0_pcie_bram_top_7x
         .mim_rx_ren(mim_rx_ren),
         .mim_rx_wen(mim_rx_wen),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_brams_7x_0 pcie_brams_tx
+  pcie_7x_0_pcie_7x_0_pcie_brams_7x_0 pcie_brams_tx
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14326,7 +14326,7 @@ module pcie_7x_0_pcie_bram_top_7x
         .wdata(wdata));
 endmodule
 
-module pcie_7x_0_pcie_brams_7x
+module pcie_7x_0_pcie_7x_0_pcie_brams_7x
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14350,7 +14350,7 @@ module pcie_7x_0_pcie_brams_7x
   wire mim_rx_wen;
   wire user_clk;
 
-  pcie_7x_0_pcie_bram_7x_7 \brams[0].ram 
+  pcie_7x_0_pcie_7x_0_pcie_bram_7x_7 \brams[0].ram 
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl [17:0]),
@@ -14358,7 +14358,7 @@ module pcie_7x_0_pcie_brams_7x
         .mim_rx_ren(mim_rx_ren),
         .mim_rx_wen(mim_rx_wen),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_bram_7x_8 \brams[1].ram 
+  pcie_7x_0_pcie_7x_0_pcie_bram_7x_8 \brams[1].ram 
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl [35:18]),
@@ -14366,7 +14366,7 @@ module pcie_7x_0_pcie_brams_7x
         .mim_rx_ren(mim_rx_ren),
         .mim_rx_wen(mim_rx_wen),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_bram_7x_9 \brams[2].ram 
+  pcie_7x_0_pcie_7x_0_pcie_bram_7x_9 \brams[2].ram 
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl [53:36]),
@@ -14374,7 +14374,7 @@ module pcie_7x_0_pcie_brams_7x
         .mim_rx_ren(mim_rx_ren),
         .mim_rx_wen(mim_rx_wen),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_bram_7x_10 \brams[3].ram 
+  pcie_7x_0_pcie_7x_0_pcie_bram_7x_10 \brams[3].ram 
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl [67:54]),
@@ -14385,7 +14385,7 @@ module pcie_7x_0_pcie_brams_7x
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_brams_7x" *) 
-module pcie_7x_0_pcie_brams_7x_0
+module pcie_7x_0_pcie_7x_0_pcie_brams_7x_0
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14409,7 +14409,7 @@ module pcie_7x_0_pcie_brams_7x_0
   wire user_clk;
   wire [68:0]wdata;
 
-  pcie_7x_0_pcie_bram_7x \brams[0].ram 
+  pcie_7x_0_pcie_7x_0_pcie_bram_7x \brams[0].ram 
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14417,7 +14417,7 @@ module pcie_7x_0_pcie_brams_7x_0
         .rdata(rdata[17:0]),
         .user_clk(user_clk),
         .wdata(wdata[17:0]));
-  pcie_7x_0_pcie_bram_7x_1 \brams[1].ram 
+  pcie_7x_0_pcie_7x_0_pcie_bram_7x_1 \brams[1].ram 
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14425,7 +14425,7 @@ module pcie_7x_0_pcie_brams_7x_0
         .rdata(rdata[35:18]),
         .user_clk(user_clk),
         .wdata(wdata[35:18]));
-  pcie_7x_0_pcie_bram_7x_2 \brams[2].ram 
+  pcie_7x_0_pcie_7x_0_pcie_bram_7x_2 \brams[2].ram 
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14433,7 +14433,7 @@ module pcie_7x_0_pcie_brams_7x_0
         .rdata(rdata[53:36]),
         .user_clk(user_clk),
         .wdata(wdata[53:36]));
-  pcie_7x_0_pcie_bram_7x_3 \brams[3].ram 
+  pcie_7x_0_pcie_7x_0_pcie_bram_7x_3 \brams[3].ram 
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14443,7 +14443,7 @@ module pcie_7x_0_pcie_brams_7x_0
         .wdata(wdata[68:54]));
 endmodule
 
-module pcie_7x_0_pcie_top
+module pcie_7x_0_pcie_7x_0_pcie_top
    (m_axis_rx_tvalid_reg,
     m_axis_rx_tkeep,
     m_axis_rx_tlast,
@@ -15013,7 +15013,7 @@ module pcie_7x_0_pcie_top
   wire user_clk;
   wire user_reset_int_reg;
 
-  pcie_7x_0_axi_basic_top axi_basic_top
+  pcie_7x_0_pcie_7x_0_axi_basic_top axi_basic_top
        (.E(trn_rdst_rdy),
         .Q(m_axis_rx_tdata),
         .SR(SR),
@@ -15170,7 +15170,7 @@ module pcie_7x_0_pcie_top
         .D(cfg_msg_data[2]),
         .Q(cfg_function_number[2]),
         .R(\tx_inst/tx_pipeline_inst/reg_disable_trn2 ));
-  pcie_7x_0_pcie_7x pcie_7x_i
+  pcie_7x_0_pcie_7x_0_pcie_7x pcie_7x_i
        (.E(pcie_7x_i_n_6),
         .bridge_reset_int(bridge_reset_int),
         .cfg_aer_ecrc_check_en(cfg_aer_ecrc_check_en),
@@ -15366,7 +15366,7 @@ module pcie_7x_0_pcie_top
         .user_reset_int_reg(user_reset_int_reg));
 endmodule
 
-module pcie_7x_0_pipe_clock
+module pcie_7x_0_pcie_7x_0_pipe_clock
    (CLK,
     int_pclk_out_slave,
     \dclk_i_bufg.dclk_i_0 ,
@@ -15677,7 +15677,7 @@ module pcie_7x_0_pipe_clock
         .O(user_clk));
 endmodule
 
-module pcie_7x_0_pipe_eq
+module pcie_7x_0_pcie_7x_0_pipe_eq
    (rxeq_adapt_done,
     TXPRECURSOR,
     TXMAINCURSOR,
@@ -16710,7 +16710,7 @@ module pcie_7x_0_pipe_eq
         .D(\FSM_onehot_fsm_rx_reg_n_0_[2] ),
         .Q(rxeq_preset_valid),
         .R(rst_cpllreset));
-  pcie_7x_0_rxeq_scan rxeq_scan_i
+  pcie_7x_0_pcie_7x_0_rxeq_scan rxeq_scan_i
        (.CLK(CLK),
         .D({rxeq_scan_i_n_1,rxeq_scan_i_n_2,rxeq_scan_i_n_3}),
         .\FSM_onehot_fsm_rx_reg[5] ({\rxeq_cnt_reg_n_0_[2] ,\rxeq_cnt_reg_n_0_[1] ,\rxeq_cnt_reg_n_0_[0] }),
@@ -18589,7 +18589,7 @@ module pcie_7x_0_pipe_eq
         .R(rst_cpllreset));
 endmodule
 
-module pcie_7x_0_pipe_sync
+module pcie_7x_0_pcie_7x_0_pipe_sync
    (out,
     txphaligndone_reg3_reg_0,
     txphinitdone_reg2_reg_0,
@@ -19207,7 +19207,7 @@ module pcie_7x_0_pipe_sync
         .R(rst_cpllreset));
 endmodule
 
-module pcie_7x_0_pipe_user
+module pcie_7x_0_pcie_7x_0_pipe_user
    (out,
     txcompliance_reg2_reg_0,
     user_oobclk,
@@ -20337,7 +20337,7 @@ module pcie_7x_0_pipe_user
         .R(rst_cpllreset));
 endmodule
 
-module pcie_7x_0_pipe_wrapper
+module pcie_7x_0_pcie_7x_0_pipe_wrapper
    (\pclk_i1_bufgctrl.pclk_i1 ,
     int_pclk_out_slave,
     CLK,
@@ -20551,7 +20551,7 @@ module pcie_7x_0_pipe_wrapper
   BUFG cpllpd_refclk_inst
        (.I(sys_clk),
         .O(gt_cpllpdrefclk));
-  pcie_7x_0_gtp_pipe_reset \gtp_pipe_reset.gtp_pipe_reset_i 
+  pcie_7x_0_pcie_7x_0_gtp_pipe_reset \gtp_pipe_reset.gtp_pipe_reset_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .\FSM_onehot_fsm_reg[1]_0 (\gtp_pipe_reset.gtp_pipe_reset_i_n_10 ),
         .PLL0RESET0(\qpll_wrapper_i/PLL0RESET0 ),
@@ -20576,7 +20576,7 @@ module pcie_7x_0_pipe_wrapper
         .txsync_done(txsync_done),
         .user_resetdone(user_resetdone),
         .user_rxcdrlock(user_rxcdrlock));
-  pcie_7x_0_pipe_clock \pipe_clock_int.pipe_clock_i 
+  pcie_7x_0_pcie_7x_0_pipe_clock \pipe_clock_int.pipe_clock_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .\dclk_i_bufg.dclk_i_0 (CLK),
         .int_pclk_out_slave(int_pclk_out_slave),
@@ -20586,7 +20586,7 @@ module pcie_7x_0_pipe_wrapper
         .\pclk_sel_reg1_reg[0]_0 (\pipe_lane[0].gtp_pipe_rate.gtp_pipe_rate_i_n_0 ),
         .\txoutclk_i.txoutclk_i_0 (\pipe_lane[0].gt_wrapper_i_n_15 ),
         .user_clk(user_clk));
-  pcie_7x_0_gt_wrapper \pipe_lane[0].gt_wrapper_i 
+  pcie_7x_0_pcie_7x_0_gt_wrapper \pipe_lane[0].gt_wrapper_i 
        (.CLK(CLK),
         .D({\pipe_lane[0].gt_wrapper_i_n_21 ,\pipe_lane[0].gt_wrapper_i_n_22 ,\pipe_lane[0].gt_wrapper_i_n_23 ,\pipe_lane[0].gt_wrapper_i_n_24 ,\pipe_lane[0].gt_wrapper_i_n_25 ,\pipe_lane[0].gt_wrapper_i_n_26 ,\pipe_lane[0].gt_wrapper_i_n_27 ,\pipe_lane[0].gt_wrapper_i_n_28 ,\pipe_lane[0].gt_wrapper_i_n_29 ,\pipe_lane[0].gt_wrapper_i_n_30 ,\pipe_lane[0].gt_wrapper_i_n_31 ,\pipe_lane[0].gt_wrapper_i_n_32 ,\pipe_lane[0].gt_wrapper_i_n_33 ,\pipe_lane[0].gt_wrapper_i_n_34 ,\pipe_lane[0].gt_wrapper_i_n_35 ,\pipe_lane[0].gt_wrapper_i_n_36 }),
         .DRPADDR(drp_mux_addr),
@@ -20649,7 +20649,7 @@ module pcie_7x_0_pipe_wrapper
         .user_rxcdrreset(user_rxcdrreset),
         .user_rxpcsreset(user_rxpcsreset),
         .user_rxpmareset(user_rxpmareset));
-  pcie_7x_0_gtp_pipe_drp \pipe_lane[0].gtp_pipe_drp.gtp_pipe_drp_i 
+  pcie_7x_0_pcie_7x_0_gtp_pipe_drp \pipe_lane[0].gtp_pipe_drp.gtp_pipe_drp_i 
        (.CLK(CLK),
         .D({\pipe_lane[0].gt_wrapper_i_n_21 ,\pipe_lane[0].gt_wrapper_i_n_22 ,\pipe_lane[0].gt_wrapper_i_n_23 ,\pipe_lane[0].gt_wrapper_i_n_24 ,\pipe_lane[0].gt_wrapper_i_n_25 ,\pipe_lane[0].gt_wrapper_i_n_26 ,\pipe_lane[0].gt_wrapper_i_n_27 ,\pipe_lane[0].gt_wrapper_i_n_28 ,\pipe_lane[0].gt_wrapper_i_n_29 ,\pipe_lane[0].gt_wrapper_i_n_30 ,\pipe_lane[0].gt_wrapper_i_n_31 ,\pipe_lane[0].gt_wrapper_i_n_32 ,\pipe_lane[0].gt_wrapper_i_n_33 ,\pipe_lane[0].gt_wrapper_i_n_34 ,\pipe_lane[0].gt_wrapper_i_n_35 ,\pipe_lane[0].gt_wrapper_i_n_36 }),
         .DRPADDR(drp_mux_addr),
@@ -20661,7 +20661,7 @@ module pcie_7x_0_pipe_wrapper
         .drp_mux_en(drp_mux_en),
         .drp_mux_we(drp_mux_we),
         .rdy_reg1_reg_0(\pipe_lane[0].gt_wrapper_i_n_0 ));
-  pcie_7x_0_gtp_pipe_rate \pipe_lane[0].gtp_pipe_rate.gtp_pipe_rate_i 
+  pcie_7x_0_pcie_7x_0_gtp_pipe_rate \pipe_lane[0].gtp_pipe_rate.gtp_pipe_rate_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .DRP_START0(DRP_START0),
         .DRP_X160(DRP_X160),
@@ -20678,14 +20678,14 @@ module pcie_7x_0_pipe_wrapper
         .rst_drp_x16(rst_drp_x16),
         .rxpmaresetdone_reg1_reg_0(\pipe_lane[0].gt_wrapper_i_n_9 ),
         .txsync_done(txsync_done));
-  pcie_7x_0_pipe_eq \pipe_lane[0].pipe_eq.pipe_eq_i 
+  pcie_7x_0_pcie_7x_0_pipe_eq \pipe_lane[0].pipe_eq.pipe_eq_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .TXMAINCURSOR(eq_txeq_maincursor),
         .TXPOSTCURSOR(eq_txeq_postcursor),
         .TXPRECURSOR(eq_txeq_precursor),
         .rst_cpllreset(rst_cpllreset),
         .rxeq_adapt_done(rxeq_adapt_done));
-  pcie_7x_0_gt_common \pipe_lane[0].pipe_quad.gt_common_enabled.gt_common_int.gt_common_i 
+  pcie_7x_0_pcie_7x_0_gt_common \pipe_lane[0].pipe_quad.gt_common_enabled.gt_common_int.gt_common_i 
        (.PLL0RESET0(\qpll_wrapper_i/PLL0RESET0 ),
         .Q(qrst_drp_start),
         .SR(dclk_rst_reg2),
@@ -20697,7 +20697,7 @@ module pcie_7x_0_pipe_wrapper
         .int_qplloutclk_out(int_qplloutclk_out),
         .int_qplloutrefclk_out(int_qplloutrefclk_out),
         .sys_clk(sys_clk));
-  pcie_7x_0_pipe_sync \pipe_lane[0].pipe_sync_i 
+  pcie_7x_0_pcie_7x_0_pipe_sync \pipe_lane[0].pipe_sync_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .\FSM_onehot_txsync_fsm.fsm_tx_reg[4]_0 (\pipe_lane[0].pipe_user_i_n_15 ),
         .\FSM_onehot_txsync_fsm.fsm_tx_reg[5]_0 ({\pipe_lane[0].pipe_sync_i_n_6 ,\pipe_lane[0].pipe_sync_i_n_7 ,\pipe_lane[0].pipe_sync_i_n_8 }),
@@ -20724,7 +20724,7 @@ module pcie_7x_0_pipe_wrapper
         .txphinitdone_reg3_reg_0(\pipe_lane[0].pipe_sync_i_n_3 ),
         .txsync_done(txsync_done),
         .user_rxcdrlock(user_rxcdrlock));
-  pcie_7x_0_pipe_user \pipe_lane[0].pipe_user_i 
+  pcie_7x_0_pcie_7x_0_pipe_user \pipe_lane[0].pipe_user_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .\FSM_onehot_txsync_fsm.fsm_tx_reg[4] (\pipe_lane[0].pipe_sync_i_n_3 ),
         .\FSM_onehot_txsync_fsm.fsm_tx_reg[4]_0 (p_1_in0_in),
@@ -20776,7 +20776,7 @@ module pcie_7x_0_pipe_wrapper
     pl_phy_lnk_up_q_i_1
        (.I0(reset_n_reg1_reg_0),
         .O(p_0_in_0));
-  pcie_7x_0_qpll_reset \qpll_reset.qpll_reset_i 
+  pcie_7x_0_pcie_7x_0_qpll_reset \qpll_reset.qpll_reset_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .Q(qrst_drp_start),
         .\drp_done_reg1_reg[0]_0 (\pipe_lane[0].pipe_quad.gt_common_enabled.gt_common_int.gt_common_i_n_4 ),
@@ -20804,7 +20804,7 @@ module pcie_7x_0_pipe_wrapper
         .Q(reset_n_reg2));
 endmodule
 
-module pcie_7x_0_qpll_drp
+module pcie_7x_0_pcie_7x_0_qpll_drp
    (done_reg_0,
     \addr_reg[7]_0 ,
     \di_reg[15]_0 ,
@@ -22106,7 +22106,7 @@ module pcie_7x_0_qpll_drp
         .R(SR));
 endmodule
 
-module pcie_7x_0_qpll_reset
+module pcie_7x_0_pcie_7x_0_qpll_reset
    (Q,
     mmcm_lock_reg1_reg_0,
     CLK,
@@ -22347,7 +22347,7 @@ module pcie_7x_0_qpll_reset
         .R(mmcm_lock_reg1_reg_0));
 endmodule
 
-module pcie_7x_0_qpll_wrapper
+module pcie_7x_0_pcie_7x_0_qpll_wrapper
    (cpllrst,
     qpll_drp_rdy,
     \gtp_common.gtpe2_common_i_0 ,
@@ -22404,7 +22404,7 @@ module pcie_7x_0_qpll_wrapper
   wire [7:0]\NLW_gtp_common.gtpe2_common_i_DMONITOROUT_UNCONNECTED ;
   wire [15:0]\NLW_gtp_common.gtpe2_common_i_PMARSVDOUT_UNCONNECTED ;
 
-  pcie_7x_0_gtp_cpllpd_ovrd cpllPDInst
+  pcie_7x_0_pcie_7x_0_gtp_cpllpd_ovrd cpllPDInst
        (.cpllpd(cpllpd),
         .cpllrst(cpllrst),
         .gt_cpllpdrefclk(gt_cpllpdrefclk));
@@ -22489,7 +22489,7 @@ module pcie_7x_0_qpll_wrapper
         .REFCLKOUTMONITOR1(\NLW_gtp_common.gtpe2_common_i_REFCLKOUTMONITOR1_UNCONNECTED ));
 endmodule
 
-module pcie_7x_0_rxeq_scan
+module pcie_7x_0_pcie_7x_0_rxeq_scan
    (rxeq_new_txcoeff_req_0,
     D,
     adapt_done_reg_0,
@@ -24087,7 +24087,6 @@ module pcie_7x_0_rxeq_scan
         .R(rst_cpllreset));
 endmodule
 
-(* ORIG_REF_NAME = "xil_internal_svlib_BRAM_TDP_MACRO" *) 
 module pcie_7x_0_xil_internal_svlib_BRAM_TDP_MACRO
    (rdata,
     user_clk,
@@ -26230,9 +26229,9 @@ module pcie_7x_0_xil_internal_svlib_BRAM_TDP_MACRO_6
         .WEBWE({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}));
 endmodule
 
-(* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_single" *) 
-(* SIM_ASSERT_CHK = "0" *) (* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) 
-(* XPM_MODULE = "TRUE" *) (* keep_hierarchy = "true" *) (* xpm_cdc = "SINGLE" *) 
+(* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) (* SIM_ASSERT_CHK = "0" *) 
+(* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) (* XPM_MODULE = "TRUE" *) 
+(* keep_hierarchy = "true" *) (* xpm_cdc = "SINGLE" *) 
 module pcie_7x_0_xpm_cdc_single
    (src_clk,
     src_in,

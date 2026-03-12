@@ -101,32 +101,12 @@ module i211_pcie_top (
     reg         cfg_turnoff_ok_r;
     wire [ 1:0] cfg_pmcsr_powerstate_w;
 
-    // PM Force State: force device back to D0 when OS writes D3
-    // The PCIe IP core exposes cfg_pmcsr_powerstate but doesn't auto-recover.
-    // We use cfg_pm_force_state to override D3 back to D0.
-    reg         cfg_pm_force_state_en_r;
-    reg  [ 1:0] cfg_pm_force_state_r;
-    reg  [ 1:0] pmcsr_powerstate_prev;
-
-    // Configuration Management Interface - used to directly write PMCSR
-    // to force PowerState = D0 when the driver transitions from D3->D0.
-    // PMCSR is at config space DW address 0x11 (byte offset 0x44).
+    // ================================================================
+    //  Configuration Management Interface (cfg_mgmt)
+    //  Currently idle — no active config space read/write needed.
+    // ================================================================
     wire [31:0] cfg_mgmt_do_w;
     wire        cfg_mgmt_rd_wr_done_w;
-    reg  [31:0] cfg_mgmt_di_r;
-    reg  [ 3:0] cfg_mgmt_byte_en_r;
-    reg  [ 9:0] cfg_mgmt_dwaddr_r;
-    reg         cfg_mgmt_wr_en_r;
-    reg         cfg_mgmt_rd_en_r;
-
-    // PMCSR force state machine
-    localparam PM_IDLE      = 3'd0,
-               PM_READ      = 3'd1,
-               PM_READ_WAIT = 3'd2,
-               PM_WRITE     = 3'd3,
-               PM_WRITE_WAIT = 3'd4,
-               PM_DONE      = 3'd5;
-    reg [2:0]  pm_state;
 
     // MSI Status
     wire        cfg_interrupt_rdy;
@@ -179,16 +159,8 @@ module i211_pcie_top (
     end
 
     // ===================================================================
-    //  Power State Management
-    //  
-    //  CRITICAL FIX for D3 -> D0 transition:
-    //  When Windows driver writes PMCSR PowerState = 11b (D3), the PCIe
-    //  IP core transitions to D3. The driver then writes 00b (D0) to wake
-    //  the device. We use cfg_pm_force_state to ensure the IP core
-    //  transitions back to D0 immediately.
-    //
-    //  Without this, SIV shows "Current D3" and the driver gets 0xC0000001
-    //  because the device appears non-responsive in D3.
+    //  Power State Management (normal operation)
+    //  Acknowledge turnoff requests from PCIe IP when received.
     // ===================================================================
 
     always @(posedge user_clk) begin
@@ -198,108 +170,6 @@ module i211_pcie_top (
             cfg_turnoff_ok_r <= 1'b1;
         else
             cfg_turnoff_ok_r <= 1'b0;
-    end
-
-    // ---- PM Force State: D3 -> D0 recovery ----
-    // Monitor cfg_pmcsr_powerstate from PCIe IP.
-    // When it enters D3 (2'b11), force it back to D0 (2'b00).
-    // This ensures the driver's PMCSR write of 00b is accepted and
-    // the device wakes up immediately.
-    always @(posedge user_clk) begin
-        if (user_reset) begin
-            cfg_pm_force_state_en_r <= 1'b0;
-            cfg_pm_force_state_r    <= 2'b00;
-            pmcsr_powerstate_prev   <= 2'b00;
-        end else begin
-            pmcsr_powerstate_prev <= cfg_pmcsr_powerstate_w;
-
-            // When PCIe IP reports any non-D0 state, force back to D0
-            if (cfg_pmcsr_powerstate_w != 2'b00) begin
-                cfg_pm_force_state_en_r <= 1'b1;
-                cfg_pm_force_state_r    <= 2'b00;  // Force D0
-            end
-            // Once IP is back in D0, release the force
-            else if (cfg_pm_force_state_en_r && cfg_pmcsr_powerstate_w == 2'b00) begin
-                cfg_pm_force_state_en_r <= 1'b0;
-            end
-        end
-    end
-
-    // ---- PMCSR Config Space Write-Back via cfg_mgmt ----
-    // When we detect cfg_pmcsr_powerstate != D0, use cfg_mgmt interface
-    // to directly write PMCSR (DW addr 0x11, byte offset 0x44) with
-    // PowerState = 00b (D0). This is the most reliable approach because
-    // cfg_pm_force_state may not update the actual config space read-back
-    // value fast enough for the driver's verification read.
-    //
-    // PMCSR register layout (DW at offset 0x44):
-    //   bits [1:0] = PowerState (00=D0, 01=D1, 10=D2, 11=D3hot)
-    //   bits [31:2] = other PM fields (preserve on write)
-    //
-    // State machine: IDLE -> detect non-D0 -> READ PMCSR -> clear bits[1:0] -> WRITE back
-    always @(posedge user_clk) begin
-        if (user_reset) begin
-            pm_state         <= PM_IDLE;
-            cfg_mgmt_di_r    <= 32'h0;
-            cfg_mgmt_byte_en_r <= 4'h0;
-            cfg_mgmt_dwaddr_r  <= 10'h0;
-            cfg_mgmt_wr_en_r   <= 1'b0;
-            cfg_mgmt_rd_en_r   <= 1'b0;
-        end else begin
-            case (pm_state)
-                PM_IDLE: begin
-                    cfg_mgmt_wr_en_r <= 1'b0;
-                    cfg_mgmt_rd_en_r <= 1'b0;
-                    // Trigger when PowerState transitions to non-D0
-                    if (cfg_pmcsr_powerstate_w != 2'b00 && pmcsr_powerstate_prev == 2'b00) begin
-                        pm_state <= PM_READ;
-                    end
-                end
-
-                PM_READ: begin
-                    // Read PMCSR at DW address 0x11 (byte offset 0x44)
-                    cfg_mgmt_dwaddr_r <= 10'h011;
-                    cfg_mgmt_rd_en_r  <= 1'b1;
-                    pm_state          <= PM_READ_WAIT;
-                end
-
-                PM_READ_WAIT: begin
-                    cfg_mgmt_rd_en_r <= 1'b0;
-                    if (cfg_mgmt_rd_wr_done_w) begin
-                        // Got PMCSR value, clear PowerState bits [1:0] to force D0
-                        cfg_mgmt_di_r     <= {cfg_mgmt_do_w[31:2], 2'b00};
-                        cfg_mgmt_dwaddr_r <= 10'h011;
-                        cfg_mgmt_byte_en_r <= 4'b0001; // Only write byte 0 (contains PowerState)
-                        pm_state           <= PM_WRITE;
-                    end
-                end
-
-                PM_WRITE: begin
-                    cfg_mgmt_wr_en_r <= 1'b1;
-                    pm_state         <= PM_WRITE_WAIT;
-                end
-
-                PM_WRITE_WAIT: begin
-                    cfg_mgmt_wr_en_r <= 1'b0;
-                    if (cfg_mgmt_rd_wr_done_w) begin
-                        pm_state <= PM_DONE;
-                    end
-                end
-
-                PM_DONE: begin
-                    // Wait for powerstate to settle back to D0
-                    if (cfg_pmcsr_powerstate_w == 2'b00) begin
-                        pm_state <= PM_IDLE;
-                    end
-                    // If still not D0, retry
-                    else begin
-                        pm_state <= PM_READ;
-                    end
-                end
-
-                default: pm_state <= PM_IDLE;
-            endcase
-        end
     end
 
     // ===================================================================
@@ -375,11 +245,11 @@ module i211_pcie_top (
 
         .cfg_mgmt_do                    (cfg_mgmt_do_w),
         .cfg_mgmt_rd_wr_done            (cfg_mgmt_rd_wr_done_w),
-        .cfg_mgmt_di                    (cfg_mgmt_di_r),
-        .cfg_mgmt_byte_en               (cfg_mgmt_byte_en_r),
-        .cfg_mgmt_dwaddr                (cfg_mgmt_dwaddr_r),
-        .cfg_mgmt_wr_en                 (cfg_mgmt_wr_en_r),
-        .cfg_mgmt_rd_en                 (cfg_mgmt_rd_en_r),
+        .cfg_mgmt_di                    (32'h0),
+        .cfg_mgmt_byte_en               (4'h0),
+        .cfg_mgmt_dwaddr                (10'h0),
+        .cfg_mgmt_wr_en                 (1'b0),
+        .cfg_mgmt_rd_en                 (1'b0),
         .cfg_mgmt_wr_readonly           (1'b0),
         .cfg_mgmt_wr_rw1c_as_rw        (1'b0),
 
@@ -434,8 +304,8 @@ module i211_pcie_top (
         .cfg_trn_pending                (1'b0),
         .cfg_pm_halt_aspm_l0s           (1'b0),
         .cfg_pm_halt_aspm_l1            (1'b0),
-        .cfg_pm_force_state_en          (cfg_pm_force_state_en_r),
-        .cfg_pm_force_state             (cfg_pm_force_state_r),
+        .cfg_pm_force_state_en          (1'b0),        // No forced power state
+        .cfg_pm_force_state             (2'b00),       // Don't care (disabled)
         .cfg_pm_wake                    (1'b0),
         .cfg_pm_send_pme_to             (1'b0),
 

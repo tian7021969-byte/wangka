@@ -20,16 +20,16 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a75t
 INFO: [Device 21-403] Loading part xc7a75tfgg484-2
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 30252
+INFO: [Synth 8-7075] Helper process launched with PID 40040
 INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:04 . Memory (MB): peak = 1223.871 ; gain = 407.242
+Starting RTL Elaboration : Time (s): cpu = 00:00:00 ; elapsed = 00:00:04 . Memory (MB): peak = 1226.043 ; gain = 406.895
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-6157] synthesizing module 'i211_pcie_top' [C:/Users/dukehhu/Desktop/1121/i211_pcie_top.v:24]
 INFO: [Synth 8-6157] synthesizing module 'IBUFDS_GTE2' [C:/Xilinx/Vivado/2022.2/scripts/rt/data/unisim_comp.v:71489]
 INFO: [Synth 8-6155] done synthesizing module 'IBUFDS_GTE2' (0#1) [C:/Xilinx/Vivado/2022.2/scripts/rt/data/unisim_comp.v:71489]
-INFO: [Synth 8-6157] synthesizing module 'pcie_7x_0' [C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/.Xil/Vivado-17020-DUKEHHU-PC0/realtime/pcie_7x_0_stub.v:5]
-INFO: [Synth 8-6155] done synthesizing module 'pcie_7x_0' (0#1) [C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/.Xil/Vivado-17020-DUKEHHU-PC0/realtime/pcie_7x_0_stub.v:5]
+INFO: [Synth 8-6157] synthesizing module 'pcie_7x_0' [C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/.Xil/Vivado-30264-DUKEHHU-PC0/realtime/pcie_7x_0_stub.v:5]
+INFO: [Synth 8-6155] done synthesizing module 'pcie_7x_0' (0#1) [C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/.Xil/Vivado-30264-DUKEHHU-PC0/realtime/pcie_7x_0_stub.v:5]
 INFO: [Synth 8-6157] synthesizing module 'i211_handshake_logic' [C:/Users/dukehhu/Desktop/1121/i211_handshake_logic.v:36]
 INFO: [Synth 8-6155] done synthesizing module 'i211_handshake_logic' (0#1) [C:/Users/dukehhu/Desktop/1121/i211_handshake_logic.v:36]
 INFO: [Synth 8-6157] synthesizing module 'tlp_rx_router' [C:/Users/dukehhu/Desktop/1121/tlp_rx_router.v:27]
@@ -96,18 +96,18 @@ WARNING: [Synth 8-7129] Port m_axis_rx_tuser[2] in module i211_handshake_logic i
 WARNING: [Synth 8-7129] Port m_axis_rx_tuser[1] in module i211_handshake_logic is either unconnected or has no load
 WARNING: [Synth 8-7129] Port m_axis_rx_tuser[0] in module i211_handshake_logic is either unconnected or has no load
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 1399.020 ; gain = 582.391
+Finished RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:06 . Memory (MB): peak = 1400.773 ; gain = 581.625
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 1399.020 ; gain = 582.391
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:01 ; elapsed = 00:00:06 . Memory (MB): peak = 1400.773 ; gain = 581.625
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 1399.020 ; gain = 582.391
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:01 ; elapsed = 00:00:06 . Memory (MB): peak = 1400.773 ; gain = 581.625
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.225 . Memory (MB): peak = 1399.020 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.232 . Memory (MB): peak = 1400.773 ; gain = 0.000
 INFO: [Project 1-570] Preparing netlist for logic optimization
 
 Processing XDC Constraints
@@ -118,48 +118,47 @@ Parsing XDC File [C:/Users/dukehhu/Desktop/1121/constraints.xdc]
 Finished Parsing XDC File [C:/Users/dukehhu/Desktop/1121/constraints.xdc]
 INFO: [Project 1-236] Implementation specific constraints were found while reading constraint file [C:/Users/dukehhu/Desktop/1121/constraints.xdc]. These constraints will be ignored for synthesis but will be used in implementation. Impacted constraints are listed in the file [.Xil/i211_pcie_top_propImpl.xdc].
 Resolution: To avoid this warning, move constraints listed in [.Xil/i211_pcie_top_propImpl.xdc] to another XDC file and exclude this new file from synthesis with the used_in_synthesis property (File Properties dialog in GUI) and re-run elaboration/synthesis.
+Parsing XDC File [C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/dont_touch.xdc]
+Finished Parsing XDC File [C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/dont_touch.xdc]
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1506.980 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1506.840 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.014 . Memory (MB): peak = 1506.980 ; gain = 0.000
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.013 . Memory (MB): peak = 1506.840 ; gain = 0.000
 INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:04 ; elapsed = 00:00:13 . Memory (MB): peak = 1506.980 ; gain = 690.352
+Finished Constraint Validation : Time (s): cpu = 00:00:03 ; elapsed = 00:00:14 . Memory (MB): peak = 1506.840 ; gain = 687.691
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a75tfgg484-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:04 ; elapsed = 00:00:13 . Memory (MB): peak = 1506.980 ; gain = 690.352
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:03 ; elapsed = 00:00:14 . Memory (MB): peak = 1506.840 ; gain = 687.691
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
 ---------------------------------------------------------------------------------
 Applied set_property KEEP_HIERARCHY = SOFT for u_pcie_ep. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:04 ; elapsed = 00:00:13 . Memory (MB): peak = 1506.980 ; gain = 690.352
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:03 ; elapsed = 00:00:14 . Memory (MB): peak = 1506.840 ; gain = 687.691
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Preparing Guide Design
 ---------------------------------------------------------------------------------
-got a mismatch i211_handshake_logic
-Is not a child genome
 WARNING: [Synth 8-6702] IncrSynth : Design change found in an area of the design that prevents previous synthesis information being used, Reverting to default synthesis
 ---------------------------------------------------------------------------------
-Finished Doing Graph Differ : Time (s): cpu = 00:00:04 ; elapsed = 00:00:14 . Memory (MB): peak = 1506.980 ; gain = 690.352
+Finished Doing Graph Differ : Time (s): cpu = 00:00:03 ; elapsed = 00:00:14 . Memory (MB): peak = 1506.840 ; gain = 687.691
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Preparing Guide Design : Time (s): cpu = 00:00:04 ; elapsed = 00:00:14 . Memory (MB): peak = 1506.980 ; gain = 690.352
+Finished Preparing Guide Design : Time (s): cpu = 00:00:03 ; elapsed = 00:00:14 . Memory (MB): peak = 1506.840 ; gain = 687.691
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'state_reg' in module 'i211_handshake_logic'
 INFO: [Synth 8-802] inferred FSM for state register 'eecd_spi_state_reg' in module 'i211_handshake_logic'
 INFO: [Synth 8-802] inferred FSM for state register 'route_state_reg' in module 'tlp_rx_router'
 INFO: [Synth 8-802] inferred FSM for state register 'arb_state_reg' in module 'tx_arbiter'
-INFO: [Synth 8-802] inferred FSM for state register 'pm_state_reg' in module 'i211_pcie_top'
 ---------------------------------------------------------------------------------------------------
                    State |                     New Encoding |                Previous Encoding 
 ---------------------------------------------------------------------------------------------------
@@ -204,19 +203,8 @@ INFO: [Synth 8-3354] encoded FSM with state register 'route_state_reg' using enc
                   ARB_P1 |                              010 |                               10
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'arb_state_reg' using encoding 'one-hot' in module 'tx_arbiter'
----------------------------------------------------------------------------------------------------
-                   State |                     New Encoding |                Previous Encoding 
----------------------------------------------------------------------------------------------------
-                 PM_IDLE |                              000 |                              000
-                 PM_READ |                              001 |                              001
-            PM_READ_WAIT |                              010 |                              010
-                PM_WRITE |                              011 |                              011
-           PM_WRITE_WAIT |                              100 |                              100
-                 PM_DONE |                              101 |                              101
----------------------------------------------------------------------------------------------------
-INFO: [Synth 8-3354] encoded FSM with state register 'pm_state_reg' using encoding 'sequential' in module 'i211_pcie_top'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:10 ; elapsed = 00:00:32 . Memory (MB): peak = 1506.980 ; gain = 690.352
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:07 ; elapsed = 00:00:33 . Memory (MB): peak = 1506.840 ; gain = 687.691
 ---------------------------------------------------------------------------------
 
 
@@ -245,16 +233,16 @@ Detailed RTL Component Info :
 	   3 Input     16 Bit         XORs := 1     
 +---Registers : 
 	               64 Bit    Registers := 2     
-	               32 Bit    Registers := 75    
+	               32 Bit    Registers := 74    
 	               16 Bit    Registers := 6     
-	               10 Bit    Registers := 2     
+	               10 Bit    Registers := 1     
 	                8 Bit    Registers := 4     
 	                7 Bit    Registers := 1     
 	                5 Bit    Registers := 2     
-	                4 Bit    Registers := 3     
+	                4 Bit    Registers := 2     
 	                3 Bit    Registers := 1     
-	                2 Bit    Registers := 4     
-	                1 Bit    Registers := 16    
+	                2 Bit    Registers := 2     
+	                1 Bit    Registers := 13    
 +---Muxes : 
 	  13 Input   64 Bit        Muxes := 1     
 	   2 Input   64 Bit        Muxes := 3     
@@ -279,18 +267,16 @@ Detailed RTL Component Info :
 	   5 Input    5 Bit        Muxes := 1     
 	  24 Input    4 Bit        Muxes := 1     
 	   2 Input    4 Bit        Muxes := 2     
-	   2 Input    3 Bit        Muxes := 6     
+	   2 Input    3 Bit        Muxes := 5     
 	   5 Input    3 Bit        Muxes := 1     
 	   3 Input    3 Bit        Muxes := 2     
-	   6 Input    3 Bit        Muxes := 1     
 	   2 Input    2 Bit        Muxes := 4     
 	   3 Input    2 Bit        Muxes := 1     
 	  13 Input    1 Bit        Muxes := 23    
-	   2 Input    1 Bit        Muxes := 43    
+	   2 Input    1 Bit        Muxes := 42    
 	   3 Input    1 Bit        Muxes := 4     
 	   5 Input    1 Bit        Muxes := 6     
 	   4 Input    1 Bit        Muxes := 1     
-	   6 Input    1 Bit        Muxes := 7     
 ---------------------------------------------------------------------------------
 Finished RTL Component Statistics 
 ---------------------------------------------------------------------------------
@@ -395,25 +381,25 @@ INFO: [Synth 8-5546] ROM "phy_read" won't be mapped to RAM because it is too spa
 INFO: [Synth 8-5546] ROM "phy_read" won't be mapped to RAM because it is too sparse
 INFO: [Synth 8-5546] ROM "reg_mdic" won't be mapped to RAM because it is too sparse
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:15 ; elapsed = 00:01:05 . Memory (MB): peak = 1506.980 ; gain = 690.352
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:11 ; elapsed = 00:01:07 . Memory (MB): peak = 1506.840 ; gain = 687.691
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:16 ; elapsed = 00:01:10 . Memory (MB): peak = 1506.980 ; gain = 690.352
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:12 ; elapsed = 00:01:12 . Memory (MB): peak = 1506.840 ; gain = 687.691
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:43 ; elapsed = 00:02:41 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished Timing Optimization : Time (s): cpu = 00:00:42 ; elapsed = 00:02:42 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:43 ; elapsed = 00:02:50 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished Technology Mapping : Time (s): cpu = 00:00:42 ; elapsed = 00:02:51 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -431,37 +417,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:44 ; elapsed = 00:02:54 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished IO Insertion : Time (s): cpu = 00:00:44 ; elapsed = 00:02:55 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:44 ; elapsed = 00:02:54 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:44 ; elapsed = 00:02:55 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:45 ; elapsed = 00:02:54 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:44 ; elapsed = 00:02:55 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:45 ; elapsed = 00:02:54 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:44 ; elapsed = 00:02:55 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:45 ; elapsed = 00:02:54 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:44 ; elapsed = 00:02:55 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:45 ; elapsed = 00:02:54 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:44 ; elapsed = 00:02:55 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Writing Synthesis Report
@@ -482,40 +468,40 @@ Report Cell Usage:
 |2     |CARRY4      |    16|
 |3     |IBUFDS_GTE2 |     1|
 |4     |LUT1        |    33|
-|5     |LUT2        |   106|
+|5     |LUT2        |   105|
 |6     |LUT3        |   292|
-|7     |LUT4        |   355|
-|8     |LUT5        |   820|
-|9     |LUT6        |  1789|
+|7     |LUT4        |   349|
+|8     |LUT5        |   818|
+|9     |LUT6        |  1788|
 |10    |MUXF7       |   398|
 |11    |MUXF8       |     1|
-|12    |FDRE        |  2495|
+|12    |FDRE        |  2455|
 |13    |FDSE        |    87|
 |14    |IBUF        |     5|
 |15    |OBUF        |     3|
 +------+------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:45 ; elapsed = 00:02:54 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:44 ; elapsed = 00:02:55 . Memory (MB): peak = 1680.441 ; gain = 861.293
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 1 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:42 ; elapsed = 00:02:52 . Memory (MB): peak = 1685.480 ; gain = 760.891
-Synthesis Optimization Complete : Time (s): cpu = 00:00:45 ; elapsed = 00:02:55 . Memory (MB): peak = 1685.480 ; gain = 868.852
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:42 ; elapsed = 00:02:53 . Memory (MB): peak = 1680.441 ; gain = 755.227
+Synthesis Optimization Complete : Time (s): cpu = 00:00:44 ; elapsed = 00:02:56 . Memory (MB): peak = 1680.441 ; gain = 861.293
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.040 . Memory (MB): peak = 1685.480 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.041 . Memory (MB): peak = 1680.441 ; gain = 0.000
 INFO: [Netlist 29-17] Analyzing 415 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 WARNING: [Netlist 29-101] Netlist 'i211_pcie_top' is not ideal for floorplanning, since the cellview 'i211_handshake_logic' contains a large number of primitives.  Please consider enabling hierarchy in synthesis if you want to do floorplanning.
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1685.480 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1680.441 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete, checksum: 59711595
+Synth Design complete, checksum: 1395f797
 INFO: [Common 17-83] Releasing license: Synthesis
-132 Infos, 58 Warnings, 0 Critical Warnings and 0 Errors encountered.
+130 Infos, 58 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:46 ; elapsed = 00:02:59 . Memory (MB): peak = 1685.480 ; gain = 1265.145
+synth_design: Time (s): cpu = 00:00:45 ; elapsed = 00:03:00 . Memory (MB): peak = 1680.441 ; gain = 1257.578
 INFO: [Common 17-1381] The checkpoint 'C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/i211_pcie_top.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file i211_pcie_top_utilization_synth.rpt -pb i211_pcie_top_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Fri Mar 13 01:11:31 2026...
+INFO: [Common 17-206] Exiting Vivado at Fri Mar 13 01:44:06 2026...

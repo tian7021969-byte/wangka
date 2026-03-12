@@ -669,7 +669,7 @@ output wire pcie_drp_rdy;
     .c_msix_cap_on("TRUE"),
     .c_msix_next_ptr("00"),
     .c_pcie_cap_next_ptr("9C"),
-    .c_msix_table_size("003"),
+    .c_msix_table_size("004"),
     .c_msix_table_offset("0000E000"),
     .c_msix_table_bir("0"),
     .c_msix_pba_offset("0000E800"),

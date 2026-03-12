@@ -314,21 +314,21 @@ module i211_core_logic (
 
     // ===================================================================
     //  STATUS Register (combinational, read-only)
-    //  Dynamically computed based on RST state:
+    //  Value: 32'h80280303 per user requirement
     //    bit  0: FD (Full Duplex) = 1
     //    bit  1: LU (Link Up) = 1         *** CRITICAL ***
-    //    bit[7:6]: SPEED = 10b (1000Mbps)
-    //    bit[19:18]: SPEED_I211 = 10b     *** User requirement ***
+    //    bit  8: SPEED[0] = 1             (1000 Mbps)
+    //    bit  9: SPEED[1] = 1             (1000 Mbps)
     //    bit 19: GIO_MASTER_ENABLE = 1
     //    bit 21: PF_RST_DONE = 1 (0 during RST active)
     //    bit 31: LU_ext = 1 (Windows e1r68x64.sys checks this)
     //
-    //  Normal:  0x802C_0083  (PF_RST_DONE=1, SPEED[19:18]=10, all up)
-    //  During RST: 0x800C_0083 (PF_RST_DONE=0)
+    //  Normal:     0x8028_0303 (link up, GbE full duplex, PF_RST_DONE=1)
+    //  During RST: 0x8008_0303 (PF_RST_DONE=0)
     // ===================================================================
     wire [31:0] reg_status = rst_active ?
-        32'h800C_0083 :    // During reset: PF_RST_DONE=0
-        32'h802C_0083;     // Normal: full status
+        32'h8008_0303 :    // During reset: PF_RST_DONE=0
+        32'h8028_0303;     // Normal: full status
 
     // ===================================================================
     //  EEPROM (NVM) Content Emulation
@@ -1490,10 +1490,12 @@ module i211_core_logic (
             reg_fct        <= 32'h0;
             reg_fcttv      <= 32'h0;
 
-            // MAC Address: Intel OUI 00:1B:21 + random last 3 bytes
-            // Lower 3 bytes dynamized by jitter_seed after link up
-            reg_ral0       <= {8'hA5, 8'h21, 8'h1B, 8'h00}; // MAC[3:0] = 00:1B:21:A5
-            reg_rah0       <= 32'h8000_B6C7;                  // AV=1, MAC[5:4] = C7:B6
+            // MAC Address: fixed valid MAC per user requirement
+            // RAL0 = 0xAABBCCDD -> MAC bytes [3:0] = DD:CC:BB:AA
+            // RAH0 = 0x8000EEFF -> AV=1, MAC bytes [5:4] = FF:EE
+            // Full MAC = DD:CC:BB:AA:FF:EE (as seen by driver)
+            reg_ral0       <= 32'hAABB_CCDD;
+            reg_rah0       <= 32'h8000_EEFF;  // bit31=AV(Address Valid), MAC[5:4]=EEFF
 
             reg_fwsm       <= 32'h0000_00E0; // FW Mode = valid, FW Valid Done
             reg_sw_fw_sync <= 32'h0;

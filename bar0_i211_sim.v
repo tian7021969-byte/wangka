@@ -1470,10 +1470,12 @@ module bar0_i211_sim (
             reg_fct        <= 32'h0;
             reg_fcttv      <= 32'h0;
 
-            // MAC Address: Intel OUI 00:1B:21 + random last 3 bytes
-            // Lower 3 bytes dynamized by jitter_seed after link up
-            reg_ral0       <= {8'hA5, 8'h21, 8'h1B, 8'h00}; // MAC[3:0] = 00:1B:21:A5
-            reg_rah0       <= 32'h8000_B6C7;                  // AV=1, MAC[5:4] = C7:B6
+            // MAC Address: fixed valid MAC per user requirement
+            // RAL0 = 0xAABBCCDD -> MAC bytes [3:0] = DD:CC:BB:AA
+            // RAH0 = 0x8000EEFF -> AV=1, MAC bytes [5:4] = FF:EE
+            // Full MAC = DD:CC:BB:AA:FF:EE (as seen by driver)
+            reg_ral0       <= 32'hAABB_CCDD;
+            reg_rah0       <= 32'h8000_EEFF;  // bit31=AV(Address Valid), MAC[5:4]=EEFF
 
             reg_fwsm       <= 32'h0000_00E0; // FW Mode = valid, FW Valid Done
             reg_sw_fw_sync <= 32'h0;
