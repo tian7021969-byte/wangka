@@ -102,15 +102,16 @@ module hda_dma_engine (
                      ST_RD_JITTER  = 4'd1,
                      ST_RD_HDR0    = 4'd2,
                      ST_RD_HDR1    = 4'd3,
-                     ST_RD_WAIT    = 4'd4,
-                     ST_RD_CPL0    = 4'd5,
-                     ST_RD_CPL1    = 4'd6,
-                     ST_WR_JITTER  = 4'd7,
-                     ST_WR_HDR0    = 4'd8,
-                     ST_WR_HDR1    = 4'd9,
-                     ST_WR_DATA    = 4'd10,
-                     ST_WR_DONE    = 4'd11,
-                     ST_TIMEOUT    = 4'd12;
+                     ST_RD_HDR1_W  = 4'd4,
+                     ST_RD_WAIT    = 4'd5,
+                     ST_RD_CPL0    = 4'd6,
+                     ST_RD_CPL1    = 4'd7,
+                     ST_WR_JITTER  = 4'd8,
+                     ST_WR_HDR0    = 4'd9,
+                     ST_WR_HDR1    = 4'd10,
+                     ST_WR_DATA    = 4'd11,
+                     ST_WR_DONE    = 4'd12,
+                     ST_TIMEOUT    = 4'd13;
 
     reg [3:0]  state;
     reg [4:0]  jitter_cnt;
@@ -180,7 +181,8 @@ module hda_dma_engine (
                 end
 
                 ST_RD_HDR0: begin
-                    // 3DW MRd: {DW1, DW0}
+                    // 3DW/4DW MRd 第一拍: {DW1, DW0}
+                    // 设置数据并等待握手 (tvalid 已在本周期设为 1)
                     s_axis_tx_tdata <= {
                         requester_id,           // Requester ID
                         pending_tag,            // Tag
@@ -197,26 +199,31 @@ module hda_dma_engine (
                     s_axis_tx_tlast  <= 1'b0;
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
-
-                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
-                        state <= ST_RD_HDR1;
-                    end
+                    // 不在本拍检查握手，等下一拍 tvalid 生效后再检查
+                    state <= ST_RD_HDR1;
                 end
 
                 ST_RD_HDR1: begin
-                    if (pending_is_64bit) begin
-                        // 4DW: {DW3(addr_lo), DW2(addr_hi)}
-                        s_axis_tx_tdata <= {pending_addr[31:2], 2'b00,
-                                           pending_addr[63:32]};
-                    end else begin
-                        // 3DW: {pad, DW2(addr)}
-                        s_axis_tx_tdata <= {32'h0, pending_addr[31:2], 2'b00};
+                    // 等待第一拍握手成功后，发送第二拍
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
+                        if (pending_is_64bit) begin
+                            // 4DW: {DW3(addr_lo), DW2(addr_hi)}
+                            s_axis_tx_tdata <= {pending_addr[31:2], 2'b00,
+                                               pending_addr[63:32]};
+                        end else begin
+                            // 3DW: {pad, DW2(addr)}
+                            s_axis_tx_tdata <= {32'h0, pending_addr[31:2], 2'b00};
+                        end
+                        s_axis_tx_tkeep  <= pending_is_64bit ? 8'hFF : 8'h0F;
+                        s_axis_tx_tlast  <= 1'b1;
+                        s_axis_tx_tvalid <= 1'b1;
+                        s_axis_tx_tuser  <= 4'b0000;
+                        state <= ST_RD_HDR1_W;
                     end
-                    s_axis_tx_tkeep  <= pending_is_64bit ? 8'hFF : 8'h0F;
-                    s_axis_tx_tlast  <= 1'b1;
-                    s_axis_tx_tvalid <= 1'b1;
-                    s_axis_tx_tuser  <= 4'b0000;
+                end
 
+                // 等待第二拍握手完成
+                ST_RD_HDR1_W: begin
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
                         s_axis_tx_tvalid <= 1'b0;
                         s_axis_tx_tlast  <= 1'b0;
@@ -264,7 +271,7 @@ module hda_dma_engine (
                 end
 
                 ST_WR_HDR0: begin
-                    // MWr: {DW1, DW0}
+                    // MWr 第一拍: {DW1, DW0}
                     s_axis_tx_tdata <= {
                         requester_id,           // Requester ID
                         8'h00,                  // Tag (MWr 不需要 Tag 匹配)
@@ -281,55 +288,58 @@ module hda_dma_engine (
                     s_axis_tx_tlast  <= 1'b0;
                     s_axis_tx_tvalid <= 1'b1;
                     s_axis_tx_tuser  <= 4'b0000;
-
-                    if (s_axis_tx_tvalid && s_axis_tx_tready)
-                        state <= ST_WR_HDR1;
+                    // 不在本拍检查握手，等下一拍 tvalid 生效后再检查
+                    state <= ST_WR_HDR1;
                 end
 
                 ST_WR_HDR1: begin
-                    if (pending_is_64bit) begin
-                        // 4DW: {DW3(addr_lo), DW2(addr_hi)}
-                        s_axis_tx_tdata <= {pending_addr[31:2], 2'b00,
-                                           pending_addr[63:32]};
-                        s_axis_tx_tkeep <= 8'hFF;
-                        s_axis_tx_tlast <= 1'b0;
-                    end else begin
-                        // 3DW: {Data_DW0, DW2(addr)}
-                        s_axis_tx_tdata <= {pending_data[31:0],
-                                           pending_addr[31:2], 2'b00};
-                        s_axis_tx_tkeep <= 8'hFF;
-                        s_axis_tx_tlast <= 1'b0;
-                    end
-                    s_axis_tx_tvalid <= 1'b1;
-                    s_axis_tx_tuser  <= 4'b0000;
-
-                    if (s_axis_tx_tvalid && s_axis_tx_tready)
+                    // 等待第一拍握手成功后，发送第二拍
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
+                        if (pending_is_64bit) begin
+                            // 4DW: {DW3(addr_lo), DW2(addr_hi)}
+                            s_axis_tx_tdata <= {pending_addr[31:2], 2'b00,
+                                               pending_addr[63:32]};
+                            s_axis_tx_tkeep <= 8'hFF;
+                            s_axis_tx_tlast <= 1'b0;
+                        end else begin
+                            // 3DW: {Data_DW0, DW2(addr)}
+                            s_axis_tx_tdata <= {pending_data[31:0],
+                                               pending_addr[31:2], 2'b00};
+                            s_axis_tx_tkeep <= 8'hFF;
+                            s_axis_tx_tlast <= 1'b0;
+                        end
+                        s_axis_tx_tvalid <= 1'b1;
+                        s_axis_tx_tuser  <= 4'b0000;
                         state <= ST_WR_DATA;
+                    end
                 end
 
                 ST_WR_DATA: begin
-                    if (pending_is_64bit) begin
-                        // 4DW MWr: 第三拍是 Data
-                        s_axis_tx_tdata <= pending_data;
-                    end else begin
-                        // 3DW MWr: 第三拍只剩 Data_DW1
-                        s_axis_tx_tdata <= {32'h0, pending_data[63:32]};
-                    end
-                    s_axis_tx_tkeep  <= pending_is_64bit ? 8'hFF : 8'h0F;
-                    s_axis_tx_tlast  <= 1'b1;
-                    s_axis_tx_tvalid <= 1'b1;
-                    s_axis_tx_tuser  <= 4'b0000;
-
+                    // 等待第二拍握手成功后，发送第三拍（数据）
                     if (s_axis_tx_tvalid && s_axis_tx_tready) begin
-                        s_axis_tx_tvalid <= 1'b0;
-                        s_axis_tx_tlast  <= 1'b0;
+                        if (pending_is_64bit) begin
+                            // 4DW MWr: 第三拍是 Data
+                            s_axis_tx_tdata <= pending_data;
+                        end else begin
+                            // 3DW MWr: 第三拍只剩 Data_DW1
+                            s_axis_tx_tdata <= {32'h0, pending_data[63:32]};
+                        end
+                        s_axis_tx_tkeep  <= pending_is_64bit ? 8'hFF : 8'h0F;
+                        s_axis_tx_tlast  <= 1'b1;
+                        s_axis_tx_tvalid <= 1'b1;
+                        s_axis_tx_tuser  <= 4'b0000;
                         state <= ST_WR_DONE;
                     end
                 end
 
                 ST_WR_DONE: begin
-                    dma_wr_done <= 1'b1;
-                    state       <= ST_IDLE;
+                    // 等待最后一拍 (tlast) 握手完成
+                    if (s_axis_tx_tvalid && s_axis_tx_tready) begin
+                        s_axis_tx_tvalid <= 1'b0;
+                        s_axis_tx_tlast  <= 1'b0;
+                        dma_wr_done <= 1'b1;
+                        state       <= ST_IDLE;
+                    end
                 end
 
                 default: state <= ST_IDLE;

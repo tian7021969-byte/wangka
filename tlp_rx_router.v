@@ -74,8 +74,11 @@ module tlp_rx_router (
     // DMA 方向 tready
     wire dma_side_ready = (route_state == RT_TO_DMA) ? dma_rx_tready : 1'b0;
 
-    // 上游 tready: IDLE 时始终 ready (接受第一拍); 路由中跟踪目标
-    assign rx_tready = (route_state == RT_IDLE)   ? 1'b1 :
+    // 上游 tready: IDLE 时根据 TLP 类型检查对应下游 ready
+    // 修复: 之前 IDLE 时无条件 ready=1, 导致下游未准备好时 CplD 第一拍丢失
+    wire idle_ready = rx_tvalid ? (is_completion ? dma_rx_tready : bar_rx_tready) : 1'b1;
+
+    assign rx_tready = (route_state == RT_IDLE)   ? idle_ready :
                        (route_state == RT_TO_BAR) ? bar_rx_tready :
                        (route_state == RT_TO_DMA) ? dma_rx_tready :
                        1'b1;
@@ -107,7 +110,8 @@ module tlp_rx_router (
         end else begin
             case (route_state)
                 RT_IDLE: begin
-                    if (rx_tvalid) begin
+                    // 必须等握手成功 (tvalid && tready) 才转换状态
+                    if (rx_tvalid && idle_ready) begin
                         if (rx_tlast) begin
                             // 单拍 TLP — 不需要跟踪路由, 保持 IDLE
                             route_state <= RT_IDLE;

@@ -1,10 +1,10 @@
 // Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-// Date        : Fri Mar  6 14:23:33 2026
+// Date        : Thu Mar 12 00:14:57 2026
 // Host        : DUKEHHU-PC0 running 64-bit major release  (build 9200)
-// Command     : write_verilog -force -mode funcsim -rename_top pcie_7x_0 -prefix
-//               pcie_7x_0_ pcie_7x_0_sim_netlist.v
+// Command     : write_verilog -force -mode funcsim
+//               c:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/pcie_7x_0_sim_netlist.v
 // Design      : pcie_7x_0
 // Purpose     : This verilog netlist is a functional simulation representation of the design and should not be modified
 //               or synthesized. This netlist cannot be used for SDF annotated simulation.
@@ -792,7 +792,7 @@ module pcie_7x_0
   (* c_fc_nph = "12" *) 
   (* c_fc_pd = "437" *) 
   (* c_fc_ph = "32" *) 
-  (* c_gen1 = "1'b1" *) 
+  (* c_gen1 = "1'b0" *) 
   (* c_header_type = "00" *) 
   (* c_hw_auton_spd_disable = "FALSE" *) 
   (* c_int_width = "64" *) 
@@ -872,7 +872,7 @@ module pcie_7x_0
   (* c_slot_cap_pwr_limit_scale = "0" *) 
   (* c_slot_cap_pwr_limit_value = "0" *) 
   (* c_surprise_dn_err_cap = "FALSE" *) 
-  (* c_trgt_lnk_spd = "2" *) 
+  (* c_trgt_lnk_spd = "0" *) 
   (* c_trn_np_fc = "TRUE" *) 
   (* c_tx_last_tlp = "29" *) 
   (* c_tx_raddr_lat = "0" *) 
@@ -901,7 +901,7 @@ module pcie_7x_0
   (* cost_table = "1" *) 
   (* d1_sup = "0" *) 
   (* d2_sup = "0" *) 
-  (* dev_id = "0011" *) 
+  (* dev_id = "7011" *) 
   (* dev_port_type = "0000" *) 
   (* dis_scl_fctr_d0_state = "0" *) 
   (* dis_scl_fctr_d1_state = "0" *) 
@@ -913,7 +913,7 @@ module pcie_7x_0
   (* ext_tag_fld_sup = "FALSE" *) 
   (* int_pin = "1" *) 
   (* intx = "TRUE" *) 
-  (* max_lnk_spd = "2" *) 
+  (* max_lnk_spd = "1" *) 
   (* max_lnk_wdt = "000001" *) 
   (* mps = "010" *) 
   (* no_soft_rst = "TRUE" *) 
@@ -935,7 +935,7 @@ module pcie_7x_0
   (* subsys_ven_id = "1102" *) 
   (* ven_id = "1102" *) 
   (* xrom_bar = "00000000" *) 
-  pcie_7x_0_pcie_7x_0_pcie2_top inst
+  pcie_7x_0_pcie2_top inst
        (.cfg_aer_ecrc_check_en(cfg_aer_ecrc_check_en),
         .cfg_aer_ecrc_gen_en(cfg_aer_ecrc_gen_en),
         .cfg_aer_interrupt_msgnum(cfg_aer_interrupt_msgnum),
@@ -1233,7 +1233,7 @@ module pcie_7x_0
         .user_reset_out(user_reset_out));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_axi_basic_rx
+module pcie_7x_0_axi_basic_rx
    (E,
     trn_rsrc_dsc_d,
     m_axis_rx_tvalid_reg,
@@ -1322,7 +1322,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_rx
   wire trn_rsrc_dsc_prev0;
   wire user_clk;
 
-  pcie_7x_0_pcie_7x_0_axi_basic_rx_null_gen rx_null_gen_inst
+  pcie_7x_0_axi_basic_rx_null_gen rx_null_gen_inst
        (.D({rx_null_gen_inst_n_0,rx_null_gen_inst_n_1}),
         .Q({Q[30:29],Q[15],Q[1:0]}),
         .S({rx_null_gen_inst_n_7,rx_null_gen_inst_n_8}),
@@ -1341,7 +1341,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_rx
         .\reg_pkt_len_counter_reg[3]_0 (rx_null_gen_inst_n_3),
         .\reg_tkeep[7]_i_7_0 (rx_null_gen_inst_n_2),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_7x_0_axi_basic_rx_pipeline rx_pipeline_inst
+  pcie_7x_0_axi_basic_rx_pipeline rx_pipeline_inst
        (.D({rx_null_gen_inst_n_0,rx_null_gen_inst_n_1}),
         .E(E),
         .Q(Q),
@@ -1380,7 +1380,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_rx
         .user_reset_out_reg(rx_pipeline_inst_n_8));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_axi_basic_rx_null_gen
+module pcie_7x_0_axi_basic_rx_null_gen
    (D,
     \reg_tkeep[7]_i_7_0 ,
     \reg_pkt_len_counter_reg[3]_0 ,
@@ -1905,7 +1905,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_rx_null_gen
         .O(\reg_pkt_len_counter_reg[0]_0 ));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_axi_basic_rx_pipeline
+module pcie_7x_0_axi_basic_rx_pipeline
    (E,
     trn_rsrc_dsc_d,
     m_axis_rx_tvalid_reg_0,
@@ -3842,7 +3842,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_rx_pipeline
         .R(SR));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_axi_basic_top
+module pcie_7x_0_axi_basic_top
    (E,
     trn_rsrc_dsc_d,
     m_axis_rx_tvalid_reg,
@@ -4010,7 +4010,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_top
   wire tx_cfg_gnt;
   wire user_clk;
 
-  pcie_7x_0_pcie_7x_0_axi_basic_rx rx_inst
+  pcie_7x_0_axi_basic_rx rx_inst
        (.E(E),
         .Q(Q),
         .SR(SR),
@@ -4035,7 +4035,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_top
         .trn_rsrc_dsc_d(trn_rsrc_dsc_d),
         .trn_rsrc_dsc_prev0(trn_rsrc_dsc_prev0),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_7x_0_axi_basic_tx tx_inst
+  pcie_7x_0_axi_basic_tx tx_inst
        (.SR(SR),
         .cfg_pcie_link_state(cfg_pcie_link_state),
         .cfg_pm_turnoff_ok_n(cfg_pm_turnoff_ok_n),
@@ -4071,7 +4071,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_top
         .user_clk(user_clk));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_axi_basic_tx
+module pcie_7x_0_axi_basic_tx
    (reg_tcfg_gnt,
     tready_thrtl_reg,
     trn_teof,
@@ -4177,7 +4177,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx
   wire tx_cfg_gnt;
   wire user_clk;
 
-  pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl \thrtl_ctl_enabled.tx_thrl_ctl_inst 
+  pcie_7x_0_axi_basic_tx_thrtl_ctl \thrtl_ctl_enabled.tx_thrl_ctl_inst 
        (.SR(SR),
         .axi_in_packet(axi_in_packet),
         .cfg_pcie_link_state(cfg_pcie_link_state),
@@ -4208,7 +4208,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx
         .trn_tdst_rdy(trn_tdst_rdy),
         .tx_cfg_gnt(tx_cfg_gnt),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_7x_0_axi_basic_tx_pipeline tx_pipeline_inst
+  pcie_7x_0_axi_basic_tx_pipeline tx_pipeline_inst
        (.SR(SR),
         .axi_in_packet(axi_in_packet),
         .axi_in_packet_reg_0(\thrtl_ctl_enabled.tx_thrl_ctl_inst_n_4 ),
@@ -4231,7 +4231,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx
         .user_clk(user_clk));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_axi_basic_tx_pipeline
+module pcie_7x_0_axi_basic_tx_pipeline
    (trn_teof,
     trn_tsrc_rdy,
     trn_trem,
@@ -4776,7 +4776,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx_pipeline
         .R(SR));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl
+module pcie_7x_0_axi_basic_tx_thrtl_ctl
    (reg_tcfg_gnt,
     tready_thrtl_reg_0,
     ppm_L1_thrtl,
@@ -4859,7 +4859,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl
   wire next_state;
   wire out;
   wire p_2_in;
-  wire pcie_block_i_i_36_n_0;
+  wire pcie_block_i_i_38_n_0;
   wire ppm_L1_thrtl;
   wire ppm_L1_thrtl_reg_0;
   wire ppm_L1_trig;
@@ -5036,7 +5036,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl
        (.I0(cfg_turnoff_ok_pending),
         .I1(tcfg_gnt_pending),
         .I2(cur_state),
-        .I3(pcie_block_i_i_36_n_0),
+        .I3(pcie_block_i_i_38_n_0),
         .I4(ppm_L23_thrtl),
         .I5(tcfg_req_thrtl),
         .O(cfg_pm_turnoff_ok_n));
@@ -5045,20 +5045,20 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl
     .INIT(16'hA202)) 
     pcie_block_i_i_30
        (.I0(tcfg_req_thrtl),
-        .I1(pcie_block_i_i_36_n_0),
+        .I1(pcie_block_i_i_38_n_0),
         .I2(cur_state),
         .I3(tcfg_gnt_pending),
         .O(trn_tcfg_gnt));
   (* SOFT_HLUTNM = "soft_lutpair98" *) 
   LUT5 #(
     .INIT(32'hFFFF20E0)) 
-    pcie_block_i_i_36
+    pcie_block_i_i_38
        (.I0(reg_axi_in_pkt),
         .I1(s_axis_tx_tvalid),
         .I2(tready_thrtl_reg_0),
         .I3(s_axis_tx_tlast),
         .I4(cur_state_i_2_n_0),
-        .O(pcie_block_i_i_36_n_0));
+        .O(pcie_block_i_i_38_n_0));
   LUT6 #(
     .INIT(64'h0000010000000000)) 
     ppm_L1_thrtl_i_2
@@ -5185,7 +5185,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl
         .I1(trn_tcfg_req),
         .I2(tcfg_gnt_pending),
         .I3(cur_state),
-        .I4(pcie_block_i_i_36_n_0),
+        .I4(pcie_block_i_i_38_n_0),
         .I5(tcfg_req_thrtl),
         .O(tcfg_gnt_pending_i_1_n_0));
   FDRE tcfg_gnt_pending_reg
@@ -5367,7 +5367,7 @@ module pcie_7x_0_pcie_7x_0_axi_basic_tx_thrtl_ctl
         .S(SR));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_core_top
+module pcie_7x_0_core_top
    (pl_ltssm_state,
     int_oobclk_out,
     user_reset_out,
@@ -5838,10 +5838,10 @@ module pcie_7x_0_pcie_7x_0_core_top
   wire [0:0]pci_exp_rxp;
   wire [0:0]pci_exp_txn;
   wire [0:0]pci_exp_txp;
-  wire pcie_block_i_i_32_n_0;
-  wire pcie_block_i_i_33_n_0;
   wire pcie_block_i_i_34_n_0;
   wire pcie_block_i_i_35_n_0;
+  wire pcie_block_i_i_36_n_0;
+  wire pcie_block_i_i_37_n_0;
   wire [8:0]pcie_drp_addr;
   wire pcie_drp_clk;
   wire [15:0]pcie_drp_di;
@@ -5849,8 +5849,7 @@ module pcie_7x_0_pcie_7x_0_core_top
   wire pcie_drp_en;
   wire pcie_drp_rdy;
   wire pcie_drp_we;
-  wire pcie_top_i_n_11;
-  wire phy_rdy_n;
+  wire pcie_top_i_n_5;
   wire pipe_rx0_chanisaligned_gt;
   wire [1:0]pipe_rx0_char_is_k_gt;
   wire [15:0]pipe_rx0_data_gt;
@@ -5915,16 +5914,10 @@ module pcie_7x_0_pcie_7x_0_core_top
   wire user_reset_out;
 
   assign user_lnk_up = user_lnk_up_int;
-  pcie_7x_0_pcie_7x_0_gt_top gt_top_i
-       (.D(pipe_rx0_char_is_k_gt),
-        .INT_DCLK_OUT(ext_ch_gt_drpclk),
+  pcie_7x_0_gt_top gt_top_i
+       (.INT_DCLK_OUT(ext_ch_gt_drpclk),
         .INT_MMCM_LOCK_OUT(int_mmcm_lock_out),
         .INT_QPLLLOCK_OUT(int_qplllock_out),
-        .Q(pipe_tx0_powerdown_gt),
-        .SR(phy_rdy_n),
-        .\gtp_channel.gtpe2_channel_i (pipe_tx_margin_gt),
-        .\gtp_channel.gtpe2_channel_i_0 (pipe_tx0_data_gt),
-        .\gtp_channel.gtpe2_channel_i_1 (pipe_tx0_char_is_k_gt),
         .int_pclk_out_slave(int_pclk_out_slave),
         .int_pclk_sel_slave(int_pclk_sel_slave),
         .int_qplloutclk_out(int_qplloutclk_out),
@@ -5936,15 +5929,20 @@ module pcie_7x_0_pcie_7x_0_core_top
         .pci_exp_txp(pci_exp_txp),
         .pipe_clk(int_oobclk_out),
         .pipe_rx0_chanisaligned(pipe_rx0_chanisaligned_gt),
+        .pipe_rx0_char_is_k(pipe_rx0_char_is_k_gt),
         .pipe_rx0_data(pipe_rx0_data_gt),
         .pipe_rx0_elec_idle(pipe_rx0_elec_idle_gt),
         .pipe_rx0_phy_status(pipe_rx0_phy_status_gt),
         .pipe_rx0_polarity(pipe_rx0_polarity_gt),
         .pipe_rx0_status(pipe_rx0_status_gt),
         .pipe_rx0_valid(pipe_rx0_valid_gt),
+        .pipe_tx0_char_is_k(pipe_tx0_char_is_k_gt),
         .pipe_tx0_compliance(pipe_tx0_compliance_gt),
+        .pipe_tx0_data(pipe_tx0_data_gt),
         .pipe_tx0_elec_idle(pipe_tx0_elec_idle_gt),
+        .pipe_tx0_powerdown(pipe_tx0_powerdown_gt),
         .pipe_tx_deemph(pipe_tx_deemph_gt),
+        .pipe_tx_margin(pipe_tx_margin_gt),
         .pipe_tx_rate(pipe_tx_rate_gt),
         .pipe_tx_rcvr_det(pipe_tx_rcvr_det_gt),
         .pl_ltssm_state(pl_ltssm_state),
@@ -6106,29 +6104,26 @@ module pcie_7x_0_pcie_7x_0_core_top
         .O(\p_0_out_inferred__0/store_ltssm_inferred_i_3_n_0 ));
   LUT1 #(
     .INIT(2'h1)) 
-    pcie_block_i_i_32
-       (.I0(cfg_mgmt_byte_en[3]),
-        .O(pcie_block_i_i_32_n_0));
-  LUT1 #(
-    .INIT(2'h1)) 
-    pcie_block_i_i_33
-       (.I0(cfg_mgmt_byte_en[2]),
-        .O(pcie_block_i_i_33_n_0));
-  LUT1 #(
-    .INIT(2'h1)) 
     pcie_block_i_i_34
-       (.I0(cfg_mgmt_byte_en[1]),
+       (.I0(cfg_mgmt_byte_en[3]),
         .O(pcie_block_i_i_34_n_0));
   LUT1 #(
     .INIT(2'h1)) 
     pcie_block_i_i_35
-       (.I0(cfg_mgmt_byte_en[0]),
+       (.I0(cfg_mgmt_byte_en[2]),
         .O(pcie_block_i_i_35_n_0));
-  pcie_7x_0_pcie_7x_0_pcie_top pcie_top_i
-       (.CLK(int_oobclk_out),
-        .D(pipe_rx0_char_is_k_gt),
-        .Q(pipe_tx_margin_gt),
-        .SR(user_reset_out),
+  LUT1 #(
+    .INIT(2'h1)) 
+    pcie_block_i_i_36
+       (.I0(cfg_mgmt_byte_en[1]),
+        .O(pcie_block_i_i_36_n_0));
+  LUT1 #(
+    .INIT(2'h1)) 
+    pcie_block_i_i_37
+       (.I0(cfg_mgmt_byte_en[0]),
+        .O(pcie_block_i_i_37_n_0));
+  pcie_7x_0_pcie_top pcie_top_i
+       (.SR(user_reset_out),
         .bridge_reset_int(bridge_reset_int),
         .cfg_aer_ecrc_check_en(cfg_aer_ecrc_check_en),
         .cfg_aer_ecrc_gen_en(cfg_aer_ecrc_gen_en),
@@ -6182,7 +6177,7 @@ module pcie_7x_0_pcie_7x_0_core_top
         .cfg_interrupt_stat(cfg_interrupt_stat),
         .cfg_lcommand(cfg_lcommand),
         .cfg_lstatus(cfg_lstatus),
-        .cfg_mgmt_byte_en_n({pcie_block_i_i_32_n_0,pcie_block_i_i_33_n_0,pcie_block_i_i_34_n_0,pcie_block_i_i_35_n_0}),
+        .cfg_mgmt_byte_en_n({pcie_block_i_i_34_n_0,pcie_block_i_i_35_n_0,pcie_block_i_i_36_n_0,pcie_block_i_i_37_n_0}),
         .cfg_mgmt_di(cfg_mgmt_di),
         .cfg_mgmt_do(cfg_mgmt_do),
         .cfg_mgmt_dwaddr(cfg_mgmt_dwaddr),
@@ -6249,20 +6244,22 @@ module pcie_7x_0_pcie_7x_0_core_top
         .pcie_drp_en(pcie_drp_en),
         .pcie_drp_rdy(pcie_drp_rdy),
         .pcie_drp_we(pcie_drp_we),
+        .pipe_clk(int_oobclk_out),
         .pipe_rx0_chanisaligned(pipe_rx0_chanisaligned_gt),
+        .pipe_rx0_char_is_k(pipe_rx0_char_is_k_gt),
+        .pipe_rx0_data(pipe_rx0_data_gt),
         .pipe_rx0_elec_idle(pipe_rx0_elec_idle_gt),
         .pipe_rx0_phy_status(pipe_rx0_phy_status_gt),
         .pipe_rx0_polarity(pipe_rx0_polarity_gt),
+        .pipe_rx0_status(pipe_rx0_status_gt),
         .pipe_rx0_valid(pipe_rx0_valid_gt),
-        .\pipe_stages_1.pipe_rx_data_q_reg[15] (pipe_rx0_data_gt),
-        .\pipe_stages_1.pipe_rx_status_q_reg[2] (pipe_rx0_status_gt),
-        .\pipe_stages_1.pipe_tx_char_is_k_q_reg[1] (pipe_tx0_char_is_k_gt),
-        .\pipe_stages_1.pipe_tx_data_q_reg[15] (pipe_tx0_data_gt),
-        .\pipe_stages_1.pipe_tx_powerdown_q_reg[1] (pipe_tx0_powerdown_gt),
-        .\pipe_stages_1.pipe_tx_rcvr_det_q_reg (phy_rdy_n),
+        .pipe_tx0_char_is_k(pipe_tx0_char_is_k_gt),
         .pipe_tx0_compliance(pipe_tx0_compliance_gt),
+        .pipe_tx0_data(pipe_tx0_data_gt),
         .pipe_tx0_elec_idle(pipe_tx0_elec_idle_gt),
+        .pipe_tx0_powerdown(pipe_tx0_powerdown_gt),
         .pipe_tx_deemph(pipe_tx_deemph_gt),
+        .pipe_tx_margin(pipe_tx_margin_gt),
         .pipe_tx_rate(pipe_tx_rate_gt),
         .pipe_tx_rcvr_det(pipe_tx_rcvr_det_gt),
         .pl_directed_change_done(pl_directed_change_done),
@@ -6301,7 +6298,7 @@ module pcie_7x_0_pcie_7x_0_core_top
         .tx_cfg_gnt(tx_cfg_gnt),
         .tx_err_drop(tx_err_drop),
         .user_clk(user_clk_out),
-        .user_reset_int_reg(pcie_top_i_n_11));
+        .user_reset_int_reg(pcie_top_i_n_5));
   (* DEST_SYNC_FF = "2" *) 
   (* INIT_SYNC_FF = "0" *) 
   (* SIM_ASSERT_CHK = "0" *) 
@@ -6357,7 +6354,7 @@ module pcie_7x_0_pcie_7x_0_core_top
   FDPE user_reset_int_reg
        (.C(user_clk_out),
         .CE(1'b1),
-        .D(pcie_top_i_n_11),
+        .D(pcie_top_i_n_5),
         .PRE(sys_or_hot_rst),
         .Q(bridge_reset_int));
   LUT2 #(
@@ -6374,7 +6371,7 @@ module pcie_7x_0_pcie_7x_0_core_top
         .Q(user_reset_out));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_gt_common
+module pcie_7x_0_gt_common
    (cpllrst,
     \gtp_common.gtpe2_common_i ,
     int_qplloutclk_out,
@@ -6416,7 +6413,7 @@ module pcie_7x_0_pcie_7x_0_gt_common
   wire qpll_drp_we;
   wire sys_clk;
 
-  pcie_7x_0_pcie_7x_0_qpll_drp qpll_drp_i
+  pcie_7x_0_qpll_drp qpll_drp_i
        (.D(qpll_drp_do),
         .Q(Q),
         .SR(SR),
@@ -6428,7 +6425,7 @@ module pcie_7x_0_pcie_7x_0_gt_common
         .qpll_drp_rdy(qpll_drp_rdy),
         .qpll_drp_we(qpll_drp_we),
         .qplllock_reg1_reg_0(\gtp_common.gtpe2_common_i ));
-  pcie_7x_0_pcie_7x_0_qpll_wrapper qpll_wrapper_i
+  pcie_7x_0_qpll_wrapper qpll_wrapper_i
        (.D(qpll_drp_do),
         .PLL0RESET0(PLL0RESET0),
         .cpllrst(cpllrst),
@@ -6445,12 +6442,12 @@ module pcie_7x_0_pcie_7x_0_gt_common
         .sys_clk(sys_clk));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
+module pcie_7x_0_gt_rx_valid_filter_7x
    (gt_rxvalid_q_reg_0,
     pipe_rx0_elec_idle,
     pipe_rx0_phy_status,
     pipe_rx0_data,
-    D,
+    pipe_rx0_char_is_k,
     pipe_rx0_status,
     SR,
     gt_rx_phy_status_q_reg_0,
@@ -6459,13 +6456,13 @@ module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
     Q,
     RXSTATUS,
     gt_rxvalid_q_reg_1,
-    \gt_rxcharisk_q_reg[1]_0 ,
+    D,
     \gt_rxdata_q_reg[15]_0 );
   output gt_rxvalid_q_reg_0;
   output pipe_rx0_elec_idle;
   output pipe_rx0_phy_status;
   output [15:0]pipe_rx0_data;
-  output [1:0]D;
+  output [1:0]pipe_rx0_char_is_k;
   output [2:0]pipe_rx0_status;
   input [0:0]SR;
   input gt_rx_phy_status_q_reg_0;
@@ -6474,7 +6471,7 @@ module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
   input [5:0]Q;
   input [2:0]RXSTATUS;
   input gt_rxvalid_q_reg_1;
-  input [1:0]\gt_rxcharisk_q_reg[1]_0 ;
+  input [1:0]D;
   input [15:0]\gt_rxdata_q_reg[15]_0 ;
 
   wire [1:0]D;
@@ -6488,7 +6485,6 @@ module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
   wire \gt_rx_status_q[1]_i_1_n_0 ;
   wire \gt_rx_status_q[2]_i_1_n_0 ;
   wire \gt_rx_status_q[2]_i_2_n_0 ;
-  wire [1:0]\gt_rxcharisk_q_reg[1]_0 ;
   wire \gt_rxcharisk_q_reg_n_0_[0] ;
   wire [15:0]\gt_rxdata_q_reg[15]_0 ;
   wire gt_rxvalid_q__0;
@@ -6500,6 +6496,7 @@ module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
   wire gt_rxvalid_q_reg_1;
   wire p_1_in;
   wire [4:0]p_1_in__0;
+  wire [1:0]pipe_rx0_char_is_k;
   wire [15:0]pipe_rx0_data;
   wire pipe_rx0_elec_idle;
   wire pipe_rx0_phy_status;
@@ -6583,13 +6580,13 @@ module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
   FDRE \gt_rxcharisk_q_reg[0] 
        (.C(gt_rx_phy_status_q_reg_0),
         .CE(1'b1),
-        .D(\gt_rxcharisk_q_reg[1]_0 [0]),
+        .D(D[0]),
         .Q(\gt_rxcharisk_q_reg_n_0_[0] ),
         .R(SR));
   FDRE \gt_rxcharisk_q_reg[1] 
        (.C(gt_rx_phy_status_q_reg_0),
         .CE(1'b1),
-        .D(\gt_rxcharisk_q_reg[1]_0 [1]),
+        .D(D[1]),
         .Q(p_1_in),
         .R(SR));
   FDRE \gt_rxdata_q_reg[0] 
@@ -6746,20 +6743,20 @@ module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
         .D(gt_rxvalid_q__0),
         .Q(gt_rxvalid_q_reg_0),
         .R(SR));
-  (* SOFT_HLUTNM = "soft_lutpair4" *) 
-  LUT2 #(
-    .INIT(4'h8)) 
-    \pipe_stages_1.pipe_rx_char_is_k_q[0]_i_1 
-       (.I0(gt_rxvalid_q_reg_0),
-        .I1(\gt_rxcharisk_q_reg_n_0_[0] ),
-        .O(D[0]));
   LUT3 #(
     .INIT(8'h08)) 
-    \pipe_stages_1.pipe_rx_char_is_k_q[1]_i_1 
+    pcie_block_i_i_32
        (.I0(p_1_in),
         .I1(gt_rxvalid_q_reg_0),
         .I2(symbol_after_eios),
-        .O(D[1]));
+        .O(pipe_rx0_char_is_k[1]));
+  (* SOFT_HLUTNM = "soft_lutpair4" *) 
+  LUT2 #(
+    .INIT(4'h8)) 
+    pcie_block_i_i_33
+       (.I0(gt_rxvalid_q_reg_0),
+        .I1(\gt_rxcharisk_q_reg_n_0_[0] ),
+        .O(pipe_rx0_char_is_k[0]));
   LUT5 #(
     .INIT(32'hFEEEEEEE)) 
     \reg_state_eios_det[0]_i_1 
@@ -6958,9 +6955,8 @@ module pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x
         .R(SR));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_gt_top
+module pcie_7x_0_gt_top
    (sys_rst_n,
-    SR,
     p_0_in_0,
     pipe_clk,
     int_pclk_out_slave,
@@ -6978,7 +6974,7 @@ module pcie_7x_0_pcie_7x_0_gt_top
     pipe_rx0_elec_idle,
     pipe_rx0_status,
     pipe_rx0_phy_status,
-    D,
+    pipe_rx0_char_is_k,
     reset_n_reg1_reg,
     sys_clk,
     pci_exp_rxn,
@@ -6987,16 +6983,15 @@ module pcie_7x_0_pcie_7x_0_gt_top
     pipe_tx_deemph,
     pipe_tx_rcvr_det,
     pipe_tx0_elec_idle,
-    Q,
-    \gtp_channel.gtpe2_channel_i ,
-    \gtp_channel.gtpe2_channel_i_0 ,
+    pipe_tx0_powerdown,
+    pipe_tx_margin,
+    pipe_tx0_data,
     pipe_tx0_compliance,
-    \gtp_channel.gtpe2_channel_i_1 ,
+    pipe_tx0_char_is_k,
     pipe_tx_rate,
     pl_ltssm_state,
     int_pclk_sel_slave);
   output sys_rst_n;
-  output [0:0]SR;
   output p_0_in_0;
   output pipe_clk;
   output int_pclk_out_slave;
@@ -7014,7 +7009,7 @@ module pcie_7x_0_pcie_7x_0_gt_top
   output pipe_rx0_elec_idle;
   output [2:0]pipe_rx0_status;
   output pipe_rx0_phy_status;
-  output [1:0]D;
+  output [1:0]pipe_rx0_char_is_k;
   input reset_n_reg1_reg;
   input sys_clk;
   input [0:0]pci_exp_rxn;
@@ -7023,28 +7018,22 @@ module pcie_7x_0_pcie_7x_0_gt_top
   input pipe_tx_deemph;
   input pipe_tx_rcvr_det;
   input pipe_tx0_elec_idle;
-  input [1:0]Q;
-  input [2:0]\gtp_channel.gtpe2_channel_i ;
-  input [15:0]\gtp_channel.gtpe2_channel_i_0 ;
+  input [1:0]pipe_tx0_powerdown;
+  input [2:0]pipe_tx_margin;
+  input [15:0]pipe_tx0_data;
   input pipe_tx0_compliance;
-  input [1:0]\gtp_channel.gtpe2_channel_i_1 ;
+  input [1:0]pipe_tx0_char_is_k;
   input pipe_tx_rate;
   input [5:0]pl_ltssm_state;
   input [0:0]int_pclk_sel_slave;
 
-  wire [1:0]D;
   wire INT_DCLK_OUT;
   wire INT_MMCM_LOCK_OUT;
   wire [0:0]INT_QPLLLOCK_OUT;
-  wire [1:0]Q;
-  wire [0:0]SR;
   wire [1:0]gt_rx_data_k_wire_filter;
   wire [15:0]gt_rx_data_wire_filter;
   wire [0:0]gt_rx_elec_idle_wire_filter;
   wire [0:0]gt_rx_phy_status_wire_filter;
-  wire [2:0]\gtp_channel.gtpe2_channel_i ;
-  wire [15:0]\gtp_channel.gtpe2_channel_i_0 ;
-  wire [1:0]\gtp_channel.gtpe2_channel_i_1 ;
   wire int_pclk_out_slave;
   wire [0:0]int_pclk_sel_slave;
   wire [0:0]int_qplloutclk_out;
@@ -7056,17 +7045,23 @@ module pcie_7x_0_pcie_7x_0_gt_top
   wire [0:0]pci_exp_rxp;
   wire [0:0]pci_exp_txn;
   wire [0:0]pci_exp_txp;
+  wire phy_rdy_n;
   wire pipe_clk;
   wire pipe_rx0_chanisaligned;
+  wire [1:0]pipe_rx0_char_is_k;
   wire [15:0]pipe_rx0_data;
   wire pipe_rx0_elec_idle;
   wire pipe_rx0_phy_status;
   wire pipe_rx0_polarity;
   wire [2:0]pipe_rx0_status;
   wire pipe_rx0_valid;
+  wire [1:0]pipe_tx0_char_is_k;
   wire pipe_tx0_compliance;
+  wire [15:0]pipe_tx0_data;
   wire pipe_tx0_elec_idle;
+  wire [1:0]pipe_tx0_powerdown;
   wire pipe_tx_deemph;
+  wire [2:0]pipe_tx_margin;
   wire pipe_tx_rcvr_det;
   wire pipe_wrapper_i_n_12;
   wire pipe_wrapper_i_n_13;
@@ -7085,18 +7080,18 @@ module pcie_7x_0_pcie_7x_0_gt_top
   wire user_clk;
 
   assign rate_in_reg1_reg0 = pipe_tx_rate;
-  pcie_7x_0_pcie_7x_0_gt_rx_valid_filter_7x \gt_rx_valid_filter[0].GT_RX_VALID_FILTER_7x_inst 
-       (.D(D),
+  pcie_7x_0_gt_rx_valid_filter_7x \gt_rx_valid_filter[0].GT_RX_VALID_FILTER_7x_inst 
+       (.D(gt_rx_data_k_wire_filter),
         .Q(pl_ltssm_state_q),
         .RXSTATUS({pipe_wrapper_i_n_12,pipe_wrapper_i_n_13,pipe_wrapper_i_n_14}),
-        .SR(SR),
+        .SR(phy_rdy_n),
         .gt_rx_elec_idle_wire_filter(gt_rx_elec_idle_wire_filter),
         .gt_rx_phy_status_q_reg_0(pipe_clk),
         .gt_rx_phy_status_wire_filter(gt_rx_phy_status_wire_filter),
-        .\gt_rxcharisk_q_reg[1]_0 (gt_rx_data_k_wire_filter),
         .\gt_rxdata_q_reg[15]_0 (gt_rx_data_wire_filter),
         .gt_rxvalid_q_reg_0(pipe_rx0_valid),
         .gt_rxvalid_q_reg_1(pipe_wrapper_i_n_34),
+        .pipe_rx0_char_is_k(pipe_rx0_char_is_k),
         .pipe_rx0_data(pipe_rx0_data),
         .pipe_rx0_elec_idle(pipe_rx0_elec_idle),
         .pipe_rx0_phy_status(pipe_rx0_phy_status),
@@ -7114,26 +7109,21 @@ module pcie_7x_0_pcie_7x_0_gt_top
   LUT1 #(
     .INIT(2'h1)) 
     pcie_block_i_i_29
-       (.I0(SR),
+       (.I0(phy_rdy_n),
         .O(sys_rst_n));
   FDRE phy_rdy_n_int_reg
        (.C(pipe_clk),
         .CE(1'b1),
         .D(pipe_wrapper_i_n_35),
-        .Q(SR),
+        .Q(phy_rdy_n),
         .R(1'b0));
-  pcie_7x_0_pcie_7x_0_pipe_wrapper pipe_wrapper_i
+  pcie_7x_0_pipe_wrapper pipe_wrapper_i
        (.CLK(INT_DCLK_OUT),
-        .D({n_0_0,rate_reg1_reg0}),
-        .Q(Q),
+        .D(gt_rx_data_k_wire_filter),
         .RXSTATUS({pipe_wrapper_i_n_12,pipe_wrapper_i_n_13,pipe_wrapper_i_n_14}),
         .gt_rx_elec_idle_wire_filter(gt_rx_elec_idle_wire_filter),
         .gt_rx_phy_status_wire_filter(gt_rx_phy_status_wire_filter),
         .\gtp_channel.gtpe2_channel_i (gt_rx_data_wire_filter),
-        .\gtp_channel.gtpe2_channel_i_0 (gt_rx_data_k_wire_filter),
-        .\gtp_channel.gtpe2_channel_i_1 (\gtp_channel.gtpe2_channel_i ),
-        .\gtp_channel.gtpe2_channel_i_2 (\gtp_channel.gtpe2_channel_i_0 ),
-        .\gtp_channel.gtpe2_channel_i_3 (\gtp_channel.gtpe2_channel_i_1 ),
         .\gtp_common.gtpe2_common_i (INT_QPLLLOCK_OUT),
         .int_pclk_out_slave(int_pclk_out_slave),
         .int_pclk_sel_slave(int_pclk_sel_slave),
@@ -7150,11 +7140,16 @@ module pcie_7x_0_pcie_7x_0_gt_top
         .pipe_rx0_chanisaligned(pipe_rx0_chanisaligned),
         .pipe_rx0_polarity(pipe_rx0_polarity),
         .pipe_rx0_valid(pipe_rx0_valid),
+        .pipe_tx0_char_is_k(pipe_tx0_char_is_k),
         .pipe_tx0_compliance(pipe_tx0_compliance),
+        .pipe_tx0_data(pipe_tx0_data),
         .pipe_tx0_elec_idle(pipe_tx0_elec_idle),
+        .pipe_tx0_powerdown(pipe_tx0_powerdown),
         .pipe_tx_deemph(pipe_tx_deemph),
+        .pipe_tx_margin(pipe_tx_margin),
         .pipe_tx_rcvr_det(pipe_tx_rcvr_det),
         .\rate_in_reg1_reg[1] ({n_0_1,rate_in_reg1_reg0}),
+        .\rate_reg1_reg[1] ({n_0_0,rate_reg1_reg0}),
         .reg_clock_locked(reg_clock_locked),
         .reg_clock_locked_reg(pipe_wrapper_i_n_35),
         .reset_n_reg1_reg_0(reset_n_reg1_reg),
@@ -7210,7 +7205,7 @@ module pcie_7x_0_pcie_7x_0_gt_top
         .Q(reg_clock_locked));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_gt_wrapper
+module pcie_7x_0_gt_wrapper
    (\gtp_channel.gtpe2_channel_i_0 ,
     pci_exp_txn,
     pci_exp_txp,
@@ -7263,12 +7258,12 @@ module pcie_7x_0_pcie_7x_0_gt_wrapper
     pipe_tx0_elec_idle,
     txphaligndone0,
     DRPDI,
-    \gtp_channel.gtpe2_channel_i_12 ,
+    pipe_tx0_powerdown,
     RXRATE,
-    \gtp_channel.gtpe2_channel_i_13 ,
-    \gtp_channel.gtpe2_channel_i_14 ,
+    pipe_tx_margin,
+    pipe_tx0_data,
     pipe_tx0_compliance,
-    \gtp_channel.gtpe2_channel_i_15 ,
+    pipe_tx0_char_is_k,
     TXPOSTCURSOR,
     TXPRECURSOR,
     TXMAINCURSOR,
@@ -7325,12 +7320,12 @@ module pcie_7x_0_pcie_7x_0_gt_wrapper
   input pipe_tx0_elec_idle;
   input txphaligndone0;
   input [15:0]DRPDI;
-  input [1:0]\gtp_channel.gtpe2_channel_i_12 ;
+  input [1:0]pipe_tx0_powerdown;
   input [0:0]RXRATE;
-  input [2:0]\gtp_channel.gtpe2_channel_i_13 ;
-  input [15:0]\gtp_channel.gtpe2_channel_i_14 ;
+  input [2:0]pipe_tx_margin;
+  input [15:0]pipe_tx0_data;
   input pipe_tx0_compliance;
-  input [1:0]\gtp_channel.gtpe2_channel_i_15 ;
+  input [1:0]pipe_tx0_char_is_k;
   input [4:0]TXPOSTCURSOR;
   input [4:0]TXPRECURSOR;
   input [6:0]TXMAINCURSOR;
@@ -7363,10 +7358,6 @@ module pcie_7x_0_pcie_7x_0_gt_wrapper
   wire \gtp_channel.gtpe2_channel_i_1 ;
   wire [1:0]\gtp_channel.gtpe2_channel_i_10 ;
   wire \gtp_channel.gtpe2_channel_i_11 ;
-  wire [1:0]\gtp_channel.gtpe2_channel_i_12 ;
-  wire [2:0]\gtp_channel.gtpe2_channel_i_13 ;
-  wire [15:0]\gtp_channel.gtpe2_channel_i_14 ;
-  wire [1:0]\gtp_channel.gtpe2_channel_i_15 ;
   wire \gtp_channel.gtpe2_channel_i_2 ;
   wire \gtp_channel.gtpe2_channel_i_3 ;
   wire \gtp_channel.gtpe2_channel_i_4 ;
@@ -7441,9 +7432,13 @@ module pcie_7x_0_pcie_7x_0_gt_wrapper
   wire [0:0]pci_exp_txp;
   wire pipe_rx0_chanisaligned;
   wire pipe_rx0_polarity;
+  wire [1:0]pipe_tx0_char_is_k;
   wire pipe_tx0_compliance;
+  wire [15:0]pipe_tx0_data;
   wire pipe_tx0_elec_idle;
+  wire [1:0]pipe_tx0_powerdown;
   wire pipe_tx_deemph;
+  wire [2:0]pipe_tx_margin;
   wire pipe_tx_rcvr_det;
   wire rst_gtreset;
   wire rst_userrdy;
@@ -7847,7 +7842,7 @@ module pcie_7x_0_pcie_7x_0_gt_wrapper
         .RXOUTCLKSEL({1'b0,1'b0,1'b0}),
         .RXPCOMMAALIGNEN(1'b1),
         .RXPCSRESET(user_rxpcsreset),
-        .RXPD(\gtp_channel.gtpe2_channel_i_12 ),
+        .RXPD(pipe_tx0_powerdown),
         .RXPHALIGN(1'b0),
         .RXPHALIGNDONE(\gtp_channel.gtpe2_channel_i_2 ),
         .RXPHALIGNEN(1'b0),
@@ -7888,12 +7883,12 @@ module pcie_7x_0_pcie_7x_0_gt_wrapper
         .TXBUFSTATUS(\NLW_gtp_channel.gtpe2_channel_i_TXBUFSTATUS_UNCONNECTED [1:0]),
         .TXCHARDISPMODE({1'b0,1'b0,1'b0,pipe_tx0_compliance}),
         .TXCHARDISPVAL({1'b0,1'b0,1'b0,1'b0}),
-        .TXCHARISK({1'b0,1'b0,\gtp_channel.gtpe2_channel_i_15 }),
+        .TXCHARISK({1'b0,1'b0,pipe_tx0_char_is_k}),
         .TXCOMFINISH(\NLW_gtp_channel.gtpe2_channel_i_TXCOMFINISH_UNCONNECTED ),
         .TXCOMINIT(1'b0),
         .TXCOMSAS(1'b0),
         .TXCOMWAKE(1'b0),
-        .TXDATA({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,\gtp_channel.gtpe2_channel_i_14 }),
+        .TXDATA({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,pipe_tx0_data}),
         .TXDEEMPH(pipe_tx_deemph),
         .TXDETECTRX(pipe_tx_rcvr_det),
         .TXDIFFCTRL({1'b1,1'b1,1'b0,1'b0}),
@@ -7910,13 +7905,13 @@ module pcie_7x_0_pcie_7x_0_gt_wrapper
         .TXHEADER({1'b0,1'b0,1'b0}),
         .TXINHIBIT(1'b0),
         .TXMAINCURSOR(TXMAINCURSOR),
-        .TXMARGIN(\gtp_channel.gtpe2_channel_i_13 ),
+        .TXMARGIN(pipe_tx_margin),
         .TXOUTCLK(\gtp_channel.gtpe2_channel_i_6 ),
         .TXOUTCLKFABRIC(\NLW_gtp_channel.gtpe2_channel_i_TXOUTCLKFABRIC_UNCONNECTED ),
         .TXOUTCLKPCS(\NLW_gtp_channel.gtpe2_channel_i_TXOUTCLKPCS_UNCONNECTED ),
         .TXOUTCLKSEL({1'b0,1'b1,1'b1}),
         .TXPCSRESET(1'b0),
-        .TXPD(\gtp_channel.gtpe2_channel_i_12 ),
+        .TXPD(pipe_tx0_powerdown),
         .TXPDELECIDLEMODE(1'b0),
         .TXPHALIGN(Q[2]),
         .TXPHALIGNDONE(\gtp_channel.gtpe2_channel_i_7 ),
@@ -7960,7 +7955,7 @@ module pcie_7x_0_pcie_7x_0_gt_wrapper
         .TXUSRCLK2(\gtp_channel.gtpe2_channel_i_11 ));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_gtp_cpllpd_ovrd
+module pcie_7x_0_gtp_cpllpd_ovrd
    (cpllpd,
     cpllrst,
     gt_cpllpdrefclk);
@@ -8083,7 +8078,7 @@ module pcie_7x_0_pcie_7x_0_gtp_cpllpd_ovrd
         .Q31(\cpllreset_wait_reg[95]_srl32_n_1 ));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_gtp_pipe_drp
+module pcie_7x_0_gtp_pipe_drp
    (done,
     DRPDI,
     DRPADDR,
@@ -9023,7 +9018,7 @@ module pcie_7x_0_pcie_7x_0_gtp_pipe_drp
         .R(SR));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_gtp_pipe_rate
+module pcie_7x_0_gtp_pipe_rate
    (pclk_sel_reg_0,
     DRP_X160,
     DRP_START0,
@@ -9704,7 +9699,7 @@ module pcie_7x_0_pcie_7x_0_gtp_pipe_rate
         .O(DRP_X160));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_gtp_pipe_reset
+module pcie_7x_0_gtp_pipe_reset
    (reset_n_reg2_reg,
     SR,
     rst_drp_start,
@@ -10516,7 +10511,7 @@ endmodule
 (* c_ep_l0s_accpt_lat = "0" *) (* c_ep_l1_accpt_lat = "7" *) (* c_ext_pci_cfg_space_addr = "3FF" *) 
 (* c_external_clocking = "TRUE" *) (* c_fc_cpld = "461" *) (* c_fc_cplh = "36" *) 
 (* c_fc_npd = "24" *) (* c_fc_nph = "12" *) (* c_fc_pd = "437" *) 
-(* c_fc_ph = "32" *) (* c_gen1 = "1'b1" *) (* c_header_type = "00" *) 
+(* c_fc_ph = "32" *) (* c_gen1 = "1'b0" *) (* c_header_type = "00" *) 
 (* c_hw_auton_spd_disable = "FALSE" *) (* c_int_width = "64" *) (* c_last_cfg_dw = "10C" *) 
 (* c_link_cap_aspm_optionality = "FALSE" *) (* c_ll_ack_timeout = "0000" *) (* c_ll_ack_timeout_enable = "FALSE" *) 
 (* c_ll_ack_timeout_function = "0" *) (* c_ll_replay_timeout = "0000" *) (* c_ll_replay_timeout_enable = "FALSE" *) 
@@ -10543,7 +10538,7 @@ endmodule
 (* c_slot_cap_hotplug_surprise = "FALSE" *) (* c_slot_cap_mrl = "FALSE" *) (* c_slot_cap_no_cmd_comp_sup = "FALSE" *) 
 (* c_slot_cap_physical_slot_num = "0" *) (* c_slot_cap_pwr_ctrl = "FALSE" *) (* c_slot_cap_pwr_ind = "FALSE" *) 
 (* c_slot_cap_pwr_limit_scale = "0" *) (* c_slot_cap_pwr_limit_value = "0" *) (* c_surprise_dn_err_cap = "FALSE" *) 
-(* c_trgt_lnk_spd = "2" *) (* c_trn_np_fc = "TRUE" *) (* c_tx_last_tlp = "29" *) 
+(* c_trgt_lnk_spd = "0" *) (* c_trn_np_fc = "TRUE" *) (* c_tx_last_tlp = "29" *) 
 (* c_tx_raddr_lat = "0" *) (* c_tx_rdata_lat = "2" *) (* c_tx_write_lat = "0" *) 
 (* c_upconfig_capable = "TRUE" *) (* c_upstream_facing = "TRUE" *) (* c_ur_atomic = "FALSE" *) 
 (* c_ur_inv_req = "TRUE" *) (* c_ur_prs_response = "TRUE" *) (* c_vc_base_ptr = "000" *) 
@@ -10553,11 +10548,11 @@ endmodule
 (* class_code = "040300" *) (* cmps = "2" *) (* con_scl_fctr_d0_state = "0" *) 
 (* con_scl_fctr_d1_state = "0" *) (* con_scl_fctr_d2_state = "0" *) (* con_scl_fctr_d3_state = "0" *) 
 (* cost_table = "1" *) (* d1_sup = "0" *) (* d2_sup = "0" *) 
-(* dev_id = "0011" *) (* dev_port_type = "0000" *) (* dis_scl_fctr_d0_state = "0" *) 
+(* dev_id = "7011" *) (* dev_port_type = "0000" *) (* dis_scl_fctr_d0_state = "0" *) 
 (* dis_scl_fctr_d1_state = "0" *) (* dis_scl_fctr_d2_state = "0" *) (* dis_scl_fctr_d3_state = "0" *) 
 (* dsi = "0" *) (* ep_l0s_accpt_lat = "000" *) (* ep_l1_accpt_lat = "111" *) 
 (* ext_tag_fld_sup = "FALSE" *) (* int_pin = "1" *) (* intx = "TRUE" *) 
-(* max_lnk_spd = "2" *) (* max_lnk_wdt = "000001" *) (* mps = "010" *) 
+(* max_lnk_spd = "1" *) (* max_lnk_wdt = "000001" *) (* mps = "010" *) 
 (* no_soft_rst = "TRUE" *) (* pci_exp_int_freq = "1" *) (* pci_exp_ref_freq = "0" *) 
 (* phantm_func_sup = "00" *) (* pme_sup = "0F" *) (* pwr_con_d0_state = "00" *) 
 (* pwr_con_d1_state = "00" *) (* pwr_con_d2_state = "00" *) (* pwr_con_d3_state = "00" *) 
@@ -10565,7 +10560,7 @@ endmodule
 (* pwr_dis_d3_state = "00" *) (* rev_id = "01" *) (* slot_clk = "TRUE" *) 
 (* subsys_id = "0080" *) (* subsys_ven_id = "1102" *) (* ven_id = "1102" *) 
 (* xrom_bar = "00000000" *) 
-module pcie_7x_0_pcie_7x_0_pcie2_top
+module pcie_7x_0_pcie2_top
    (pci_exp_txn,
     pci_exp_txp,
     pci_exp_rxn,
@@ -11265,9 +11260,9 @@ module pcie_7x_0_pcie_7x_0_pcie2_top
   wire [2:0]fc_sel;
   wire int_dclk_out;
   wire int_mmcm_lock_out;
-  wire int_oobclk_out;
   wire int_pclk_out_slave;
   wire [0:0]int_pclk_sel_slave;
+  wire int_pipe_rxusrclk_out;
   wire [0:0]\^int_qplllock_out ;
   wire [0:0]\^int_qplloutclk_out ;
   wire [0:0]\^int_qplloutrefclk_out ;
@@ -11456,7 +11451,7 @@ module pcie_7x_0_pcie_7x_0_pcie2_top
   assign icap_o[2] = \<const0> ;
   assign icap_o[1] = \<const0> ;
   assign icap_o[0] = \<const0> ;
-  assign int_pipe_rxusrclk_out = int_oobclk_out;
+  assign int_oobclk_out = int_pipe_rxusrclk_out;
   assign int_qplllock_out[1] = \<const0> ;
   assign int_qplllock_out[0] = \^int_qplllock_out [0];
   assign int_qplloutclk_out[1] = \<const0> ;
@@ -11843,7 +11838,7 @@ module pcie_7x_0_pcie_7x_0_pcie2_top
   assign user_clk_out = int_userclk1_out;
   GND GND
        (.G(\<const0> ));
-  pcie_7x_0_pcie_7x_0_core_top inst
+  pcie_7x_0_core_top inst
        (.cfg_aer_ecrc_check_en(cfg_aer_ecrc_check_en),
         .cfg_aer_ecrc_gen_en(cfg_aer_ecrc_gen_en),
         .cfg_aer_interrupt_msgnum(cfg_aer_interrupt_msgnum),
@@ -11951,7 +11946,7 @@ module pcie_7x_0_pcie_7x_0_pcie2_top
         .fc_ph(fc_ph),
         .fc_sel(fc_sel),
         .int_mmcm_lock_out(int_mmcm_lock_out),
-        .int_oobclk_out(int_oobclk_out),
+        .int_oobclk_out(int_pipe_rxusrclk_out),
         .int_pclk_out_slave(int_pclk_out_slave),
         .int_pclk_sel_slave(int_pclk_sel_slave),
         .int_qplllock_out(\^int_qplllock_out ),
@@ -12013,7 +12008,7 @@ module pcie_7x_0_pcie_7x_0_pcie2_top
         .user_reset_out(user_reset_out));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pcie_7x
+module pcie_7x_0_pcie_7x
    (user_reset_int_reg,
     src_in,
     cfg_mgmt_rd_wr_done,
@@ -12166,7 +12161,7 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
     pcie_drp_clk,
     pcie_drp_en,
     pcie_drp_we,
-    CLK,
+    pipe_clk,
     pipe_rx0_chanisaligned,
     pipe_rx0_elec_idle,
     pipe_rx0_phy_status,
@@ -12187,14 +12182,14 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
     cfg_err_aer_headerlog,
     trn_td,
     pcie_drp_di,
-    Q,
+    pipe_rx0_data,
     cfg_pm_force_state,
-    pcie_block_i_6,
+    pipe_rx0_char_is_k,
     pl_directed_link_change,
     pl_directed_link_width,
     trn_trem,
     cfg_ds_function_number,
-    pcie_block_i_7,
+    pipe_rx0_status,
     fc_sel,
     cfg_mgmt_di,
     cfg_mgmt_byte_en_n,
@@ -12359,7 +12354,7 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
   input pcie_drp_clk;
   input pcie_drp_en;
   input pcie_drp_we;
-  input CLK;
+  input pipe_clk;
   input pipe_rx0_chanisaligned;
   input pipe_rx0_elec_idle;
   input pipe_rx0_phy_status;
@@ -12380,14 +12375,14 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
   input [127:0]cfg_err_aer_headerlog;
   input [63:0]trn_td;
   input [15:0]pcie_drp_di;
-  input [15:0]Q;
+  input [15:0]pipe_rx0_data;
   input [1:0]cfg_pm_force_state;
-  input [1:0]pcie_block_i_6;
+  input [1:0]pipe_rx0_char_is_k;
   input [1:0]pl_directed_link_change;
   input [1:0]pl_directed_link_width;
   input [0:0]trn_trem;
   input [2:0]cfg_ds_function_number;
-  input [2:0]pcie_block_i_7;
+  input [2:0]pipe_rx0_status;
   input [2:0]fc_sel;
   input [31:0]cfg_mgmt_di;
   input [3:0]cfg_mgmt_byte_en_n;
@@ -12401,9 +12396,7 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
   input [8:0]pcie_drp_addr;
   input [9:0]cfg_mgmt_dwaddr;
 
-  wire CLK;
   wire [0:0]E;
-  wire [15:0]Q;
   wire bridge_reset_int;
   wire cfg_aer_ecrc_check_en;
   wire cfg_aer_ecrc_gen_en;
@@ -12533,8 +12526,6 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
   wire [63:0]pcie_block_i_3;
   wire [0:0]pcie_block_i_4;
   wire [3:0]pcie_block_i_5;
-  wire [1:0]pcie_block_i_6;
-  wire [2:0]pcie_block_i_7;
   wire pcie_block_i_i_10_n_0;
   wire pcie_block_i_i_11_n_0;
   wire pcie_block_i_i_12_n_0;
@@ -12909,10 +12900,14 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
   wire pcie_drp_en;
   wire pcie_drp_rdy;
   wire pcie_drp_we;
+  wire pipe_clk;
   wire pipe_rx0_chanisaligned;
+  wire [1:0]pipe_rx0_char_is_k;
+  wire [15:0]pipe_rx0_data;
   wire pipe_rx0_elec_idle;
   wire pipe_rx0_phy_status;
   wire pipe_rx0_polarity;
+  wire [2:0]pipe_rx0_status;
   wire pipe_rx0_valid;
   wire pipe_rx1_polarity;
   wire pipe_rx2_polarity;
@@ -13169,14 +13164,14 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
     .LINK_CAP_L1_EXIT_LATENCY_GEN1(7),
     .LINK_CAP_L1_EXIT_LATENCY_GEN2(7),
     .LINK_CAP_LINK_BANDWIDTH_NOTIFICATION_CAP("FALSE"),
-    .LINK_CAP_MAX_LINK_SPEED(4'h2),
+    .LINK_CAP_MAX_LINK_SPEED(4'h1),
     .LINK_CAP_MAX_LINK_WIDTH(6'h01),
     .LINK_CAP_RSVD_23(0),
     .LINK_CAP_SURPRISE_DOWN_ERROR_CAPABLE("FALSE"),
     .LINK_CONTROL_RCB(0),
     .LINK_CTRL2_DEEMPHASIS("FALSE"),
     .LINK_CTRL2_HW_AUTONOMOUS_SPEED_DISABLE("FALSE"),
-    .LINK_CTRL2_TARGET_LINK_SPEED(4'h2),
+    .LINK_CTRL2_TARGET_LINK_SPEED(4'h0),
     .LINK_STATUS_SLOT_CLOCK_CONFIG("TRUE"),
     .LL_ACK_TIMEOUT(15'h0000),
     .LL_ACK_TIMEOUT_EN("FALSE"),
@@ -13396,7 +13391,7 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
         .CFGDEVCONTROLNOSNOOPEN(cfg_dcommand[11]),
         .CFGDEVCONTROLPHANTOMEN(cfg_dcommand[9]),
         .CFGDEVCONTROLURERRREPORTINGEN(cfg_dcommand[3]),
-        .CFGDEVID({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b1,1'b0,1'b0,1'b0,1'b1}),
+        .CFGDEVID({1'b0,1'b1,1'b1,1'b1,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b1,1'b0,1'b0,1'b0,1'b1}),
         .CFGDEVSTATUSCORRERRDETECTED(cfg_dstatus[0]),
         .CFGDEVSTATUSFATALERRDETECTED(cfg_dstatus[2]),
         .CFGDEVSTATUSNONFATALERRDETECTED(cfg_dstatus[1]),
@@ -13570,14 +13565,14 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
         .MIMTXWADDR(mim_tx_waddr),
         .MIMTXWDATA(mim_tx_wdata),
         .MIMTXWEN(mim_tx_wen),
-        .PIPECLK(CLK),
+        .PIPECLK(pipe_clk),
         .PIPERX0CHANISALIGNED(pipe_rx0_chanisaligned),
-        .PIPERX0CHARISK(pcie_block_i_6),
-        .PIPERX0DATA(Q),
+        .PIPERX0CHARISK(pipe_rx0_char_is_k),
+        .PIPERX0DATA(pipe_rx0_data),
         .PIPERX0ELECIDLE(pipe_rx0_elec_idle),
         .PIPERX0PHYSTATUS(pipe_rx0_phy_status),
         .PIPERX0POLARITY(pipe_rx0_polarity),
-        .PIPERX0STATUS(pcie_block_i_7),
+        .PIPERX0STATUS(pipe_rx0_status),
         .PIPERX0VALID(pipe_rx0_valid),
         .PIPERX1CHANISALIGNED(1'b0),
         .PIPERX1CHARISK({1'b0,1'b0}),
@@ -13904,7 +13899,7 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
     pcie_block_i_i_9
        (.I0(cfg_err_locked),
         .O(pcie_block_i_i_9_n_0));
-  pcie_7x_0_pcie_7x_0_pcie_bram_top_7x pcie_bram_top
+  pcie_7x_0_pcie_bram_top_7x pcie_bram_top
        (.MIMRXRADDR(mim_rx_raddr[10:0]),
         .MIMRXWADDR(mim_rx_waddr[10:0]),
         .MIMTXRADDR(mim_tx_raddr[10:0]),
@@ -13992,7 +13987,7 @@ module pcie_7x_0_pcie_7x_0_pcie_7x
         .O(user_reset_int_reg));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pcie_bram_7x
+module pcie_7x_0_pcie_bram_7x
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14027,7 +14022,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_7x
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_7x_0_pcie_bram_7x_1
+module pcie_7x_0_pcie_bram_7x_1
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14062,7 +14057,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_7x_1
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_7x_0_pcie_bram_7x_10
+module pcie_7x_0_pcie_bram_7x_10
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14097,7 +14092,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_7x_10
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_7x_0_pcie_bram_7x_2
+module pcie_7x_0_pcie_bram_7x_2
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14132,7 +14127,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_7x_2
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_7x_0_pcie_bram_7x_3
+module pcie_7x_0_pcie_bram_7x_3
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14167,7 +14162,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_7x_3
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_7x_0_pcie_bram_7x_7
+module pcie_7x_0_pcie_bram_7x_7
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14202,7 +14197,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_7x_7
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_7x_0_pcie_bram_7x_8
+module pcie_7x_0_pcie_bram_7x_8
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14237,7 +14232,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_7x_8
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_bram_7x" *) 
-module pcie_7x_0_pcie_7x_0_pcie_bram_7x_9
+module pcie_7x_0_pcie_bram_7x_9
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14271,7 +14266,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_7x_9
         .user_clk(user_clk));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pcie_bram_top_7x
+module pcie_7x_0_pcie_bram_top_7x
    (rdata,
     \genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
@@ -14313,7 +14308,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_top_7x
   wire user_clk;
   wire [68:0]wdata;
 
-  pcie_7x_0_pcie_7x_0_pcie_brams_7x pcie_brams_rx
+  pcie_7x_0_pcie_brams_7x pcie_brams_rx
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ),
@@ -14321,7 +14316,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_top_7x
         .mim_rx_ren(mim_rx_ren),
         .mim_rx_wen(mim_rx_wen),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_7x_0_pcie_brams_7x_0 pcie_brams_tx
+  pcie_7x_0_pcie_brams_7x_0 pcie_brams_tx
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14331,7 +14326,7 @@ module pcie_7x_0_pcie_7x_0_pcie_bram_top_7x
         .wdata(wdata));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pcie_brams_7x
+module pcie_7x_0_pcie_brams_7x
    (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl ,
     user_clk,
     mim_rx_wen,
@@ -14355,7 +14350,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x
   wire mim_rx_wen;
   wire user_clk;
 
-  pcie_7x_0_pcie_7x_0_pcie_bram_7x_7 \brams[0].ram 
+  pcie_7x_0_pcie_bram_7x_7 \brams[0].ram 
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl [17:0]),
@@ -14363,7 +14358,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x
         .mim_rx_ren(mim_rx_ren),
         .mim_rx_wen(mim_rx_wen),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_7x_0_pcie_bram_7x_8 \brams[1].ram 
+  pcie_7x_0_pcie_bram_7x_8 \brams[1].ram 
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl [35:18]),
@@ -14371,7 +14366,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x
         .mim_rx_ren(mim_rx_ren),
         .mim_rx_wen(mim_rx_wen),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_7x_0_pcie_bram_7x_9 \brams[2].ram 
+  pcie_7x_0_pcie_bram_7x_9 \brams[2].ram 
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl [53:36]),
@@ -14379,7 +14374,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x
         .mim_rx_ren(mim_rx_ren),
         .mim_rx_wen(mim_rx_wen),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_7x_0_pcie_bram_7x_10 \brams[3].ram 
+  pcie_7x_0_pcie_bram_7x_10 \brams[3].ram 
        (.MIMRXRADDR(MIMRXRADDR),
         .MIMRXWADDR(MIMRXWADDR),
         .\genblk5_0.bram36_tdp_bl.bram36_tdp_bl (\genblk5_0.bram36_tdp_bl.bram36_tdp_bl [67:54]),
@@ -14390,7 +14385,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x
 endmodule
 
 (* ORIG_REF_NAME = "pcie_7x_0_pcie_brams_7x" *) 
-module pcie_7x_0_pcie_7x_0_pcie_brams_7x_0
+module pcie_7x_0_pcie_brams_7x_0
    (rdata,
     user_clk,
     mim_tx_wen,
@@ -14414,7 +14409,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x_0
   wire user_clk;
   wire [68:0]wdata;
 
-  pcie_7x_0_pcie_7x_0_pcie_bram_7x \brams[0].ram 
+  pcie_7x_0_pcie_bram_7x \brams[0].ram 
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14422,7 +14417,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x_0
         .rdata(rdata[17:0]),
         .user_clk(user_clk),
         .wdata(wdata[17:0]));
-  pcie_7x_0_pcie_7x_0_pcie_bram_7x_1 \brams[1].ram 
+  pcie_7x_0_pcie_bram_7x_1 \brams[1].ram 
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14430,7 +14425,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x_0
         .rdata(rdata[35:18]),
         .user_clk(user_clk),
         .wdata(wdata[35:18]));
-  pcie_7x_0_pcie_7x_0_pcie_bram_7x_2 \brams[2].ram 
+  pcie_7x_0_pcie_bram_7x_2 \brams[2].ram 
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14438,7 +14433,7 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x_0
         .rdata(rdata[53:36]),
         .user_clk(user_clk),
         .wdata(wdata[53:36]));
-  pcie_7x_0_pcie_7x_0_pcie_bram_7x_3 \brams[3].ram 
+  pcie_7x_0_pcie_bram_7x_3 \brams[3].ram 
        (.MIMTXRADDR(MIMTXRADDR),
         .MIMTXWADDR(MIMTXWADDR),
         .mim_tx_ren(mim_tx_ren),
@@ -14448,619 +14443,12 @@ module pcie_7x_0_pcie_7x_0_pcie_brams_7x_0
         .wdata(wdata[68:54]));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pcie_pipe_lane
-   (pipe_rx0_valid,
-    pipe_rx0_chanisaligned,
-    pipe_rx0_phy_status,
-    pipe_rx0_elec_idle,
-    pipe_rx0_polarity,
-    pipe_tx0_compliance,
-    pipe_tx0_elec_idle,
-    \pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 ,
-    \pipe_stages_1.pipe_rx_data_q_reg[15]_0 ,
-    \pipe_stages_1.pipe_rx_status_q_reg[2]_0 ,
-    \pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 ,
-    \pipe_stages_1.pipe_tx_data_q_reg[15]_0 ,
-    \pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 ,
-    \pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ,
-    \pipe_stages_1.pipe_rx_valid_q_reg_0 ,
-    CLK,
-    \pipe_stages_1.pipe_rx_chanisaligned_q_reg_0 ,
-    \pipe_stages_1.pipe_rx_phy_status_q_reg_0 ,
-    \pipe_stages_1.pipe_rx_elec_idle_q_reg_0 ,
-    \pipe_stages_1.pipe_rx_polarity_q_reg_0 ,
-    \pipe_stages_1.pipe_tx_compliance_q_reg_0 ,
-    \pipe_stages_1.pipe_tx_elec_idle_q_reg_0 ,
-    \pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_2 ,
-    \pipe_stages_1.pipe_rx_data_q_reg[15]_1 ,
-    \pipe_stages_1.pipe_rx_status_q_reg[2]_1 ,
-    \pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_1 ,
-    \pipe_stages_1.pipe_tx_data_q_reg[15]_1 ,
-    \pipe_stages_1.pipe_tx_powerdown_q_reg[1]_1 );
-  output pipe_rx0_valid;
-  output pipe_rx0_chanisaligned;
-  output pipe_rx0_phy_status;
-  output pipe_rx0_elec_idle;
-  output pipe_rx0_polarity;
-  output pipe_tx0_compliance;
-  output pipe_tx0_elec_idle;
-  output [1:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 ;
-  output [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15]_0 ;
-  output [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2]_0 ;
-  output [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 ;
-  output [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15]_0 ;
-  output [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 ;
-  input [0:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ;
-  input \pipe_stages_1.pipe_rx_valid_q_reg_0 ;
-  input CLK;
-  input \pipe_stages_1.pipe_rx_chanisaligned_q_reg_0 ;
-  input \pipe_stages_1.pipe_rx_phy_status_q_reg_0 ;
-  input \pipe_stages_1.pipe_rx_elec_idle_q_reg_0 ;
-  input \pipe_stages_1.pipe_rx_polarity_q_reg_0 ;
-  input \pipe_stages_1.pipe_tx_compliance_q_reg_0 ;
-  input \pipe_stages_1.pipe_tx_elec_idle_q_reg_0 ;
-  input [1:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_2 ;
-  input [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15]_1 ;
-  input [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2]_1 ;
-  input [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_1 ;
-  input [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15]_1 ;
-  input [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_1 ;
-
-  wire CLK;
-  wire pipe_rx0_chanisaligned;
-  wire pipe_rx0_elec_idle;
-  wire pipe_rx0_phy_status;
-  wire pipe_rx0_polarity;
-  wire pipe_rx0_valid;
-  wire \pipe_stages_1.pipe_rx_chanisaligned_q_reg_0 ;
-  wire [1:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 ;
-  wire [0:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ;
-  wire [1:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_2 ;
-  wire [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15]_0 ;
-  wire [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15]_1 ;
-  wire \pipe_stages_1.pipe_rx_elec_idle_q_reg_0 ;
-  wire \pipe_stages_1.pipe_rx_phy_status_q_reg_0 ;
-  wire \pipe_stages_1.pipe_rx_polarity_q_reg_0 ;
-  wire [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2]_0 ;
-  wire [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2]_1 ;
-  wire \pipe_stages_1.pipe_rx_valid_q_reg_0 ;
-  wire [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 ;
-  wire [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_1 ;
-  wire \pipe_stages_1.pipe_tx_compliance_q_reg_0 ;
-  wire [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15]_0 ;
-  wire [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15]_1 ;
-  wire \pipe_stages_1.pipe_tx_elec_idle_q_reg_0 ;
-  wire [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 ;
-  wire [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_1 ;
-  wire pipe_tx0_compliance;
-  wire pipe_tx0_elec_idle;
-
-  FDRE \pipe_stages_1.pipe_rx_chanisaligned_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_chanisaligned_q_reg_0 ),
-        .Q(pipe_rx0_chanisaligned),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_char_is_k_q_reg[0] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_2 [0]),
-        .Q(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 [0]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_char_is_k_q_reg[1] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_2 [1]),
-        .Q(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 [1]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[0] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [0]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [0]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[10] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [10]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [10]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[11] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [11]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [11]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[12] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [12]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [12]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[13] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [13]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [13]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[14] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [14]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [14]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[15] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [15]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [15]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[1] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [1]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [1]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[2] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [2]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [2]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[3] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [3]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [3]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[4] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [4]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [4]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[5] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [5]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [5]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[6] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [6]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [6]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[7] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [7]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [7]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[8] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [8]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [8]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_data_q_reg[9] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_data_q_reg[15]_1 [9]),
-        .Q(\pipe_stages_1.pipe_rx_data_q_reg[15]_0 [9]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_elec_idle_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_elec_idle_q_reg_0 ),
-        .Q(pipe_rx0_elec_idle),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_phy_status_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_phy_status_q_reg_0 ),
-        .Q(pipe_rx0_phy_status),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_polarity_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_polarity_q_reg_0 ),
-        .Q(pipe_rx0_polarity),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_status_q_reg[0] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_status_q_reg[2]_1 [0]),
-        .Q(\pipe_stages_1.pipe_rx_status_q_reg[2]_0 [0]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_status_q_reg[1] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_status_q_reg[2]_1 [1]),
-        .Q(\pipe_stages_1.pipe_rx_status_q_reg[2]_0 [1]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_status_q_reg[2] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_status_q_reg[2]_1 [2]),
-        .Q(\pipe_stages_1.pipe_rx_status_q_reg[2]_0 [2]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_rx_valid_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_rx_valid_q_reg_0 ),
-        .Q(pipe_rx0_valid),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_char_is_k_q_reg[0] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_1 [0]),
-        .Q(\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 [0]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_char_is_k_q_reg[1] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_1 [1]),
-        .Q(\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 [1]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_compliance_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_compliance_q_reg_0 ),
-        .Q(pipe_tx0_compliance),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[0] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [0]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [0]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[10] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [10]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [10]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[11] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [11]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [11]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[12] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [12]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [12]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[13] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [13]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [13]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[14] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [14]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [14]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[15] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [15]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [15]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[1] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [1]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [1]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[2] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [2]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [2]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[3] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [3]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [3]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[4] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [4]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [4]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[5] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [5]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [5]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[6] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [6]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [6]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[7] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [7]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [7]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[8] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [8]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [8]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_data_q_reg[9] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_data_q_reg[15]_1 [9]),
-        .Q(\pipe_stages_1.pipe_tx_data_q_reg[15]_0 [9]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDSE \pipe_stages_1.pipe_tx_elec_idle_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_elec_idle_q_reg_0 ),
-        .Q(pipe_tx0_elec_idle),
-        .S(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDRE \pipe_stages_1.pipe_tx_powerdown_q_reg[0] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_1 [0]),
-        .Q(\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 [0]),
-        .R(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-  FDSE \pipe_stages_1.pipe_tx_powerdown_q_reg[1] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_1 [1]),
-        .Q(\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 [1]),
-        .S(\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 ));
-endmodule
-
-module pcie_7x_0_pcie_7x_0_pcie_pipe_misc
-   (pipe_tx_rcvr_det,
-    pipe_tx_rate,
-    pipe_tx_deemph,
-    Q,
-    \pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ,
-    \pipe_stages_1.pipe_tx_rcvr_det_q_reg_1 ,
-    CLK,
-    \pipe_stages_1.pipe_tx_rate_q_reg_0 ,
-    \pipe_stages_1.pipe_tx_deemph_q_reg_0 ,
-    D);
-  output pipe_tx_rcvr_det;
-  output pipe_tx_rate;
-  output pipe_tx_deemph;
-  output [2:0]Q;
-  input [0:0]\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ;
-  input \pipe_stages_1.pipe_tx_rcvr_det_q_reg_1 ;
-  input CLK;
-  input \pipe_stages_1.pipe_tx_rate_q_reg_0 ;
-  input \pipe_stages_1.pipe_tx_deemph_q_reg_0 ;
-  input [2:0]D;
-
-  wire CLK;
-  wire [2:0]D;
-  wire [2:0]Q;
-  wire \pipe_stages_1.pipe_tx_deemph_q_reg_0 ;
-  wire \pipe_stages_1.pipe_tx_rate_q_reg_0 ;
-  wire [0:0]\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ;
-  wire \pipe_stages_1.pipe_tx_rcvr_det_q_reg_1 ;
-  wire pipe_tx_deemph;
-  wire pipe_tx_rate;
-  wire pipe_tx_rcvr_det;
-
-  FDSE \pipe_stages_1.pipe_tx_deemph_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_deemph_q_reg_0 ),
-        .Q(pipe_tx_deemph),
-        .S(\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ));
-  FDRE \pipe_stages_1.pipe_tx_margin_q_reg[0] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(D[0]),
-        .Q(Q[0]),
-        .R(\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ));
-  FDRE \pipe_stages_1.pipe_tx_margin_q_reg[1] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(D[1]),
-        .Q(Q[1]),
-        .R(\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ));
-  FDRE \pipe_stages_1.pipe_tx_margin_q_reg[2] 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(D[2]),
-        .Q(Q[2]),
-        .R(\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ));
-  FDRE \pipe_stages_1.pipe_tx_rate_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_rate_q_reg_0 ),
-        .Q(pipe_tx_rate),
-        .R(\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ));
-  FDRE \pipe_stages_1.pipe_tx_rcvr_det_q_reg 
-       (.C(CLK),
-        .CE(1'b1),
-        .D(\pipe_stages_1.pipe_tx_rcvr_det_q_reg_1 ),
-        .Q(pipe_tx_rcvr_det),
-        .R(\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ));
-endmodule
-
-module pcie_7x_0_pcie_7x_0_pcie_pipe_pipeline
-   (pipe_tx_rcvr_det,
-    pipe_tx_rate,
-    pipe_tx_deemph,
-    pipe_rx0_valid,
-    pipe_rx0_chanisaligned,
-    pipe_rx0_phy_status,
-    pipe_rx0_elec_idle,
-    pipe_rx0_polarity,
-    pipe_tx0_compliance,
-    pipe_tx0_elec_idle,
-    Q,
-    \pipe_stages_1.pipe_rx_char_is_k_q_reg[1] ,
-    \pipe_stages_1.pipe_rx_data_q_reg[15] ,
-    \pipe_stages_1.pipe_rx_status_q_reg[2] ,
-    \pipe_stages_1.pipe_tx_char_is_k_q_reg[1] ,
-    \pipe_stages_1.pipe_tx_data_q_reg[15] ,
-    \pipe_stages_1.pipe_tx_powerdown_q_reg[1] ,
-    \pipe_stages_1.pipe_tx_rcvr_det_q_reg ,
-    \pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ,
-    CLK,
-    \pipe_stages_1.pipe_tx_rate_q_reg ,
-    \pipe_stages_1.pipe_tx_deemph_q_reg ,
-    \pipe_stages_1.pipe_rx_valid_q_reg ,
-    \pipe_stages_1.pipe_rx_chanisaligned_q_reg ,
-    \pipe_stages_1.pipe_rx_phy_status_q_reg ,
-    \pipe_stages_1.pipe_rx_elec_idle_q_reg ,
-    \pipe_stages_1.pipe_rx_polarity_q_reg ,
-    \pipe_stages_1.pipe_tx_compliance_q_reg ,
-    \pipe_stages_1.pipe_tx_elec_idle_q_reg ,
-    D,
-    \pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 ,
-    \pipe_stages_1.pipe_rx_data_q_reg[15]_0 ,
-    \pipe_stages_1.pipe_rx_status_q_reg[2]_0 ,
-    \pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 ,
-    \pipe_stages_1.pipe_tx_data_q_reg[15]_0 ,
-    \pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 );
-  output pipe_tx_rcvr_det;
-  output pipe_tx_rate;
-  output pipe_tx_deemph;
-  output pipe_rx0_valid;
-  output pipe_rx0_chanisaligned;
-  output pipe_rx0_phy_status;
-  output pipe_rx0_elec_idle;
-  output pipe_rx0_polarity;
-  output pipe_tx0_compliance;
-  output pipe_tx0_elec_idle;
-  output [2:0]Q;
-  output [1:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1] ;
-  output [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15] ;
-  output [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2] ;
-  output [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1] ;
-  output [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15] ;
-  output [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1] ;
-  input [0:0]\pipe_stages_1.pipe_tx_rcvr_det_q_reg ;
-  input \pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ;
-  input CLK;
-  input \pipe_stages_1.pipe_tx_rate_q_reg ;
-  input \pipe_stages_1.pipe_tx_deemph_q_reg ;
-  input \pipe_stages_1.pipe_rx_valid_q_reg ;
-  input \pipe_stages_1.pipe_rx_chanisaligned_q_reg ;
-  input \pipe_stages_1.pipe_rx_phy_status_q_reg ;
-  input \pipe_stages_1.pipe_rx_elec_idle_q_reg ;
-  input \pipe_stages_1.pipe_rx_polarity_q_reg ;
-  input \pipe_stages_1.pipe_tx_compliance_q_reg ;
-  input \pipe_stages_1.pipe_tx_elec_idle_q_reg ;
-  input [2:0]D;
-  input [1:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 ;
-  input [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15]_0 ;
-  input [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2]_0 ;
-  input [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 ;
-  input [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15]_0 ;
-  input [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 ;
-
-  wire CLK;
-  wire [2:0]D;
-  wire [2:0]Q;
-  wire pipe_rx0_chanisaligned;
-  wire pipe_rx0_elec_idle;
-  wire pipe_rx0_phy_status;
-  wire pipe_rx0_polarity;
-  wire pipe_rx0_valid;
-  wire \pipe_stages_1.pipe_rx_chanisaligned_q_reg ;
-  wire [1:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1] ;
-  wire [1:0]\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 ;
-  wire [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15] ;
-  wire [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15]_0 ;
-  wire \pipe_stages_1.pipe_rx_elec_idle_q_reg ;
-  wire \pipe_stages_1.pipe_rx_phy_status_q_reg ;
-  wire \pipe_stages_1.pipe_rx_polarity_q_reg ;
-  wire [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2] ;
-  wire [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2]_0 ;
-  wire \pipe_stages_1.pipe_rx_valid_q_reg ;
-  wire [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1] ;
-  wire [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 ;
-  wire \pipe_stages_1.pipe_tx_compliance_q_reg ;
-  wire [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15] ;
-  wire [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15]_0 ;
-  wire \pipe_stages_1.pipe_tx_deemph_q_reg ;
-  wire \pipe_stages_1.pipe_tx_elec_idle_q_reg ;
-  wire [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1] ;
-  wire [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 ;
-  wire \pipe_stages_1.pipe_tx_rate_q_reg ;
-  wire [0:0]\pipe_stages_1.pipe_tx_rcvr_det_q_reg ;
-  wire \pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ;
-  wire pipe_tx0_compliance;
-  wire pipe_tx0_elec_idle;
-  wire pipe_tx_deemph;
-  wire pipe_tx_rate;
-  wire pipe_tx_rcvr_det;
-
-  pcie_7x_0_pcie_7x_0_pcie_pipe_lane pipe_lane_0_i
-       (.CLK(CLK),
-        .pipe_rx0_chanisaligned(pipe_rx0_chanisaligned),
-        .pipe_rx0_elec_idle(pipe_rx0_elec_idle),
-        .pipe_rx0_phy_status(pipe_rx0_phy_status),
-        .pipe_rx0_polarity(pipe_rx0_polarity),
-        .pipe_rx0_valid(pipe_rx0_valid),
-        .\pipe_stages_1.pipe_rx_chanisaligned_q_reg_0 (\pipe_stages_1.pipe_rx_chanisaligned_q_reg ),
-        .\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 (\pipe_stages_1.pipe_rx_char_is_k_q_reg[1] ),
-        .\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_1 (\pipe_stages_1.pipe_tx_rcvr_det_q_reg ),
-        .\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_2 (\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 ),
-        .\pipe_stages_1.pipe_rx_data_q_reg[15]_0 (\pipe_stages_1.pipe_rx_data_q_reg[15] ),
-        .\pipe_stages_1.pipe_rx_data_q_reg[15]_1 (\pipe_stages_1.pipe_rx_data_q_reg[15]_0 ),
-        .\pipe_stages_1.pipe_rx_elec_idle_q_reg_0 (\pipe_stages_1.pipe_rx_elec_idle_q_reg ),
-        .\pipe_stages_1.pipe_rx_phy_status_q_reg_0 (\pipe_stages_1.pipe_rx_phy_status_q_reg ),
-        .\pipe_stages_1.pipe_rx_polarity_q_reg_0 (\pipe_stages_1.pipe_rx_polarity_q_reg ),
-        .\pipe_stages_1.pipe_rx_status_q_reg[2]_0 (\pipe_stages_1.pipe_rx_status_q_reg[2] ),
-        .\pipe_stages_1.pipe_rx_status_q_reg[2]_1 (\pipe_stages_1.pipe_rx_status_q_reg[2]_0 ),
-        .\pipe_stages_1.pipe_rx_valid_q_reg_0 (\pipe_stages_1.pipe_rx_valid_q_reg ),
-        .\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 (\pipe_stages_1.pipe_tx_char_is_k_q_reg[1] ),
-        .\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_1 (\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 ),
-        .\pipe_stages_1.pipe_tx_compliance_q_reg_0 (\pipe_stages_1.pipe_tx_compliance_q_reg ),
-        .\pipe_stages_1.pipe_tx_data_q_reg[15]_0 (\pipe_stages_1.pipe_tx_data_q_reg[15] ),
-        .\pipe_stages_1.pipe_tx_data_q_reg[15]_1 (\pipe_stages_1.pipe_tx_data_q_reg[15]_0 ),
-        .\pipe_stages_1.pipe_tx_elec_idle_q_reg_0 (\pipe_stages_1.pipe_tx_elec_idle_q_reg ),
-        .\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 (\pipe_stages_1.pipe_tx_powerdown_q_reg[1] ),
-        .\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_1 (\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 ),
-        .pipe_tx0_compliance(pipe_tx0_compliance),
-        .pipe_tx0_elec_idle(pipe_tx0_elec_idle));
-  pcie_7x_0_pcie_7x_0_pcie_pipe_misc pipe_misc_i
-       (.CLK(CLK),
-        .D(D),
-        .Q(Q),
-        .\pipe_stages_1.pipe_tx_deemph_q_reg_0 (\pipe_stages_1.pipe_tx_deemph_q_reg ),
-        .\pipe_stages_1.pipe_tx_rate_q_reg_0 (\pipe_stages_1.pipe_tx_rate_q_reg ),
-        .\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 (\pipe_stages_1.pipe_tx_rcvr_det_q_reg ),
-        .\pipe_stages_1.pipe_tx_rcvr_det_q_reg_1 (\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 ),
-        .pipe_tx_deemph(pipe_tx_deemph),
-        .pipe_tx_rate(pipe_tx_rate),
-        .pipe_tx_rcvr_det(pipe_tx_rcvr_det));
-endmodule
-
-module pcie_7x_0_pcie_7x_0_pcie_top
+module pcie_7x_0_pcie_top
    (m_axis_rx_tvalid_reg,
     m_axis_rx_tkeep,
     m_axis_rx_tlast,
     trn_tcfg_req,
     tready_thrtl_reg,
-    pipe_tx_rcvr_det,
-    pipe_tx_rate,
-    pipe_tx_deemph,
-    pipe_rx0_polarity,
-    pipe_tx0_compliance,
-    pipe_tx0_elec_idle,
     user_reset_int_reg,
     src_in,
     cfg_mgmt_rd_wr_done,
@@ -15078,10 +14466,6 @@ module pcie_7x_0_pcie_7x_0_pcie_top
     cfg_msg_data,
     cfg_device_number,
     cfg_function_number,
-    Q,
-    \pipe_stages_1.pipe_tx_char_is_k_q_reg[1] ,
-    \pipe_stages_1.pipe_tx_data_q_reg[15] ,
-    \pipe_stages_1.pipe_tx_powerdown_q_reg[1] ,
     cfg_aer_ecrc_check_en,
     cfg_aer_ecrc_gen_en,
     cfg_aer_rooterr_corr_err_received,
@@ -15123,6 +14507,12 @@ module pcie_7x_0_pcie_7x_0_pcie_top
     cfg_root_control_syserr_non_fatal_err_en,
     cfg_slot_control_electromech_il_ctl_pulse,
     pcie_drp_rdy,
+    pipe_rx0_polarity,
+    pipe_tx0_compliance,
+    pipe_tx0_elec_idle,
+    pipe_tx_deemph,
+    pipe_tx_rate,
+    pipe_tx_rcvr_det,
     pl_directed_change_done,
     pl_link_gen2_cap,
     pl_link_partner_gen2_supported,
@@ -15135,11 +14525,15 @@ module pcie_7x_0_pcie_7x_0_pcie_top
     fc_npd,
     fc_pd,
     pcie_drp_do,
+    pipe_tx0_data,
     cfg_pmcsr_powerstate,
+    pipe_tx0_char_is_k,
+    pipe_tx0_powerdown,
     pl_lane_reversal_mode,
     pl_rx_pm_state,
     pl_sel_lnk_width,
     cfg_interrupt_mmenable,
+    pipe_tx_margin,
     pl_initial_link_width,
     pl_tx_pm_state,
     cfg_mgmt_do,
@@ -15156,12 +14550,6 @@ module pcie_7x_0_pcie_7x_0_pcie_top
     s_axis_tx_tlast,
     s_axis_tx_tvalid,
     s_axis_tx_tkeep,
-    \pipe_stages_1.pipe_tx_rcvr_det_q_reg ,
-    CLK,
-    pipe_rx0_valid,
-    pipe_rx0_chanisaligned,
-    pipe_rx0_phy_status,
-    pipe_rx0_elec_idle,
     m_axis_rx_tready,
     bridge_reset_int,
     pl_phy_lnk_up,
@@ -15195,12 +14583,14 @@ module pcie_7x_0_pcie_7x_0_pcie_top
     cfg_pm_wake,
     s_axis_tx_tdata,
     s_axis_tx_tuser,
-    D,
-    \pipe_stages_1.pipe_rx_data_q_reg[15] ,
-    \pipe_stages_1.pipe_rx_status_q_reg[2] ,
     pcie_drp_clk,
     pcie_drp_en,
     pcie_drp_we,
+    pipe_clk,
+    pipe_rx0_chanisaligned,
+    pipe_rx0_elec_idle,
+    pipe_rx0_phy_status,
+    pipe_rx0_valid,
     pl_directed_link_auton,
     pl_directed_link_speed,
     pl_downstream_deemph_source,
@@ -15211,10 +14601,13 @@ module pcie_7x_0_pcie_7x_0_pcie_top
     rx_np_req,
     cfg_err_aer_headerlog,
     pcie_drp_di,
+    pipe_rx0_data,
     cfg_pm_force_state,
+    pipe_rx0_char_is_k,
     pl_directed_link_change,
     pl_directed_link_width,
     cfg_ds_function_number,
+    pipe_rx0_status,
     fc_sel,
     cfg_mgmt_di,
     cfg_mgmt_byte_en_n,
@@ -15232,12 +14625,6 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   output m_axis_rx_tlast;
   output trn_tcfg_req;
   output tready_thrtl_reg;
-  output pipe_tx_rcvr_det;
-  output pipe_tx_rate;
-  output pipe_tx_deemph;
-  output pipe_rx0_polarity;
-  output pipe_tx0_compliance;
-  output pipe_tx0_elec_idle;
   output user_reset_int_reg;
   output src_in;
   output cfg_mgmt_rd_wr_done;
@@ -15255,10 +14642,6 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   output [15:0]cfg_msg_data;
   output [4:0]cfg_device_number;
   output [2:0]cfg_function_number;
-  output [2:0]Q;
-  output [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1] ;
-  output [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15] ;
-  output [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1] ;
   output cfg_aer_ecrc_check_en;
   output cfg_aer_ecrc_gen_en;
   output cfg_aer_rooterr_corr_err_received;
@@ -15300,6 +14683,12 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   output cfg_root_control_syserr_non_fatal_err_en;
   output cfg_slot_control_electromech_il_ctl_pulse;
   output pcie_drp_rdy;
+  output pipe_rx0_polarity;
+  output pipe_tx0_compliance;
+  output pipe_tx0_elec_idle;
+  output pipe_tx_deemph;
+  output pipe_tx_rate;
+  output pipe_tx_rcvr_det;
   output pl_directed_change_done;
   output pl_link_gen2_cap;
   output pl_link_partner_gen2_supported;
@@ -15312,11 +14701,15 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   output [11:0]fc_npd;
   output [11:0]fc_pd;
   output [15:0]pcie_drp_do;
+  output [15:0]pipe_tx0_data;
   output [1:0]cfg_pmcsr_powerstate;
+  output [1:0]pipe_tx0_char_is_k;
+  output [1:0]pipe_tx0_powerdown;
   output [1:0]pl_lane_reversal_mode;
   output [1:0]pl_rx_pm_state;
   output [1:0]pl_sel_lnk_width;
   output [2:0]cfg_interrupt_mmenable;
+  output [2:0]pipe_tx_margin;
   output [2:0]pl_initial_link_width;
   output [2:0]pl_tx_pm_state;
   output [31:0]cfg_mgmt_do;
@@ -15333,12 +14726,6 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   input s_axis_tx_tlast;
   input s_axis_tx_tvalid;
   input [0:0]s_axis_tx_tkeep;
-  input [0:0]\pipe_stages_1.pipe_tx_rcvr_det_q_reg ;
-  input CLK;
-  input pipe_rx0_valid;
-  input pipe_rx0_chanisaligned;
-  input pipe_rx0_phy_status;
-  input pipe_rx0_elec_idle;
   input m_axis_rx_tready;
   input bridge_reset_int;
   input pl_phy_lnk_up;
@@ -15372,12 +14759,14 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   input cfg_pm_wake;
   input [63:0]s_axis_tx_tdata;
   input [3:0]s_axis_tx_tuser;
-  input [1:0]D;
-  input [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15] ;
-  input [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2] ;
   input pcie_drp_clk;
   input pcie_drp_en;
   input pcie_drp_we;
+  input pipe_clk;
+  input pipe_rx0_chanisaligned;
+  input pipe_rx0_elec_idle;
+  input pipe_rx0_phy_status;
+  input pipe_rx0_valid;
   input pl_directed_link_auton;
   input pl_directed_link_speed;
   input pl_downstream_deemph_source;
@@ -15388,10 +14777,13 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   input rx_np_req;
   input [127:0]cfg_err_aer_headerlog;
   input [15:0]pcie_drp_di;
+  input [15:0]pipe_rx0_data;
   input [1:0]cfg_pm_force_state;
+  input [1:0]pipe_rx0_char_is_k;
   input [1:0]pl_directed_link_change;
   input [1:0]pl_directed_link_width;
   input [2:0]cfg_ds_function_number;
+  input [2:0]pipe_rx0_status;
   input [2:0]fc_sel;
   input [31:0]cfg_mgmt_di;
   input [3:0]cfg_mgmt_byte_en_n;
@@ -15405,9 +14797,6 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   input [8:0]pcie_drp_addr;
   input [9:0]cfg_mgmt_dwaddr;
 
-  wire CLK;
-  wire [1:0]D;
-  wire [2:0]Q;
   wire [0:0]SR;
   wire bridge_reset_int;
   wire cfg_aer_ecrc_check_en;
@@ -15535,39 +14924,24 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   wire pcie_drp_en;
   wire pcie_drp_rdy;
   wire pcie_drp_we;
+  wire pipe_clk;
   wire pipe_rx0_chanisaligned;
-  wire pipe_rx0_chanisaligned_1;
   wire [1:0]pipe_rx0_char_is_k;
   wire [15:0]pipe_rx0_data;
   wire pipe_rx0_elec_idle;
-  wire pipe_rx0_elec_idle_3;
   wire pipe_rx0_phy_status;
-  wire pipe_rx0_phy_status_2;
   wire pipe_rx0_polarity;
-  wire pipe_rx0_polarity_9;
   wire [2:0]pipe_rx0_status;
   wire pipe_rx0_valid;
-  wire pipe_rx0_valid_0;
-  wire [15:0]\pipe_stages_1.pipe_rx_data_q_reg[15] ;
-  wire [2:0]\pipe_stages_1.pipe_rx_status_q_reg[2] ;
-  wire [1:0]\pipe_stages_1.pipe_tx_char_is_k_q_reg[1] ;
-  wire [15:0]\pipe_stages_1.pipe_tx_data_q_reg[15] ;
-  wire [1:0]\pipe_stages_1.pipe_tx_powerdown_q_reg[1] ;
-  wire [0:0]\pipe_stages_1.pipe_tx_rcvr_det_q_reg ;
   wire [1:0]pipe_tx0_char_is_k;
   wire pipe_tx0_compliance;
-  wire pipe_tx0_compliance_8;
   wire [15:0]pipe_tx0_data;
   wire pipe_tx0_elec_idle;
-  wire pipe_tx0_elec_idle_7;
   wire [1:0]pipe_tx0_powerdown;
   wire pipe_tx_deemph;
-  wire pipe_tx_deemph_6;
   wire [2:0]pipe_tx_margin;
   wire pipe_tx_rate;
-  wire pipe_tx_rate_5;
   wire pipe_tx_rcvr_det;
-  wire pipe_tx_rcvr_det_4;
   wire pl_directed_change_done;
   wire pl_directed_link_auton;
   wire [1:0]pl_directed_link_change;
@@ -15639,7 +15013,7 @@ module pcie_7x_0_pcie_7x_0_pcie_top
   wire user_clk;
   wire user_reset_int_reg;
 
-  pcie_7x_0_pcie_7x_0_axi_basic_top axi_basic_top
+  pcie_7x_0_axi_basic_top axi_basic_top
        (.E(trn_rdst_rdy),
         .Q(m_axis_rx_tdata),
         .SR(SR),
@@ -15796,10 +15170,8 @@ module pcie_7x_0_pcie_7x_0_pcie_top
         .D(cfg_msg_data[2]),
         .Q(cfg_function_number[2]),
         .R(\tx_inst/tx_pipeline_inst/reg_disable_trn2 ));
-  pcie_7x_0_pcie_7x_0_pcie_7x pcie_7x_i
-       (.CLK(CLK),
-        .E(pcie_7x_i_n_6),
-        .Q(pipe_rx0_data),
+  pcie_7x_0_pcie_7x pcie_7x_i
+       (.E(pcie_7x_i_n_6),
         .bridge_reset_int(bridge_reset_int),
         .cfg_aer_ecrc_check_en(cfg_aer_ecrc_check_en),
         .cfg_aer_ecrc_gen_en(cfg_aer_ecrc_gen_en),
@@ -15912,8 +15284,6 @@ module pcie_7x_0_pcie_7x_0_pcie_top
         .pcie_block_i_3(trn_rd),
         .pcie_block_i_4(trn_rrem),
         .pcie_block_i_5({trn_tsrc_dsc,trn_tstr,trn_terrfwd,trn_tecrc_gen}),
-        .pcie_block_i_6(pipe_rx0_char_is_k),
-        .pcie_block_i_7(pipe_rx0_status),
         .pcie_drp_addr(pcie_drp_addr),
         .pcie_drp_clk(pcie_drp_clk),
         .pcie_drp_di(pcie_drp_di),
@@ -15921,20 +15291,24 @@ module pcie_7x_0_pcie_7x_0_pcie_top
         .pcie_drp_en(pcie_drp_en),
         .pcie_drp_rdy(pcie_drp_rdy),
         .pcie_drp_we(pcie_drp_we),
-        .pipe_rx0_chanisaligned(pipe_rx0_chanisaligned_1),
-        .pipe_rx0_elec_idle(pipe_rx0_elec_idle_3),
-        .pipe_rx0_phy_status(pipe_rx0_phy_status_2),
-        .pipe_rx0_polarity(pipe_rx0_polarity_9),
-        .pipe_rx0_valid(pipe_rx0_valid_0),
+        .pipe_clk(pipe_clk),
+        .pipe_rx0_chanisaligned(pipe_rx0_chanisaligned),
+        .pipe_rx0_char_is_k(pipe_rx0_char_is_k),
+        .pipe_rx0_data(pipe_rx0_data),
+        .pipe_rx0_elec_idle(pipe_rx0_elec_idle),
+        .pipe_rx0_phy_status(pipe_rx0_phy_status),
+        .pipe_rx0_polarity(pipe_rx0_polarity),
+        .pipe_rx0_status(pipe_rx0_status),
+        .pipe_rx0_valid(pipe_rx0_valid),
         .pipe_tx0_char_is_k(pipe_tx0_char_is_k),
-        .pipe_tx0_compliance(pipe_tx0_compliance_8),
+        .pipe_tx0_compliance(pipe_tx0_compliance),
         .pipe_tx0_data(pipe_tx0_data),
-        .pipe_tx0_elec_idle(pipe_tx0_elec_idle_7),
+        .pipe_tx0_elec_idle(pipe_tx0_elec_idle),
         .pipe_tx0_powerdown(pipe_tx0_powerdown),
-        .pipe_tx_deemph(pipe_tx_deemph_6),
+        .pipe_tx_deemph(pipe_tx_deemph),
         .pipe_tx_margin(pipe_tx_margin),
-        .pipe_tx_rate(pipe_tx_rate_5),
-        .pipe_tx_rcvr_det(pipe_tx_rcvr_det_4),
+        .pipe_tx_rate(pipe_tx_rate),
+        .pipe_tx_rcvr_det(pipe_tx_rcvr_det),
         .pl_directed_change_done(pl_directed_change_done),
         .pl_directed_link_auton(pl_directed_link_auton),
         .pl_directed_link_change(pl_directed_link_change),
@@ -15990,46 +15364,9 @@ module pcie_7x_0_pcie_7x_0_pcie_top
         .tx_err_drop(tx_err_drop),
         .user_clk(user_clk),
         .user_reset_int_reg(user_reset_int_reg));
-  pcie_7x_0_pcie_7x_0_pcie_pipe_pipeline pcie_pipe_pipeline_i
-       (.CLK(CLK),
-        .D(pipe_tx_margin),
-        .Q(Q),
-        .pipe_rx0_chanisaligned(pipe_rx0_chanisaligned_1),
-        .pipe_rx0_elec_idle(pipe_rx0_elec_idle_3),
-        .pipe_rx0_phy_status(pipe_rx0_phy_status_2),
-        .pipe_rx0_polarity(pipe_rx0_polarity),
-        .pipe_rx0_valid(pipe_rx0_valid_0),
-        .\pipe_stages_1.pipe_rx_chanisaligned_q_reg (pipe_rx0_chanisaligned),
-        .\pipe_stages_1.pipe_rx_char_is_k_q_reg[1] (pipe_rx0_char_is_k),
-        .\pipe_stages_1.pipe_rx_char_is_k_q_reg[1]_0 (D),
-        .\pipe_stages_1.pipe_rx_data_q_reg[15] (pipe_rx0_data),
-        .\pipe_stages_1.pipe_rx_data_q_reg[15]_0 (\pipe_stages_1.pipe_rx_data_q_reg[15] ),
-        .\pipe_stages_1.pipe_rx_elec_idle_q_reg (pipe_rx0_elec_idle),
-        .\pipe_stages_1.pipe_rx_phy_status_q_reg (pipe_rx0_phy_status),
-        .\pipe_stages_1.pipe_rx_polarity_q_reg (pipe_rx0_polarity_9),
-        .\pipe_stages_1.pipe_rx_status_q_reg[2] (pipe_rx0_status),
-        .\pipe_stages_1.pipe_rx_status_q_reg[2]_0 (\pipe_stages_1.pipe_rx_status_q_reg[2] ),
-        .\pipe_stages_1.pipe_rx_valid_q_reg (pipe_rx0_valid),
-        .\pipe_stages_1.pipe_tx_char_is_k_q_reg[1] (\pipe_stages_1.pipe_tx_char_is_k_q_reg[1] ),
-        .\pipe_stages_1.pipe_tx_char_is_k_q_reg[1]_0 (pipe_tx0_char_is_k),
-        .\pipe_stages_1.pipe_tx_compliance_q_reg (pipe_tx0_compliance_8),
-        .\pipe_stages_1.pipe_tx_data_q_reg[15] (\pipe_stages_1.pipe_tx_data_q_reg[15] ),
-        .\pipe_stages_1.pipe_tx_data_q_reg[15]_0 (pipe_tx0_data),
-        .\pipe_stages_1.pipe_tx_deemph_q_reg (pipe_tx_deemph_6),
-        .\pipe_stages_1.pipe_tx_elec_idle_q_reg (pipe_tx0_elec_idle_7),
-        .\pipe_stages_1.pipe_tx_powerdown_q_reg[1] (\pipe_stages_1.pipe_tx_powerdown_q_reg[1] ),
-        .\pipe_stages_1.pipe_tx_powerdown_q_reg[1]_0 (pipe_tx0_powerdown),
-        .\pipe_stages_1.pipe_tx_rate_q_reg (pipe_tx_rate_5),
-        .\pipe_stages_1.pipe_tx_rcvr_det_q_reg (\pipe_stages_1.pipe_tx_rcvr_det_q_reg ),
-        .\pipe_stages_1.pipe_tx_rcvr_det_q_reg_0 (pipe_tx_rcvr_det_4),
-        .pipe_tx0_compliance(pipe_tx0_compliance),
-        .pipe_tx0_elec_idle(pipe_tx0_elec_idle),
-        .pipe_tx_deemph(pipe_tx_deemph),
-        .pipe_tx_rate(pipe_tx_rate),
-        .pipe_tx_rcvr_det(pipe_tx_rcvr_det));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pipe_clock
+module pcie_7x_0_pipe_clock
    (CLK,
     int_pclk_out_slave,
     \dclk_i_bufg.dclk_i_0 ,
@@ -16061,7 +15398,7 @@ module pcie_7x_0_pcie_7x_0_pipe_clock
   wire mmcm_fb;
   wire mmcm_i_0;
   wire mmcm_i_1;
-  wire pclk_sel;
+  (* DONT_TOUCH *) wire pclk_sel;
   (* SHIFT_EXTRACT = "NO" *) (* async_reg = "true" *) wire pclk_sel_reg1;
   wire \pclk_sel_reg1_reg[0]_0 ;
   (* SHIFT_EXTRACT = "NO" *) (* async_reg = "true" *) wire pclk_sel_reg2;
@@ -16199,6 +15536,7 @@ module pcie_7x_0_pcie_7x_0_pipe_clock
         .PWRDWN(1'b0),
         .RST(1'b0));
   (* BOX_TYPE = "PRIMITIVE" *) 
+  (* DONT_TOUCH *) 
   BUFGCTRL #(
     .CE_TYPE_CE0("SYNC"),
     .CE_TYPE_CE1("SYNC"),
@@ -16230,6 +15568,8 @@ module pcie_7x_0_pcie_7x_0_pipe_clock
     \pclk_i1_bufgctrl.pclk_i1_i_1 
        (.I0(pclk_sel),
         .O(S00));
+  (* DONT_TOUCH *) 
+  (* KEEP = "yes" *) 
   FDRE #(
     .INIT(1'b0)) 
     pclk_sel_reg
@@ -16337,7 +15677,7 @@ module pcie_7x_0_pcie_7x_0_pipe_clock
         .O(user_clk));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pipe_eq
+module pcie_7x_0_pipe_eq
    (rxeq_adapt_done,
     TXPRECURSOR,
     TXMAINCURSOR,
@@ -17370,7 +16710,7 @@ module pcie_7x_0_pcie_7x_0_pipe_eq
         .D(\FSM_onehot_fsm_rx_reg_n_0_[2] ),
         .Q(rxeq_preset_valid),
         .R(rst_cpllreset));
-  pcie_7x_0_pcie_7x_0_rxeq_scan rxeq_scan_i
+  pcie_7x_0_rxeq_scan rxeq_scan_i
        (.CLK(CLK),
         .D({rxeq_scan_i_n_1,rxeq_scan_i_n_2,rxeq_scan_i_n_3}),
         .\FSM_onehot_fsm_rx_reg[5] ({\rxeq_cnt_reg_n_0_[2] ,\rxeq_cnt_reg_n_0_[1] ,\rxeq_cnt_reg_n_0_[0] }),
@@ -19249,7 +18589,7 @@ module pcie_7x_0_pcie_7x_0_pipe_eq
         .R(rst_cpllreset));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pipe_sync
+module pcie_7x_0_pipe_sync
    (out,
     txphaligndone_reg3_reg_0,
     txphinitdone_reg2_reg_0,
@@ -19867,7 +19207,7 @@ module pcie_7x_0_pcie_7x_0_pipe_sync
         .R(rst_cpllreset));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pipe_user
+module pcie_7x_0_pipe_user
    (out,
     txcompliance_reg2_reg_0,
     user_oobclk,
@@ -20997,7 +20337,7 @@ module pcie_7x_0_pcie_7x_0_pipe_user
         .R(rst_cpllreset));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_pipe_wrapper
+module pcie_7x_0_pipe_wrapper
    (\pclk_i1_bufgctrl.pclk_i1 ,
     int_pclk_out_slave,
     CLK,
@@ -21012,7 +20352,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
     gt_rx_elec_idle_wire_filter,
     RXSTATUS,
     \gtp_channel.gtpe2_channel_i ,
-    \gtp_channel.gtpe2_channel_i_0 ,
+    D,
     p_0_in_0,
     rst_idle_reg2_reg,
     reg_clock_locked_reg,
@@ -21025,16 +20365,16 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
     pipe_tx_deemph,
     pipe_tx_rcvr_det,
     pipe_tx0_elec_idle,
-    Q,
-    \gtp_channel.gtpe2_channel_i_1 ,
-    \gtp_channel.gtpe2_channel_i_2 ,
+    pipe_tx0_powerdown,
+    pipe_tx_margin,
+    pipe_tx0_data,
     pipe_tx0_compliance,
-    \gtp_channel.gtpe2_channel_i_3 ,
+    pipe_tx0_char_is_k,
     int_pclk_sel_slave,
     reset_n_reg1_reg_0,
     pipe_rx0_valid,
     reg_clock_locked,
-    D,
+    \rate_reg1_reg[1] ,
     \rate_in_reg1_reg[1] );
   output \pclk_i1_bufgctrl.pclk_i1 ;
   output int_pclk_out_slave;
@@ -21050,7 +20390,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
   output [0:0]gt_rx_elec_idle_wire_filter;
   output [2:0]RXSTATUS;
   output [15:0]\gtp_channel.gtpe2_channel_i ;
-  output [1:0]\gtp_channel.gtpe2_channel_i_0 ;
+  output [1:0]D;
   output p_0_in_0;
   output rst_idle_reg2_reg;
   output reg_clock_locked_reg;
@@ -21063,23 +20403,22 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
   input pipe_tx_deemph;
   input pipe_tx_rcvr_det;
   input pipe_tx0_elec_idle;
-  input [1:0]Q;
-  input [2:0]\gtp_channel.gtpe2_channel_i_1 ;
-  input [15:0]\gtp_channel.gtpe2_channel_i_2 ;
+  input [1:0]pipe_tx0_powerdown;
+  input [2:0]pipe_tx_margin;
+  input [15:0]pipe_tx0_data;
   input pipe_tx0_compliance;
-  input [1:0]\gtp_channel.gtpe2_channel_i_3 ;
+  input [1:0]pipe_tx0_char_is_k;
   input [0:0]int_pclk_sel_slave;
   input reset_n_reg1_reg_0;
   input pipe_rx0_valid;
   input reg_clock_locked;
-  input [1:0]D;
+  input [1:0]\rate_reg1_reg[1] ;
   input [1:0]\rate_in_reg1_reg[1] ;
 
   wire CLK;
   wire [1:0]D;
   wire DRP_START0;
   wire DRP_X160;
-  wire [1:0]Q;
   wire [2:0]RXSTATUS;
   wire SYNC_TXPHINITDONE1;
   wire SYNC_TXSYNC_START0;
@@ -21104,10 +20443,6 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
   wire gt_txresetdone;
   wire gt_txsyncdone;
   wire [15:0]\gtp_channel.gtpe2_channel_i ;
-  wire [1:0]\gtp_channel.gtpe2_channel_i_0 ;
-  wire [2:0]\gtp_channel.gtpe2_channel_i_1 ;
-  wire [15:0]\gtp_channel.gtpe2_channel_i_2 ;
-  wire [1:0]\gtp_channel.gtpe2_channel_i_3 ;
   wire \gtp_common.gtpe2_common_i ;
   wire \gtp_pipe_reset.gtp_pipe_reset_i_n_0 ;
   wire \gtp_pipe_reset.gtp_pipe_reset_i_n_10 ;
@@ -21166,9 +20501,13 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
   wire pipe_rx0_chanisaligned;
   wire pipe_rx0_polarity;
   wire pipe_rx0_valid;
+  wire [1:0]pipe_tx0_char_is_k;
   wire pipe_tx0_compliance;
+  wire [15:0]pipe_tx0_data;
   wire pipe_tx0_elec_idle;
+  wire [1:0]pipe_tx0_powerdown;
   wire pipe_tx_deemph;
+  wire [2:0]pipe_tx_margin;
   wire pipe_tx_rcvr_det;
   wire \qpll_wrapper_i/PLL0RESET0 ;
   wire \qpll_wrapper_i/cpllrst ;
@@ -21176,6 +20515,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
   wire rate_done;
   wire [1:0]\rate_in_reg1_reg[1] ;
   wire [0:0]rate_rate_0;
+  wire [1:0]\rate_reg1_reg[1] ;
   wire rate_txsync_start;
   wire reg_clock_locked;
   wire reg_clock_locked_reg;
@@ -21211,7 +20551,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
   BUFG cpllpd_refclk_inst
        (.I(sys_clk),
         .O(gt_cpllpdrefclk));
-  pcie_7x_0_pcie_7x_0_gtp_pipe_reset \gtp_pipe_reset.gtp_pipe_reset_i 
+  pcie_7x_0_gtp_pipe_reset \gtp_pipe_reset.gtp_pipe_reset_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .\FSM_onehot_fsm_reg[1]_0 (\gtp_pipe_reset.gtp_pipe_reset_i_n_10 ),
         .PLL0RESET0(\qpll_wrapper_i/PLL0RESET0 ),
@@ -21236,7 +20576,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .txsync_done(txsync_done),
         .user_resetdone(user_resetdone),
         .user_rxcdrlock(user_rxcdrlock));
-  pcie_7x_0_pcie_7x_0_pipe_clock \pipe_clock_int.pipe_clock_i 
+  pcie_7x_0_pipe_clock \pipe_clock_int.pipe_clock_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .\dclk_i_bufg.dclk_i_0 (CLK),
         .int_pclk_out_slave(int_pclk_out_slave),
@@ -21246,7 +20586,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .\pclk_sel_reg1_reg[0]_0 (\pipe_lane[0].gtp_pipe_rate.gtp_pipe_rate_i_n_0 ),
         .\txoutclk_i.txoutclk_i_0 (\pipe_lane[0].gt_wrapper_i_n_15 ),
         .user_clk(user_clk));
-  pcie_7x_0_pcie_7x_0_gt_wrapper \pipe_lane[0].gt_wrapper_i 
+  pcie_7x_0_gt_wrapper \pipe_lane[0].gt_wrapper_i 
        (.CLK(CLK),
         .D({\pipe_lane[0].gt_wrapper_i_n_21 ,\pipe_lane[0].gt_wrapper_i_n_22 ,\pipe_lane[0].gt_wrapper_i_n_23 ,\pipe_lane[0].gt_wrapper_i_n_24 ,\pipe_lane[0].gt_wrapper_i_n_25 ,\pipe_lane[0].gt_wrapper_i_n_26 ,\pipe_lane[0].gt_wrapper_i_n_27 ,\pipe_lane[0].gt_wrapper_i_n_28 ,\pipe_lane[0].gt_wrapper_i_n_29 ,\pipe_lane[0].gt_wrapper_i_n_30 ,\pipe_lane[0].gt_wrapper_i_n_31 ,\pipe_lane[0].gt_wrapper_i_n_32 ,\pipe_lane[0].gt_wrapper_i_n_33 ,\pipe_lane[0].gt_wrapper_i_n_34 ,\pipe_lane[0].gt_wrapper_i_n_35 ,\pipe_lane[0].gt_wrapper_i_n_36 }),
         .DRPADDR(drp_mux_addr),
@@ -21270,12 +20610,8 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .gt_txsyncdone(gt_txsyncdone),
         .\gtp_channel.gtpe2_channel_i_0 (\pipe_lane[0].gt_wrapper_i_n_0 ),
         .\gtp_channel.gtpe2_channel_i_1 (\pipe_lane[0].gt_wrapper_i_n_6 ),
-        .\gtp_channel.gtpe2_channel_i_10 (\gtp_channel.gtpe2_channel_i_0 ),
+        .\gtp_channel.gtpe2_channel_i_10 (D),
         .\gtp_channel.gtpe2_channel_i_11 (\pclk_i1_bufgctrl.pclk_i1 ),
-        .\gtp_channel.gtpe2_channel_i_12 (Q),
-        .\gtp_channel.gtpe2_channel_i_13 (\gtp_channel.gtpe2_channel_i_1 ),
-        .\gtp_channel.gtpe2_channel_i_14 (\gtp_channel.gtpe2_channel_i_2 ),
-        .\gtp_channel.gtpe2_channel_i_15 (\gtp_channel.gtpe2_channel_i_3 ),
         .\gtp_channel.gtpe2_channel_i_2 (\pipe_lane[0].gt_wrapper_i_n_8 ),
         .\gtp_channel.gtpe2_channel_i_3 (\pipe_lane[0].gt_wrapper_i_n_9 ),
         .\gtp_channel.gtpe2_channel_i_4 (\pipe_lane[0].gt_wrapper_i_n_12 ),
@@ -21292,9 +20628,13 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .pci_exp_txp(pci_exp_txp),
         .pipe_rx0_chanisaligned(pipe_rx0_chanisaligned),
         .pipe_rx0_polarity(pipe_rx0_polarity),
+        .pipe_tx0_char_is_k(pipe_tx0_char_is_k),
         .pipe_tx0_compliance(pipe_tx0_compliance),
+        .pipe_tx0_data(pipe_tx0_data),
         .pipe_tx0_elec_idle(pipe_tx0_elec_idle),
+        .pipe_tx0_powerdown(pipe_tx0_powerdown),
         .pipe_tx_deemph(pipe_tx_deemph),
+        .pipe_tx_margin(pipe_tx_margin),
         .pipe_tx_rcvr_det(pipe_tx_rcvr_det),
         .rst_gtreset(rst_gtreset),
         .rst_userrdy(rst_userrdy),
@@ -21309,7 +20649,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .user_rxcdrreset(user_rxcdrreset),
         .user_rxpcsreset(user_rxpcsreset),
         .user_rxpmareset(user_rxpmareset));
-  pcie_7x_0_pcie_7x_0_gtp_pipe_drp \pipe_lane[0].gtp_pipe_drp.gtp_pipe_drp_i 
+  pcie_7x_0_gtp_pipe_drp \pipe_lane[0].gtp_pipe_drp.gtp_pipe_drp_i 
        (.CLK(CLK),
         .D({\pipe_lane[0].gt_wrapper_i_n_21 ,\pipe_lane[0].gt_wrapper_i_n_22 ,\pipe_lane[0].gt_wrapper_i_n_23 ,\pipe_lane[0].gt_wrapper_i_n_24 ,\pipe_lane[0].gt_wrapper_i_n_25 ,\pipe_lane[0].gt_wrapper_i_n_26 ,\pipe_lane[0].gt_wrapper_i_n_27 ,\pipe_lane[0].gt_wrapper_i_n_28 ,\pipe_lane[0].gt_wrapper_i_n_29 ,\pipe_lane[0].gt_wrapper_i_n_30 ,\pipe_lane[0].gt_wrapper_i_n_31 ,\pipe_lane[0].gt_wrapper_i_n_32 ,\pipe_lane[0].gt_wrapper_i_n_33 ,\pipe_lane[0].gt_wrapper_i_n_34 ,\pipe_lane[0].gt_wrapper_i_n_35 ,\pipe_lane[0].gt_wrapper_i_n_36 }),
         .DRPADDR(drp_mux_addr),
@@ -21321,7 +20661,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .drp_mux_en(drp_mux_en),
         .drp_mux_we(drp_mux_we),
         .rdy_reg1_reg_0(\pipe_lane[0].gt_wrapper_i_n_0 ));
-  pcie_7x_0_pcie_7x_0_gtp_pipe_rate \pipe_lane[0].gtp_pipe_rate.gtp_pipe_rate_i 
+  pcie_7x_0_gtp_pipe_rate \pipe_lane[0].gtp_pipe_rate.gtp_pipe_rate_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .DRP_START0(DRP_START0),
         .DRP_X160(DRP_X160),
@@ -21338,14 +20678,14 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .rst_drp_x16(rst_drp_x16),
         .rxpmaresetdone_reg1_reg_0(\pipe_lane[0].gt_wrapper_i_n_9 ),
         .txsync_done(txsync_done));
-  pcie_7x_0_pcie_7x_0_pipe_eq \pipe_lane[0].pipe_eq.pipe_eq_i 
+  pcie_7x_0_pipe_eq \pipe_lane[0].pipe_eq.pipe_eq_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .TXMAINCURSOR(eq_txeq_maincursor),
         .TXPOSTCURSOR(eq_txeq_postcursor),
         .TXPRECURSOR(eq_txeq_precursor),
         .rst_cpllreset(rst_cpllreset),
         .rxeq_adapt_done(rxeq_adapt_done));
-  pcie_7x_0_pcie_7x_0_gt_common \pipe_lane[0].pipe_quad.gt_common_enabled.gt_common_int.gt_common_i 
+  pcie_7x_0_gt_common \pipe_lane[0].pipe_quad.gt_common_enabled.gt_common_int.gt_common_i 
        (.PLL0RESET0(\qpll_wrapper_i/PLL0RESET0 ),
         .Q(qrst_drp_start),
         .SR(dclk_rst_reg2),
@@ -21357,7 +20697,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .int_qplloutclk_out(int_qplloutclk_out),
         .int_qplloutrefclk_out(int_qplloutrefclk_out),
         .sys_clk(sys_clk));
-  pcie_7x_0_pcie_7x_0_pipe_sync \pipe_lane[0].pipe_sync_i 
+  pcie_7x_0_pipe_sync \pipe_lane[0].pipe_sync_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .\FSM_onehot_txsync_fsm.fsm_tx_reg[4]_0 (\pipe_lane[0].pipe_user_i_n_15 ),
         .\FSM_onehot_txsync_fsm.fsm_tx_reg[5]_0 ({\pipe_lane[0].pipe_sync_i_n_6 ,\pipe_lane[0].pipe_sync_i_n_7 ,\pipe_lane[0].pipe_sync_i_n_8 }),
@@ -21384,7 +20724,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .txphinitdone_reg3_reg_0(\pipe_lane[0].pipe_sync_i_n_3 ),
         .txsync_done(txsync_done),
         .user_rxcdrlock(user_rxcdrlock));
-  pcie_7x_0_pcie_7x_0_pipe_user \pipe_lane[0].pipe_user_i 
+  pcie_7x_0_pipe_user \pipe_lane[0].pipe_user_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
         .\FSM_onehot_txsync_fsm.fsm_tx_reg[4] (\pipe_lane[0].pipe_sync_i_n_3 ),
         .\FSM_onehot_txsync_fsm.fsm_tx_reg[4]_0 (p_1_in0_in),
@@ -21436,14 +20776,14 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
     pl_phy_lnk_up_q_i_1
        (.I0(reset_n_reg1_reg_0),
         .O(p_0_in_0));
-  pcie_7x_0_pcie_7x_0_qpll_reset \qpll_reset.qpll_reset_i 
+  pcie_7x_0_qpll_reset \qpll_reset.qpll_reset_i 
        (.CLK(\pclk_i1_bufgctrl.pclk_i1 ),
-        .D(D),
         .Q(qrst_drp_start),
         .\drp_done_reg1_reg[0]_0 (\pipe_lane[0].pipe_quad.gt_common_enabled.gt_common_int.gt_common_i_n_4 ),
         .mmcm_lock_reg1_reg_0(\gtp_pipe_reset.gtp_pipe_reset_i_n_0 ),
         .mmcm_lock_reg1_reg_1(mmcm_i),
-        .\qplllock_reg1_reg[0]_0 (\gtp_common.gtpe2_common_i ));
+        .\qplllock_reg1_reg[0]_0 (\gtp_common.gtpe2_common_i ),
+        .\rate_reg1_reg[1]_0 (\rate_reg1_reg[1] ));
   (* ASYNC_REG *) 
   (* KEEP = "yes" *) 
   (* SHIFT_EXTRACT = "NO" *) 
@@ -21464,7 +20804,7 @@ module pcie_7x_0_pcie_7x_0_pipe_wrapper
         .Q(reset_n_reg2));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_qpll_drp
+module pcie_7x_0_qpll_drp
    (done_reg_0,
     \addr_reg[7]_0 ,
     \di_reg[15]_0 ,
@@ -22766,24 +22106,23 @@ module pcie_7x_0_pcie_7x_0_qpll_drp
         .R(SR));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_qpll_reset
+module pcie_7x_0_qpll_reset
    (Q,
     mmcm_lock_reg1_reg_0,
     CLK,
     \drp_done_reg1_reg[0]_0 ,
     \qplllock_reg1_reg[0]_0 ,
     mmcm_lock_reg1_reg_1,
-    D);
+    \rate_reg1_reg[1]_0 );
   output [0:0]Q;
   input mmcm_lock_reg1_reg_0;
   input CLK;
   input \drp_done_reg1_reg[0]_0 ;
   input \qplllock_reg1_reg[0]_0 ;
   input mmcm_lock_reg1_reg_1;
-  input [1:0]D;
+  input [1:0]\rate_reg1_reg[1]_0 ;
 
   wire CLK;
-  wire [1:0]D;
   wire \FSM_onehot_fsm[0]_i_1__1_n_0 ;
   wire \FSM_onehot_fsm[1]_i_1_n_0 ;
   wire \FSM_onehot_fsm[2]_i_1_n_0 ;
@@ -22807,6 +22146,7 @@ module pcie_7x_0_pcie_7x_0_qpll_reset
   (* SHIFT_EXTRACT = "NO" *) (* async_reg = "true" *) wire qpllreset_in_reg1;
   (* SHIFT_EXTRACT = "NO" *) (* async_reg = "true" *) wire qpllreset_in_reg2;
   (* SHIFT_EXTRACT = "NO" *) (* async_reg = "true" *) wire [1:0]rate_reg1;
+  wire [1:0]\rate_reg1_reg[1]_0 ;
   (* SHIFT_EXTRACT = "NO" *) (* async_reg = "true" *) wire [1:0]rate_reg2;
 
   LUT3 #(
@@ -22975,7 +22315,7 @@ module pcie_7x_0_pcie_7x_0_qpll_reset
   FDRE \rate_reg1_reg[0] 
        (.C(CLK),
         .CE(1'b1),
-        .D(D[0]),
+        .D(\rate_reg1_reg[1]_0 [0]),
         .Q(rate_reg1[0]),
         .R(mmcm_lock_reg1_reg_0));
   (* ASYNC_REG *) 
@@ -22984,7 +22324,7 @@ module pcie_7x_0_pcie_7x_0_qpll_reset
   FDRE \rate_reg1_reg[1] 
        (.C(CLK),
         .CE(1'b1),
-        .D(D[1]),
+        .D(\rate_reg1_reg[1]_0 [1]),
         .Q(rate_reg1[1]),
         .R(mmcm_lock_reg1_reg_0));
   (* ASYNC_REG *) 
@@ -23007,7 +22347,7 @@ module pcie_7x_0_pcie_7x_0_qpll_reset
         .R(mmcm_lock_reg1_reg_0));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_qpll_wrapper
+module pcie_7x_0_qpll_wrapper
    (cpllrst,
     qpll_drp_rdy,
     \gtp_common.gtpe2_common_i_0 ,
@@ -23064,7 +22404,7 @@ module pcie_7x_0_pcie_7x_0_qpll_wrapper
   wire [7:0]\NLW_gtp_common.gtpe2_common_i_DMONITOROUT_UNCONNECTED ;
   wire [15:0]\NLW_gtp_common.gtpe2_common_i_PMARSVDOUT_UNCONNECTED ;
 
-  pcie_7x_0_pcie_7x_0_gtp_cpllpd_ovrd cpllPDInst
+  pcie_7x_0_gtp_cpllpd_ovrd cpllPDInst
        (.cpllpd(cpllpd),
         .cpllrst(cpllrst),
         .gt_cpllpdrefclk(gt_cpllpdrefclk));
@@ -23149,7 +22489,7 @@ module pcie_7x_0_pcie_7x_0_qpll_wrapper
         .REFCLKOUTMONITOR1(\NLW_gtp_common.gtpe2_common_i_REFCLKOUTMONITOR1_UNCONNECTED ));
 endmodule
 
-module pcie_7x_0_pcie_7x_0_rxeq_scan
+module pcie_7x_0_rxeq_scan
    (rxeq_new_txcoeff_req_0,
     D,
     adapt_done_reg_0,
@@ -24747,6 +24087,7 @@ module pcie_7x_0_pcie_7x_0_rxeq_scan
         .R(rst_cpllreset));
 endmodule
 
+(* ORIG_REF_NAME = "xil_internal_svlib_BRAM_TDP_MACRO" *) 
 module pcie_7x_0_xil_internal_svlib_BRAM_TDP_MACRO
    (rdata,
     user_clk,
@@ -26889,9 +26230,9 @@ module pcie_7x_0_xil_internal_svlib_BRAM_TDP_MACRO_6
         .WEBWE({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}));
 endmodule
 
-(* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) (* SIM_ASSERT_CHK = "0" *) 
-(* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) (* XPM_MODULE = "TRUE" *) 
-(* keep_hierarchy = "true" *) (* xpm_cdc = "SINGLE" *) 
+(* DEST_SYNC_FF = "2" *) (* INIT_SYNC_FF = "0" *) (* ORIG_REF_NAME = "xpm_cdc_single" *) 
+(* SIM_ASSERT_CHK = "0" *) (* SRC_INPUT_REG = "0" *) (* VERSION = "0" *) 
+(* XPM_MODULE = "TRUE" *) (* keep_hierarchy = "true" *) (* xpm_cdc = "SINGLE" *) 
 module pcie_7x_0_xpm_cdc_single
    (src_clk,
     src_in,

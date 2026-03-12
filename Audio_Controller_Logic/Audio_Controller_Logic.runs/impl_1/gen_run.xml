@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773243973">
+<GenRun Id="impl_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773304106">
   <File Type="ROUTE-PWR" Name="hda_pcie_top_power_routed.rpt"/>
   <File Type="PA-TCL" Name="hda_pcie_top.tcl"/>
   <File Type="BITSTR-MMI" Name="hda_pcie_top.mmi"/>
@@ -81,13 +81,6 @@
   <File Type="POSTROUTE-PHYSOPT-RQS-RPT" Name="postroute_physopt_report_qor_suggestions_0.rpt"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
-    <File Path="$PSRCDIR/sources_1/ip/pcie_7x_0/pcie_7x_0.xci">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
     <File Path="$PPRDIR/../bar0_hda_sim.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
@@ -190,4 +183,5 @@
       <Option Id="BinFile">1</Option>
     </Step>
   </Strategy>
+  <BlockFileSet Type="BlockSrcs" Name="pcie_7x_0"/>
 </GenRun>
