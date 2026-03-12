@@ -4,14 +4,14 @@
 #
 #  使用方法:
 #    在 Vivado Tcl Console 中执行:
-#      source C:/Users/dukehhu/Desktop/amd/reconfig_pcie_i211.tcl
+#      source C:/Users/dukehhu/Desktop/1121/reconfig_pcie_i211.tcl
 #
 #  或在 Vivado GUI 中: Tools → Run Tcl Script...
 # ===========================================================================
 
 # 打开项目 (如果尚未打开)
 if {[catch {current_project}]} {
-    open_project C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.xpr
+    open_project C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.xpr
 }
 
 # ===========================================================================
@@ -43,6 +43,12 @@ set_property -dict [list \
     CONFIG.IntX_Generation              {false} \
     CONFIG.MSI_Enabled                  {true} \
     CONFIG.MSI_64b                      {true} \
+    CONFIG.MSIx_Enabled                 {true} \
+    CONFIG.MSIx_Table_Size              {5} \
+    CONFIG.MSIx_Table_BIR               {BAR_0} \
+    CONFIG.MSIx_Table_Offset            {0000E000} \
+    CONFIG.MSIx_PBA_BIR                 {BAR_0} \
+    CONFIG.MSIx_PBA_Offset              {0000E800} \
 ] $pcie_ip
 
 puts "INFO: PCIe IP 已更新为 Intel I211 配置"
@@ -51,7 +57,9 @@ puts "  Device ID  = 0x1539"
 puts "  Rev ID     = 0x03"
 puts "  SVID:SSID  = 0x1849:0x1539"
 puts "  Class Code = 0x020000 (Ethernet Controller)"
-puts "  BAR0       = 128KB Memory"
+puts "  BAR0       = 128KB Memory, 32-bit, Non-Prefetchable"
+puts "  MSI        = Enabled (64-bit, 1 vector)"
+puts "  MSI-X      = Enabled (5 vectors, Table@BAR0+0xE000, PBA@BAR0+0xE800)"
 
 # ===========================================================================
 #  2. 更新项目源文件 — 替换顶层模块
@@ -59,11 +67,11 @@ puts "  BAR0       = 128KB Memory"
 
 # 移除旧的 HDA 源文件 (从项目中移除, 不删除文件)
 set old_files [list \
-    "C:/Users/dukehhu/Desktop/amd/bar0_hda_sim.v" \
-    "C:/Users/dukehhu/Desktop/amd/hda_codec_engine.v" \
-    "C:/Users/dukehhu/Desktop/amd/hda_dma_engine.v" \
-    "C:/Users/dukehhu/Desktop/amd/hda_pcie_top.v" \
-    "C:/Users/dukehhu/Desktop/amd/pcileech_pcie_cfg_a7.v" \
+    "C:/Users/dukehhu/Desktop/1121/bar0_hda_sim.v" \
+    "C:/Users/dukehhu/Desktop/1121/hda_codec_engine.v" \
+    "C:/Users/dukehhu/Desktop/1121/hda_dma_engine.v" \
+    "C:/Users/dukehhu/Desktop/1121/hda_pcie_top.v" \
+    "C:/Users/dukehhu/Desktop/1121/pcileech_pcie_cfg_a7.v" \
 ]
 
 foreach f $old_files {
@@ -75,8 +83,8 @@ foreach f $old_files {
 
 # 添加新的 I211 源文件
 set new_files [list \
-    "C:/Users/dukehhu/Desktop/amd/bar0_i211_sim.v" \
-    "C:/Users/dukehhu/Desktop/amd/i211_pcie_top.v" \
+    "C:/Users/dukehhu/Desktop/1121/bar0_i211_sim.v" \
+    "C:/Users/dukehhu/Desktop/1121/i211_pcie_top.v" \
 ]
 
 foreach f $new_files {
