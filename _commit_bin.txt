@@ -1,8 +1,0 @@
-[main 44d756c] Update bitstream: rebuilt with codec detection delay fix
- 63 files changed, 3390 insertions(+), 2666 deletions(-)
- create mode 100644 Audio_Controller_Logic/Audio_Controller_Logic.runs/.jobs/vrs_config_119.xml
- create mode 100644 Audio_Controller_Logic/Audio_Controller_Logic.runs/.jobs/vrs_config_120.xml
- create mode 100644 Audio_Controller_Logic/Audio_Controller_Logic.runs/.jobs/vrs_config_121.xml
- create mode 100644 Audio_Controller_Logic/Audio_Controller_Logic.runs/.jobs/vrs_config_122.xml
- create mode 100644 Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_3240.backup.vdi
- create mode 100644 Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/vivado_3240.backup.jou

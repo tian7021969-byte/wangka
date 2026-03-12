@@ -1,58 +1,61 @@
 # ===========================================================================
 #
 #  constraints.xdc
-#  Intel I211 Gigabit Ethernet Controller — Xilinx Artix-7 Captain DMA 75T V3.0
-#  引脚分配与时序约束
+#  Intel I211 Gigabit Ethernet Controller - Xilinx Artix-7 Captain DMA 75T V3.0
+#  Pin Assignment and Timing Constraints
 #
 # ===========================================================================
 #
-#  目标器件 : XC7A75T-FGG484
-#  PCIe 配置 : Gen1 x1 (2.5 GT/s, 单 GTP 通道)
-#  参考时钟 : 来自 PCIe 连接器的 100 MHz 差分时钟
-#  GTP Bank  : Bank 216
+#  Target Device : XC7A75T-FGG484
+#  PCIe Config   : Gen1 x1 (2.5 GT/s, single GTP lane)
+#  Reference Clk : 100 MHz differential clock from PCIe connector
+#  GTP Bank      : Bank 216
 #
-#  本文件定义：
-#    1. PCIe 参考时钟引脚 (REFCLK)
-#    2. PCIe 复位引脚 (PERST#)
-#    3. 通用 I/O 引脚 (LED 状态指示灯)
-#    4. 时序约束 (参考时钟、false path)
-#    5. Bitstream 配置选项
+#  This file defines:
+#    1. PCIe reference clock pins (REFCLK)
+#    2. PCIe reset pin (PERST#)
+#    3. General I/O pins (LED status indicator)
+#    4. Timing constraints (reference clock, false paths)
+#    5. Bitstream configuration options
 #
-#  重要说明 — GTP 收发器数据通道 (TX/RX):
-#    PCIe 数据通道 (pcie_tx_p/n, pcie_rx_p/n) 是 GTP Quad 内部的
-#    专用串行引脚，由 Xilinx PCIe IP 核根据 REFCLK 所在的 GTP Quad
-#    自动放置。在 XDC 中 **不可** 对这些引脚使用 PACKAGE_PIN 约束，
-#    否则会触发 [Vivado 12-1141] 放置冲突错误。
+#  IMPORTANT NOTE - GTP Transceiver Data Lanes (TX/RX):
+#    PCIe data lanes (pcie_tx_p/n, pcie_rx_p/n) are dedicated serial
+#    pins inside the GTP Quad, automatically placed by the Xilinx PCIe
+#    IP core based on the REFCLK location within the GTP Quad.
+#    You MUST NOT use PACKAGE_PIN constraints on these pins in XDC,
+#    otherwise it will trigger [Vivado 12-1141] placement conflict error.
 #
 # ===========================================================================
 
 
 # ===========================================================================
-#  PCIe 参考时钟 (100 MHz 差分)
+#  PCIe Reference Clock (100 MHz Differential)
 # ===========================================================================
 #
-#  来自 PCIe 金手指连接器的 100 MHz 参考时钟，路由至 GTP Bank 216 的
-#  专用 MGTREFCLK0 引脚对 (F10/E10)。
+#  100 MHz reference clock from PCIe edge connector, routed to GTP Bank 216
+#  dedicated MGTREFCLK0 pin pair (F10/E10).
 #
-#  这些是 MGT Quad 内的专用模拟引脚，不需要也不允许设置 IOSTANDARD，
-#  IBUFDS_GTE2 原语会在内部处理差分输入终端。
+#  These are dedicated analog pins inside the MGT Quad; IOSTANDARD is
+#  neither required nor allowed. IBUFDS_GTE2 primitive handles the
+#  differential input termination internally.
 #
-#  PCIe IP 核会根据此 REFCLK 的位置自动将 GTP 收发器通道
-#  (TX/RX) 放置在同一 Quad 内的正确位置，无需手动指定数据通道引脚。
+#  The PCIe IP core will automatically place GTP transceiver lanes
+#  (TX/RX) in the same Quad based on this REFCLK location.
 
 set_property PACKAGE_PIN F10 [get_ports { pcie_clk_p }]
 set_property PACKAGE_PIN E10 [get_ports { pcie_clk_n }]
 
 
 # ===========================================================================
-#  PCIe 基本复位信号 (PERST#)
+#  PCIe Fundamental Reset Signal (PERST#)
 # ===========================================================================
 #
-#  来自 PCIe 连接器的低电平有效复位信号。在 Captain DMA 75T V3.0 上，
-#  该信号路由至引脚 C13。
+#  Active-low reset signal from PCIe connector. On Captain DMA 75T V3.0,
+#  this signal is routed to pin C13.
 #
-#  内部上拉电阻确保 FPGA 在板级上电时序完成之前（主机尚未拉低
-#  PERST# 时）不会看到误复位。LVCMOS33 电平标准。
+#  Internal pull-up resistor ensures the FPGA does not see a false reset
+#  during board power-up sequence (before the host asserts PERST#).
+#  LVCMOS33 voltage standard.
 
 set_property PACKAGE_PIN C13        [get_ports { pcie_rst_n }]
 set_property IOSTANDARD  LVCMOS33   [get_ports { pcie_rst_n }]
@@ -60,48 +63,50 @@ set_property PULLUP      true       [get_ports { pcie_rst_n }]
 
 
 # ===========================================================================
-#  PCIe x1 GTP 收发器通道 (Lane 0, Bank 216)
+#  PCIe x1 GTP Transceiver Lane (Lane 0, Bank 216)
 # ===========================================================================
 #
-#  注意: 此处 **不设置** PACKAGE_PIN 约束!
+#  NOTE: PACKAGE_PIN constraints are NOT set here!
 #
-#  GTP 收发器的 TX/RX 差分对属于 GTPE2_CHANNEL 原语的内部端口，
-#  由 PCIe IP 核在综合/实现时自动放置到 REFCLK (F10/E10) 所在的
-#  GTP Quad 中。
+#  GTP transceiver TX/RX differential pairs are internal ports of the
+#  GTPE2_CHANNEL primitive, automatically placed by the PCIe IP core
+#  during synthesis/implementation into the GTP Quad containing
+#  REFCLK (F10/E10).
 #
-#  如果在 XDC 中对 pcie_tx_p/n 或 pcie_rx_p/n 使用 set_property
-#  PACKAGE_PIN，会导致 [Vivado 12-1141] 错误，因为 Vivado 无法
-#  同时满足用户指定的 LOC 和 IP 内部的相对放置约束。
+#  Setting PACKAGE_PIN for pcie_tx_p/n or pcie_rx_p/n in XDC will
+#  cause [Vivado 12-1141] error because Vivado cannot satisfy both
+#  the user-specified LOC and IP-internal relative placement constraints.
 #
-#  对于 FGG484 封装 GTP Quad (REFCLK F10/E10)，实际物理引脚为:
+#  For FGG484 package GTP Quad (REFCLK F10/E10), actual physical pins:
 #    MGTPTXP0 = B6,  MGTPTXN0 = A6
 #    MGTPRXP0 = B8,  MGTPRXN0 = A8
-#  这些引脚由 IP 核自动使用，仅作参考记录。
+#  These pins are used automatically by the IP core, listed for reference.
 
 
 # ===========================================================================
-#  状态指示灯 — 链路连接指示 (LED)
+#  Status Indicator LED - Link Connection Status
 # ===========================================================================
 #
-#  由 PCIe IP 的 user_lnk_up 信号驱动（低电平有效）:
-#    LED 亮 = PCIe 链路训练完成，设备已被主机枚举
-#    LED 灭 = 链路断开、训练中、或处于 D3hot 电源状态
+#  Driven by PCIe IP user_lnk_up signal (active low):
+#    LED on  = PCIe link training complete, device enumerated by host
+#    LED off = Link down, training, or in D3hot power state
 #
-#  Captain DMA 75T V3.0 的 user_ld1_n 引脚 G21，低电平有效，LVCMOS33。
+#  Captain DMA 75T V3.0 user_ld1_n pin G21, active low, LVCMOS33.
 
 set_property PACKAGE_PIN G21        [get_ports { led_status }]
 set_property IOSTANDARD  LVCMOS33   [get_ports { led_status }]
 
 
 # ===========================================================================
-#  时序约束
+#  Timing Constraints
 # ===========================================================================
 
 # ---------------------------------------------------------------------------
-#  PCIe 参考时钟 — 100 MHz (周期 10.000 ns)
+#  PCIe Reference Clock - 100 MHz (period 10.000 ns)
 # ---------------------------------------------------------------------------
-#  定义 GTP 收发器 PLL 的参考时钟。时钟名 "pcie_sys_clk" 与 Xilinx
-#  PCIe IP 核内部时序约束中引用的名称一致。波形指定 50% 占空比。
+#  Defines the GTP transceiver PLL reference clock. Clock name "pcie_sys_clk"
+#  matches the name referenced in Xilinx PCIe IP core internal timing
+#  constraints. Waveform specifies 50% duty cycle.
 
 create_clock -period 10.000 -name pcie_sys_clk \
     -waveform {0.000 5.000} \
@@ -110,53 +115,55 @@ create_clock -period 10.000 -name pcie_sys_clk \
 # ---------------------------------------------------------------------------
 #  PERST# False Path
 # ---------------------------------------------------------------------------
-#  PERST# 是异步外部复位信号，由 PCIe IP 核在内部进行同步处理。
-#  从该端口出发的所有时序路径均排除在静态时序分析之外。
+#  PERST# is an asynchronous external reset signal, synchronized internally
+#  by the PCIe IP core. All timing paths from this port are excluded from
+#  static timing analysis.
 
 set_false_path -from [get_ports pcie_rst_n]
 
 # ---------------------------------------------------------------------------
-#  LED 输出 — 宽松时序
+#  LED Output - Relaxed Timing
 # ---------------------------------------------------------------------------
-#  LED 输出为纯状态指示，无时序要求。设置 false path 防止工具
-#  过度约束该输出并浪费布线资源。
+#  LED output is purely a status indicator with no timing requirements.
+#  Set false path to prevent the tool from over-constraining this output
+#  and wasting routing resources.
 
 set_false_path -to [get_ports led_status]
 
 # ---------------------------------------------------------------------------
-#  注: I211 设计不使用 MMCM，无异步时钟域约束需求
-#  所有逻辑运行在 PCIe user_clk (62.5 MHz) 单时钟域
+#  Note: I211 design does not use MMCM, no async clock domain constraints
+#  All logic runs on PCIe user_clk (62.5 MHz) single clock domain
 # ---------------------------------------------------------------------------
 
 
 # ===========================================================================
-#  Bitstream 配置 (Flash 烧录参数)
+#  Bitstream Configuration (Flash Programming Parameters)
 # ===========================================================================
 
-# SPI Flash 总线宽度: x4 (Quad-SPI 加速配置加载)
+# SPI Flash bus width: x4 (Quad-SPI accelerated configuration loading)
 set_property BITSTREAM.CONFIG.SPI_BUSWIDTH  4       [current_design]
 
-# 配置时钟频率: 50 MHz
+# Configuration clock frequency: 50 MHz
 set_property BITSTREAM.CONFIG.CONFIGRATE    50      [current_design]
 
-# SPI Flash 下降沿采样 (增加时序余量, 提高可靠性)
+# SPI Flash falling edge sampling (improves timing margin and reliability)
 set_property BITSTREAM.CONFIG.SPI_FALL_EDGE YES     [current_design]
 
-# 注: PERSIST 已移除 — Artix-7 PCIe 设计中 SPI 引脚在配置完成后
-# 由 UNUSEDPIN=PULLUP 保护, 不需要 PERSIST (且 PERSIST 要求
-# CONFIG_MODE 引脚约束, 会触发 DRC PRST-1)。
+# Note: PERSIST removed - in Artix-7 PCIe designs, SPI pins are protected
+# by UNUSEDPIN=PULLUP after configuration. PERSIST is not needed (and
+# PERSIST requires CONFIG_MODE pin constraints, triggering DRC PRST-1).
 
-# 内部配置电压: 3.3V (匹配 Captain 开发板设计)
+# Internal configuration voltage: 3.3V (matches Captain board design)
 set_property CONFIG_VOLTAGE                 3.3     [current_design]
 set_property CFGBVS                         VCCO    [current_design]
 
-# 启用位流压缩 (减小 .bit 文件体积，加快 SPI Flash 加载速度)
+# Enable bitstream compression (reduces .bit file size, speeds up SPI Flash loading)
 set_property BITSTREAM.GENERAL.COMPRESS     TRUE    [current_design]
 
-# 未使用引脚在配置期间上拉 (防止浮空输入)
+# Pull up unused pins during configuration (prevents floating inputs)
 set_property BITSTREAM.CONFIG.UNUSEDPIN     PULLUP  [current_design]
 
 
 # ===========================================================================
-#  约束文件结束
+#  End of Constraints File
 # ===========================================================================

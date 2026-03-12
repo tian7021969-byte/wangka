@@ -17,7 +17,7 @@ proc create_report { reportName command } {
   }
 }
 namespace eval ::optrace {
-  variable script "C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/i211_pcie_top.tcl"
+  variable script "C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/i211_pcie_top.tcl"
   variable category "vivado_impl"
 }
 
@@ -125,7 +125,7 @@ set rc [catch {
   create_msg_db write_bitstream.pb
   set_param chipscope.maxJobs 6
   open_checkpoint i211_pcie_top_routed.dcp
-  set_property webtalk.parent_dir C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.cache/wt [current_project]
+  set_property webtalk.parent_dir C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.cache/wt [current_project]
 set_property TOP i211_pcie_top [current_fileset]
 OPTRACE "read constraints: write_bitstream" START { }
 OPTRACE "read constraints: write_bitstream" END { }

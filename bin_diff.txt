@@ -1,8 +1,0 @@
- 驱动器 C 中的卷是 Windows
- 卷的序列号是 A6FF-5164
-
- c:\Users\dukehhu\Desktop\amd\Audio_Controller_Logic\Audio_Controller_Logic.runs\impl_1 的目录
-
-2026/03/12  17:33         1,283,248 hda_pcie_top.bin
-               1 个文件      1,283,248 字节
-               0 个目录 116,813,168,640 可用字节

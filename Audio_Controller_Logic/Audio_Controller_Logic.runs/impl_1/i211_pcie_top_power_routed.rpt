@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 -------------------------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version     : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-| Date             : Thu Mar 12 19:45:46 2026
+| Date             : Thu Mar 12 20:53:18 2026
 | Host             : DUKEHHU-PC0 running 64-bit major release  (build 9200)
 | Command          : report_power -file i211_pcie_top_power_routed.rpt -pb i211_pcie_top_power_summary_routed.pb -rpx i211_pcie_top_power_routed.rpx
 | Design           : i211_pcie_top
@@ -30,7 +30,7 @@ Table of Contents
 ----------
 
 +--------------------------+--------------+
-| Total On-Chip Power (W)  | 0.410        |
+| Total On-Chip Power (W)  | 0.411        |
 | Design Power Budget (W)  | Unspecified* |
 | Power Budget Margin (W)  | NA           |
 | Dynamic (W)              | 0.308        |
@@ -53,14 +53,14 @@ Table of Contents
 | On-Chip                 | Power (W) | Used     | Available | Utilization (%) |
 +-------------------------+-----------+----------+-----------+-----------------+
 | Clocks                  |     0.009 |        8 |       --- |             --- |
-| Slice Logic             |     0.003 |     4445 |       --- |             --- |
-|   LUT as Logic          |     0.002 |     1722 |     47200 |            3.65 |
+| Slice Logic             |     0.003 |     4566 |       --- |             --- |
+|   LUT as Logic          |     0.003 |     1984 |     47200 |            4.20 |
 |   Register              |    <0.001 |     1890 |     94400 |            2.00 |
-|   F7/F8 Muxes           |    <0.001 |      424 |     63400 |            0.67 |
-|   CARRY4                |    <0.001 |       14 |     15850 |            0.09 |
+|   F7/F8 Muxes           |    <0.001 |      226 |     63400 |            0.36 |
+|   CARRY4                |    <0.001 |       18 |     15850 |            0.11 |
 |   LUT as Shift Register |    <0.001 |       11 |     19000 |            0.06 |
 |   Others                |     0.000 |       96 |       --- |             --- |
-| Signals                 |     0.005 |     3343 |       --- |             --- |
+| Signals                 |     0.005 |     3869 |       --- |             --- |
 | Block RAM               |     0.010 |        8 |       105 |            7.62 |
 | MMCM                    |     0.107 |        1 |         6 |           16.67 |
 | I/O                     |    <0.001 |        2 |       285 |            0.70 |
@@ -68,7 +68,7 @@ Table of Contents
 | Hard IPs                |     0.025 |        1 |       --- |             --- |
 |   PCIE                  |     0.025 |        1 |         1 |          100.00 |
 | Static Power            |     0.102 |          |           |                 |
-| Total                   |     0.410 |          |           |                 |
+| Total                   |     0.411 |          |           |                 |
 +-------------------------+-----------+----------+-----------+-----------------+
 
 
@@ -78,7 +78,7 @@ Table of Contents
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
 | Source    | Voltage (V) | Total (A) | Dynamic (A) | Static (A) | Powerup (A) | Budget (A)  | Margin (A) |
 +-----------+-------------+-----------+-------------+------------+-------------+-------------+------------+
-| Vccint    |       1.000 |     0.078 |       0.063 |      0.016 |       NA    | Unspecified | NA         |
+| Vccint    |       1.000 |     0.079 |       0.063 |      0.016 |       NA    | Unspecified | NA         |
 | Vccaux    |       1.800 |     0.077 |       0.059 |      0.018 |       NA    | Unspecified | NA         |
 | Vcco33    |       3.300 |     0.004 |       0.000 |      0.004 |       NA    | Unspecified | NA         |
 | Vcco25    |       2.500 |     0.000 |       0.000 |      0.000 |       NA    | Unspecified | NA         |

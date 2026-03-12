@@ -1,2 +1,0 @@
-To https://github.com/tian7021969-byte/amd.git
-   6f7cf6b..eaf3d2f  main -> main

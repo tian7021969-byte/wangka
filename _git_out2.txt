@@ -1,5 +1,0 @@
-ad011f2 Fix Code 10: Add codec detection delay after CRST exit (HDA spec 4.3 compliance)
-b903d49 Update bitstream: GCAP fix 0x4401 (OSS=1,ISS=0,BSS=4)
-eaf3d2f Fix Code 10 root cause: GCAP 0x4409- to match real AE-9 (OSS=1,ISS=0,BSS=4)
-6f7cf6b Rebuild bitstream with updated PCIe IP (Device ID 0011, SSID 0081, IC interface)
-cd8c761 Update bitstream: Device ID 0011, Subsystem ID 0081, IC interface

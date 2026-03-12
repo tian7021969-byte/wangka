@@ -1,19 +1,21 @@
 // ===========================================================================
 //
 //  tlp_tag_randomizer.v
-//  TLP Transaction Tag 随机化模块
+//  TLP Transaction Tag Randomization Module
 //
 // ===========================================================================
 //
-//  功能概述
+//  Overview
 //  --------
-//  拦截 AXI4-Stream TX 路径上的 TLP 报文，将 Header 中的 Tag 字段
-//  替换为 LFSR 伪随机序列，消除 FPGA PCIe IP 核默认的顺序递增特征。
+//  Intercepts TLPs on the AXI4-Stream TX path and replaces the Header
+//  Tag field with an LFSR pseudo-random sequence, eliminating the
+//  sequential increment pattern from the FPGA PCIe IP core default.
 //
-//  LFSR 种子动态化
-//  ----------------
-//  种子来源于外部输入 (基于 Wall Clock 和 PCIe 链路建立时刻的低位),
-//  确保每次上电 Tag 序列不同，避免固定模式被检测工具指纹识别。
+//  LFSR Seed Dynamic Generation
+//  ----------------------------
+//  Seed is sourced from external input (based on Wall Clock and PCIe
+//  link establishment time low bits), ensuring a different Tag sequence
+//  on each power cycle to avoid fixed-pattern fingerprint detection.
 //
 // ===========================================================================
 
@@ -21,10 +23,10 @@ module tlp_tag_randomizer (
     input  wire         clk,
     input  wire         rst_n,
 
-    // 动态种子输入 (来自顶层, 基于 wall clock)
+    // Dynamic seed input (from top level, based on wall clock)
     input  wire [15:0]  lfsr_seed,
 
-    // 来自用户逻辑的 AXI4-Stream TX (输入侧)
+    // AXI4-Stream TX from user logic (input side)
     input  wire [63:0]  s_axis_tx_tdata_in,
     input  wire [ 7:0]  s_axis_tx_tkeep_in,
     input  wire         s_axis_tx_tlast_in,
@@ -32,7 +34,7 @@ module tlp_tag_randomizer (
     output wire         s_axis_tx_tready_in,
     input  wire [ 3:0]  s_axis_tx_tuser_in,
 
-    // 送往 PCIe IP 核的 AXI4-Stream TX (输出侧)
+    // AXI4-Stream TX to PCIe IP core (output side)
     output reg  [63:0]  s_axis_tx_tdata_out,
     output reg  [ 7:0]  s_axis_tx_tkeep_out,
     output reg          s_axis_tx_tlast_out,
@@ -42,12 +44,12 @@ module tlp_tag_randomizer (
 );
 
     // ===================================================================
-    //  16-bit Galois LFSR — 动态种子
+    //  16-bit Galois LFSR - Dynamic Seed
     // ===================================================================
     //
-    // 多项式: x^16 + x^14 + x^13 + x^11 + 1
-    // 种子来自外部 (wall clock 低位 XOR 链路建立时刻)
-    // 确保种子非零: 如果 lfsr_seed 为 0, 强制为 0xBEEF
+    // Polynomial: x^16 + x^14 + x^13 + x^11 + 1
+    // Seed from external (wall clock low bits XOR link establishment time)
+    // Force non-zero seed: if lfsr_seed is 0, use 0xBEEF instead
 
     wire handshake;
     wire advance_lfsr;
@@ -70,7 +72,7 @@ module tlp_tag_randomizer (
     wire [7:0] random_tag = lfsr[7:0];
 
     // ===================================================================
-    //  TLP 首拍检测 (SOF)
+    //  TLP Start-of-Frame (SOF) Detection
     // ===================================================================
 
     reg sof_tracker;
@@ -86,26 +88,28 @@ module tlp_tag_randomizer (
     assign is_sof = sof_tracker;
 
     // ===================================================================
-    //  Tag 替换逻辑 — 纯组合透传 (零延迟)
+    //  Tag Replacement Logic - Pure Combinational Passthrough (Zero Delay)
     // ===================================================================
     //
-    //  之前使用寄存器输出 (1 拍延迟)，在某些 AXI 反压场景下
-    //  可能导致 CplD 被延迟或上游 handshake 语义不一致。
-    //  改为纯组合逻辑透传，消除所有延迟风险。
+    //  Previously used registered output (1 cycle delay), which could
+    //  cause CplD delays or upstream handshake inconsistency under
+    //  certain AXI backpressure scenarios.
+    //  Changed to pure combinational passthrough to eliminate all
+    //  delay risks.
 
     assign handshake = s_axis_tx_tvalid_in && s_axis_tx_tready_out;
 
-    // 检测 TLP 类型: DW0 在 tdata[31:0], Type 字段在 bit[28:24]
+    // Detect TLP type: DW0 in tdata[31:0], Type field at bit[28:24]
     // Completion TLP: Type = 01010 (0x0A)
-    // 只对非 Completion 的请求 TLP (MRd/MWr) 替换 Tag
+    // Only replace Tag for non-Completion request TLPs (MRd/MWr)
     wire is_completion = (s_axis_tx_tdata_in[28:24] == 5'b01010);
     wire is_request_tlp = is_sof && s_axis_tx_tvalid_in && !is_completion;
     assign advance_lfsr = handshake && is_request_tlp;
 
-    // tready 直通
+    // tready direct passthrough
     assign s_axis_tx_tready_in = s_axis_tx_tready_out;
 
-    // 纯组合逻辑输出 — 零延迟透传
+    // Pure combinational output - zero delay passthrough
     always @(*) begin
         s_axis_tx_tkeep_out  = s_axis_tx_tkeep_in;
         s_axis_tx_tlast_out  = s_axis_tx_tlast_in;
@@ -113,14 +117,14 @@ module tlp_tag_randomizer (
         s_axis_tx_tuser_out  = s_axis_tx_tuser_in;
 
         if (is_request_tlp) begin
-            // 只对请求 TLP (MRd/MWr) 首拍替换 Tag 字段
+            // Only replace Tag field on request TLP (MRd/MWr) first beat
             s_axis_tx_tdata_out = {
                 s_axis_tx_tdata_in[63:48],  // Requester ID
-                random_tag,                  // Tag ← LFSR
+                random_tag,                  // Tag <- LFSR
                 s_axis_tx_tdata_in[39:0]     // BE + DW0
             };
         end else begin
-            // Completion TLP 和非首拍: 不修改, 原样透传
+            // Completion TLP and non-first beats: no modification, passthrough
             s_axis_tx_tdata_out = s_axis_tx_tdata_in;
         end
     end

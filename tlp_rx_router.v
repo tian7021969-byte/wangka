@@ -1,24 +1,26 @@
 // ===========================================================================
 //
 //  tlp_rx_router.v
-//  RX TLP 路由分发器 — 根据 TLP 类型路由到 BAR0 或 DMA 引擎
+//  RX TLP Router / Dispatcher - Routes TLPs to BAR0 or DMA engine
+//  based on TLP type
 //
 // ===========================================================================
 //
-//  功能概述
+//  Overview
 //  --------
-//  PCIe IP 的 RX AXI4-Stream 通路只有一个输出，但我们有两个消费者:
-//    - bar0_hda_sim : 处理 MRd/MWr TLP (BAR0 寄存器访问)
-//    - hda_dma_engine : 接收 CplD TLP (DMA 读返回的 Completion)
+//  The PCIe IP RX AXI4-Stream has a single output, but we have two
+//  consumers:
+//    - bar0_i211_sim : handles MRd/MWr TLPs (BAR0 register access)
+//    - DMA engine    : receives CplD TLPs (DMA read completion data)
 //
-//  路由规则:
-//    - Completion / CplD (Fmt[1:0]=0x, Type=01010) → DMA 端口
-//    - 其他所有 TLP (MRd, MWr, Msg, etc)          → BAR0 端口
+//  Routing Rules:
+//    - Completion / CplD (Fmt[1:0]=0x, Type=01010) -> DMA port
+//    - All other TLPs (MRd, MWr, Msg, etc)         -> BAR0 port
 //
-//  实现方式:
-//    - 第一拍解析 Fmt/Type 字段, 决定路由目标
-//    - 后续拍数据直接转发到选定端口
-//    - 未被选中的端口 tvalid=0
+//  Implementation:
+//    - First beat: parse Fmt/Type fields, determine route target
+//    - Subsequent beats: forward data directly to selected port
+//    - Unselected port sees tvalid=0
 //
 // ===========================================================================
 
@@ -26,7 +28,7 @@ module tlp_rx_router (
     input  wire         clk,
     input  wire         rst_n,
 
-    // 上游: PCIe IP RX
+    // Upstream: PCIe IP RX
     input  wire [63:0]  rx_tdata,
     input  wire [ 7:0]  rx_tkeep,
     input  wire         rx_tlast,
@@ -34,7 +36,7 @@ module tlp_rx_router (
     output wire         rx_tready,
     input  wire [21:0]  rx_tuser,
 
-    // 下游端口 0: BAR0 (MRd/MWr)
+    // Downstream Port 0: BAR0 (MRd/MWr)
     output wire [63:0]  bar_rx_tdata,
     output wire [ 7:0]  bar_rx_tkeep,
     output wire         bar_rx_tlast,
@@ -42,7 +44,7 @@ module tlp_rx_router (
     input  wire         bar_rx_tready,
     output wire [21:0]  bar_rx_tuser,
 
-    // 下游端口 1: DMA 引擎 (CplD)
+    // Downstream Port 1: DMA Engine (CplD)
     output wire [63:0]  dma_rx_tdata,
     output wire [ 7:0]  dma_rx_tkeep,
     output wire         dma_rx_tlast,
@@ -51,31 +53,32 @@ module tlp_rx_router (
     output wire [21:0]  dma_rx_tuser
 );
 
-    // 路由状态
-    localparam [1:0] RT_IDLE    = 2'd0,  // 等待 TLP 第一拍
-                     RT_TO_BAR  = 2'd1,  // 路由到 BAR0
-                     RT_TO_DMA  = 2'd2;  // 路由到 DMA
+    // Route state
+    localparam [1:0] RT_IDLE    = 2'd0,  // Waiting for TLP first beat
+                     RT_TO_BAR  = 2'd1,  // Routing to BAR0
+                     RT_TO_DMA  = 2'd2;  // Routing to DMA
 
     reg [1:0] route_state;
 
-    // TLP 类型检测 (从第一拍 DW0 解析)
-    // DW0 格式: [31]=R, [30:29]=Fmt, [28:24]=Type, ...
-    // Completion:      Fmt=0x0, Type=01010  → CplD 是 Fmt=010
+    // TLP type detection (parsed from first beat DW0)
+    // DW0 format: [31]=R, [30:29]=Fmt, [28:24]=Type, ...
+    // Completion:      Fmt=0x0, Type=01010
     // CplD (with data): Fmt[1]=1, Type=01010
 
     wire [1:0] rx_fmt  = rx_tdata[30:29];
     wire [4:0] rx_type = rx_tdata[28:24];
 
-    // CplD/Cpl 判断: Type=01010 (Completion)
+    // CplD/Cpl detection: Type=01010 (Completion)
     wire is_completion = (rx_type == 5'b01010);
 
-    // BAR0 方向 tready
+    // BAR0 side tready
     wire bar_side_ready = (route_state == RT_TO_BAR) ? bar_rx_tready : 1'b0;
-    // DMA 方向 tready
+    // DMA side tready
     wire dma_side_ready = (route_state == RT_TO_DMA) ? dma_rx_tready : 1'b0;
 
-    // 上游 tready: IDLE 时根据 TLP 类型检查对应下游 ready
-    // 修复: 之前 IDLE 时无条件 ready=1, 导致下游未准备好时 CplD 第一拍丢失
+    // Upstream tready: in IDLE, check downstream ready based on TLP type
+    // Fix: previously IDLE always had ready=1, causing CplD first beat loss
+    // when downstream was not ready
     wire idle_ready = rx_tvalid ? (is_completion ? dma_rx_tready : bar_rx_tready) : 1'b1;
 
     assign rx_tready = (route_state == RT_IDLE)   ? idle_ready :
@@ -83,7 +86,7 @@ module tlp_rx_router (
                        (route_state == RT_TO_DMA) ? dma_rx_tready :
                        1'b1;
 
-    // 数据通路 — 直接透传
+    // Data path - direct passthrough
     assign bar_rx_tdata  = rx_tdata;
     assign bar_rx_tkeep  = rx_tkeep;
     assign bar_rx_tlast  = rx_tlast;
@@ -94,7 +97,7 @@ module tlp_rx_router (
     assign dma_rx_tlast  = rx_tlast;
     assign dma_rx_tuser  = rx_tuser;
 
-    // tvalid 路由
+    // tvalid routing
     assign bar_rx_tvalid = (route_state == RT_TO_BAR) ? rx_tvalid :
                            (route_state == RT_IDLE && rx_tvalid && !is_completion) ? 1'b1 :
                            1'b0;
@@ -103,17 +106,17 @@ module tlp_rx_router (
                            (route_state == RT_IDLE && rx_tvalid && is_completion) ? 1'b1 :
                            1'b0;
 
-    // 路由状态机
+    // Route state machine
     always @(posedge clk) begin
         if (!rst_n) begin
             route_state <= RT_IDLE;
         end else begin
             case (route_state)
                 RT_IDLE: begin
-                    // 必须等握手成功 (tvalid && tready) 才转换状态
+                    // Must wait for successful handshake (tvalid && tready) before transition
                     if (rx_tvalid && idle_ready) begin
                         if (rx_tlast) begin
-                            // 单拍 TLP — 不需要跟踪路由, 保持 IDLE
+                            // Single-beat TLP - no need to track route, stay IDLE
                             route_state <= RT_IDLE;
                         end else if (is_completion) begin
                             route_state <= RT_TO_DMA;

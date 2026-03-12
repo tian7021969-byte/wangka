@@ -1,6 +1,0 @@
-warning: in the working copy of 'Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/pcie_7x_0.xml', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/sim/pcie_7x_0.v', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/source/pcie_7x_0_core_top.v', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/synth/pcie_7x_0.v', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'Audio_Controller_Logic/Audio_Controller_Logic.srcs/sources_1/ip/pcie_7x_0/pcie_7x_0.xci', LF will be replaced by CRLF the next time Git touches it
-warning: in the working copy of 'bar0_hda_sim.v', LF will be replaced by CRLF the next time Git touches it

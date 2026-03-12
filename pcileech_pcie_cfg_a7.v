@@ -109,9 +109,9 @@ module pcileech_pcie_cfg_a7 #(
     input  wire         clk,            // PCIe user clock (62.5 / 125 MHz)
     input  wire         rst_n,          // Active-low synchronous reset
 
-    // 运行时 DSN 输入 (全 64 位动态化, 由顶层在链路建立时锁定)
+    // Runtime DSN input (full 64-bit dynamic, latched by top-level at link-up)
     input  wire [63:0]  dsn_runtime,    // Runtime Device Serial Number
-    input  wire         dsn_valid,      // DSN 已锁定 (1=使用 dsn_runtime)
+    input  wire         dsn_valid,      // DSN latched (1=use dsn_runtime)
 
     // PCIe Configuration TLP Interface
     // Directly driven by the Xilinx 7-Series Integrated Endpoint
@@ -169,8 +169,8 @@ module pcileech_pcie_cfg_a7 #(
     //   Bits [13:0]  hardwired to 0 (memory, 32-bit, non-prefetchable)
     localparam [31:0] BAR0_SIZE_MASK      = 32'hFFFF_C000;
 
-    // Expansion ROM — Disabled (匹配 PCIe IP 核配置)
-    // DWORD 12 (30h) 硬接线为 0, 不支持 Expansion ROM
+    // Expansion ROM - Disabled (matches PCIe IP core configuration)
+    // DWORD 12 (30h) hardwired to 0, no Expansion ROM support
 
     // Power Management Capability (offset 50h)
     //   Cap ID = 01h, Next Ptr = 60h
@@ -184,7 +184,7 @@ module pcileech_pcie_cfg_a7 #(
     // MSI Capability (offset 60h)
     //   Cap ID = 05h, Next Ptr = 00h (end of chain)
     //   Message Control: 64-bit addressing capable, 1 vector allocated
-    //   匹配 PCIe IP 核实际配置 (MSI enabled, MSI-X disabled)
+    //   Matches Xilinx PCIe IP core actual config (MSI enabled, MSI-X disabled)
     localparam [ 7:0] MSI_CAP_ID        = 8'h05;
     localparam [ 7:0] MSI_NEXT_PTR      = 8'h00;
     localparam [15:0] MSI_MSG_CTRL      = 16'h0080;  // 64-bit capable, 1 vector
@@ -304,8 +304,8 @@ module pcileech_pcie_cfg_a7 #(
             cfgmem[11] <= {CFG_SUBSYS_DEVICE, CFG_SUBSYS_VENDOR};
 
             // DWORD 12 (30h): Expansion ROM Base Address
-            // Disabled — 匹配 PCIe IP 核配置 (Expansion_Rom_Enabled=false)
-            // 硬接线为 0, BAR sizing 写入不生效
+            // Disabled - matches PCIe IP core config (Expansion_Rom_Enabled=false)
+            // Hardwired to 0, BAR sizing writes have no effect
             cfgmem[12] <= 32'h0000_0000;
 
             // DWORD 13 (34h): Capabilities Pointer
@@ -344,7 +344,7 @@ module pcileech_pcie_cfg_a7 #(
             // -------------------------------------------------------
             //  MSI CAPABILITY (offset 60h, DWORDs 24–27)
             //  PCIe 3.0 §7.7.1
-            //  匹配 Xilinx PCIe IP 核实际配置 (MSI enabled, MSI-X disabled)
+            //  Matches Xilinx PCIe IP core actual config (MSI enabled, MSI-X disabled)
             // -------------------------------------------------------
 
             // DWORD 24 (60h): Message Control [31:16] | Next [15:8] | ID [7:0]
@@ -384,11 +384,13 @@ module pcileech_pcie_cfg_a7 #(
     end // always (reset)
 
     // ===================================================================
-    //  DSN 运行时更新 — 链路建立后用动态值覆盖静态初始值
+    //  DSN Runtime Update - Override static init value with dynamic value
+    //  after link establishment
     // ===================================================================
     //
-    // 当顶层的 dsn_valid 置位时, 将运行时 DSN 写入 cfgmem[65:66],
-    // 覆盖编译时静态参数值, 实现全 64 位动态隐身。
+    // When the top-level dsn_valid is asserted, write the runtime DSN
+    // to cfgmem[65:66], overriding the compile-time static parameter
+    // value for full 64-bit dynamic stealth.
 
     always @(posedge clk) begin
         if (rst_n && dsn_valid) begin
@@ -486,7 +488,7 @@ module pcileech_pcie_cfg_a7 #(
                     ) & BAR0_SIZE_MASK;
                 end
 
-                // Expansion ROM (DWORD 12) — 不可写, 已 disabled
+                // Expansion ROM (DWORD 12) - not writable, disabled
 
                 DWADDR_INT_LINE: begin
                     if (cfg_wr_be[0])

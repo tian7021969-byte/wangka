@@ -1,16 +1,16 @@
 // ===========================================================================
 //
 //  i211_pcie_top.v
-//  Intel I211 Gigabit Ethernet Controller — PCIe 端点顶层模块
-//  目标器件: Xilinx Artix-7 75T (Captain DMA 开发板)
+//  Intel I211 Gigabit Ethernet Controller - PCIe Endpoint Top-Level Module
+//  Target Device: Xilinx Artix-7 75T (Captain DMA Board)
 //
 // ===========================================================================
 //
-//  数据路径:
-//    RX: PCIe IP (Gen1 x1) → tlp_rx_router → bar0_i211_sim (BAR0 寄存器)
-//    TX: bar0_i211_sim (CplD) → tx_arbiter → tlp_tag_randomizer → PCIe IP
+//  Data Path:
+//    RX: PCIe IP (Gen1 x1) -> tlp_rx_router -> bar0_i211_sim (BAR0 Regs)
+//    TX: bar0_i211_sim (CplD) -> tx_arbiter -> tlp_tag_randomizer -> PCIe IP
 //
-//  Intel I211 PCIe 配置:
+//  Intel I211 PCIe Configuration:
 //    Vendor ID  = 0x8086
 //    Device ID  = 0x1539
 //    Rev ID     = 0x03
@@ -33,7 +33,7 @@ module i211_pcie_top (
 );
 
     // ===================================================================
-    //  内部信号
+    //  Internal Signals
     // ===================================================================
 
     wire        pcie_sys_clk;
@@ -42,7 +42,7 @@ module i211_pcie_top (
     wire        user_lnk_up;
     wire        user_rst_n;
 
-    // PCIe IP RX (→ TLP 路由器)
+    // PCIe IP RX (-> TLP Router)
     wire [63:0] rx_tdata;
     wire [ 7:0] rx_tkeep;
     wire        rx_tlast;
@@ -50,7 +50,7 @@ module i211_pcie_top (
     wire        rx_tready;
     wire [21:0] rx_tuser;
 
-    // TLP 路由器 → BAR0
+    // TLP Router -> BAR0
     wire [63:0] routed_bar_rx_tdata;
     wire [ 7:0] routed_bar_rx_tkeep;
     wire        routed_bar_rx_tlast;
@@ -58,7 +58,7 @@ module i211_pcie_top (
     wire        routed_bar_rx_tready;
     wire [21:0] routed_bar_rx_tuser;
 
-    // TLP 路由器 → DMA (未使用, I211 不需要主动 DMA)
+    // TLP Router -> DMA (unused, I211 does not need active DMA)
     wire [63:0] routed_dma_rx_tdata;
     wire [ 7:0] routed_dma_rx_tkeep;
     wire        routed_dma_rx_tlast;
@@ -66,7 +66,7 @@ module i211_pcie_top (
     wire        routed_dma_rx_tready;
     wire [21:0] routed_dma_rx_tuser;
 
-    // BAR0 TX → TX 仲裁器 端口 0
+    // BAR0 TX -> TX Arbiter Port 0
     wire [63:0] bar_tx_tdata;
     wire [ 7:0] bar_tx_tkeep;
     wire        bar_tx_tlast;
@@ -74,7 +74,7 @@ module i211_pcie_top (
     wire        bar_tx_tready;
     wire [ 3:0] bar_tx_tuser;
 
-    // TX 仲裁器输出 → Tag 随机化器
+    // TX Arbiter Output -> Tag Randomizer
     wire [63:0] arb_tx_tdata;
     wire [ 7:0] arb_tx_tkeep;
     wire        arb_tx_tlast;
@@ -82,7 +82,7 @@ module i211_pcie_top (
     wire        arb_tx_tready;
     wire [ 3:0] arb_tx_tuser;
 
-    // Tag 随机化器输出 → PCIe IP TX
+    // Tag Randomizer Output -> PCIe IP TX
     wire [63:0] tag_tx_tdata;
     wire [ 7:0] tag_tx_tkeep;
     wire        tag_tx_tlast;
@@ -96,22 +96,23 @@ module i211_pcie_top (
     wire [ 2:0] cfg_function_number;
     wire [15:0] completer_id = {cfg_bus_number, cfg_device_number, cfg_function_number};
 
-    // 电源管理
+    // Power Management
     wire        cfg_to_turnoff;
     reg         cfg_turnoff_ok_r;
     wire [ 1:0] cfg_pmcsr_powerstate_w;
 
-    // MSI 状态
+    // MSI Status
     wire        cfg_interrupt_rdy;
     wire        cfg_interrupt_msienable;
 
     // ===================================================================
-    //  DSN 动态化 — 基于 LFSR 每次上电产生不同序列号
+    //  DSN Dynamic Generation - LFSR generates different serial number
+    //  on each power cycle
     // ===================================================================
 
     reg [63:0] dsn_value;
     reg        dsn_latched;
-    reg [31:0] free_run_cnt;  // 自由运行计数器 (替代 walclk)
+    reg [31:0] free_run_cnt;  // Free-running counter (replaces walclk)
 
     always @(posedge user_clk) begin
         if (user_reset)
@@ -134,7 +135,7 @@ module i211_pcie_top (
     end
 
     // ===================================================================
-    //  LFSR 种子 — 基于 free_run_cnt 低位, 每次上电不同
+    //  LFSR Seed - Based on free_run_cnt low bits, different each boot
     // ===================================================================
 
     reg [15:0] lfsr_seed_latched;
@@ -151,7 +152,7 @@ module i211_pcie_top (
     end
 
     // ===================================================================
-    //  电源状态管理
+    //  Power State Management
     // ===================================================================
 
     always @(posedge user_clk) begin
@@ -276,7 +277,7 @@ module i211_pcie_top (
         .cfg_err_acs                    (1'b0),
         .cfg_err_internal_uncor         (1'b0),
 
-        // MSI — 暂不使用 (I211 使用 MSI-X, 但 PCIe IP 不直接支持 MSI-X emulation)
+        // MSI - not used (I211 uses MSI-X, but PCIe IP does not directly support MSI-X emulation)
         .cfg_interrupt                  (1'b0),
         .cfg_interrupt_rdy              (cfg_interrupt_rdy),
         .cfg_interrupt_assert           (1'b0),
@@ -289,7 +290,7 @@ module i211_pcie_top (
         .cfg_interrupt_stat             (1'b0),
         .cfg_pciecap_interrupt_msgnum   (5'b0),
 
-        // 电源管理
+        // Power Management
         .cfg_turnoff_ok                 (cfg_turnoff_ok_r),
         .cfg_to_turnoff                 (cfg_to_turnoff),
         .cfg_trn_pending                (1'b0),
@@ -379,13 +380,13 @@ module i211_pcie_top (
     );
 
     // ===================================================================
-    //  复位极性转换
+    //  Reset Polarity Conversion
     // ===================================================================
 
     assign user_rst_n = ~user_reset;
 
     // ===================================================================
-    //  BAR0 I211 寄存器仿真
+    //  BAR0 I211 Register Emulation
     // ===================================================================
 
     bar0_i211_sim u_bar0_sim (
@@ -394,7 +395,7 @@ module i211_pcie_top (
         .completer_id       (completer_id),
         .jitter_seed        (lfsr_seed_latched),
 
-        // RX (来自 TLP 路由器)
+        // RX (from TLP Router)
         .m_axis_rx_tdata    (routed_bar_rx_tdata),
         .m_axis_rx_tkeep    (routed_bar_rx_tkeep),
         .m_axis_rx_tlast    (routed_bar_rx_tlast),
@@ -402,7 +403,7 @@ module i211_pcie_top (
         .m_axis_rx_tready   (routed_bar_rx_tready),
         .m_axis_rx_tuser    (routed_bar_rx_tuser),
 
-        // TX → TX 仲裁器
+        // TX -> TX Arbiter
         .s_axis_tx_tdata    (bar_tx_tdata),
         .s_axis_tx_tkeep    (bar_tx_tkeep),
         .s_axis_tx_tlast    (bar_tx_tlast),
@@ -412,14 +413,14 @@ module i211_pcie_top (
     );
 
     // ===================================================================
-    //  DMA RX — 未使用 (I211 仿真不需要主动 DMA)
-    //  需要将 TLP 路由器的 DMA 端口正确终止
+    //  DMA RX - Unused (I211 emulation does not need active DMA)
+    //  TLP Router DMA port must be properly terminated
     // ===================================================================
 
-    assign routed_dma_rx_tready = 1'b1;  // 始终接受并丢弃
+    assign routed_dma_rx_tready = 1'b1;  // Always accept and discard
 
     // ===================================================================
-    //  RX TLP 路由分发器
+    //  RX TLP Router / Dispatcher
     // ===================================================================
 
     tlp_rx_router u_rx_router (
@@ -449,14 +450,14 @@ module i211_pcie_top (
     );
 
     // ===================================================================
-    //  TX 仲裁器 (仅 BAR0 端口使用, DMA 端口空置)
+    //  TX Arbiter (only BAR0 port used, DMA port idle)
     // ===================================================================
 
     tx_arbiter u_tx_arb (
         .clk        (user_clk),
         .rst_n      (user_rst_n),
 
-        // 端口 0: BAR0 CplD
+        // Port 0: BAR0 CplD
         .p0_tdata   (bar_tx_tdata),
         .p0_tkeep   (bar_tx_tkeep),
         .p0_tlast   (bar_tx_tlast),
@@ -464,7 +465,7 @@ module i211_pcie_top (
         .p0_tready  (bar_tx_tready),
         .p0_tuser   (bar_tx_tuser),
 
-        // 端口 1: 未使用 (无 DMA)
+        // Port 1: Unused (no DMA)
         .p1_tdata   (64'h0),
         .p1_tkeep   (8'h0),
         .p1_tlast   (1'b0),
@@ -472,7 +473,7 @@ module i211_pcie_top (
         .p1_tready  (),
         .p1_tuser   (4'h0),
 
-        // 合并输出
+        // Merged output
         .m_tdata    (arb_tx_tdata),
         .m_tkeep    (arb_tx_tkeep),
         .m_tlast    (arb_tx_tlast),
@@ -482,7 +483,7 @@ module i211_pcie_top (
     );
 
     // ===================================================================
-    //  TLP Tag 随机化器
+    //  TLP Tag Randomizer
     // ===================================================================
 
     tlp_tag_randomizer u_tag_rand (
@@ -506,7 +507,7 @@ module i211_pcie_top (
     );
 
     // ===================================================================
-    //  链路状态指示灯
+    //  Link Status Indicator LED
     // ===================================================================
 
     assign led_status = ~user_lnk_up;

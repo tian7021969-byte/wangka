@@ -1,26 +1,26 @@
 // ===========================================================================
 //
 //  bar0_i211_sim.v
-//  Intel I211 Gigabit Ethernet Controller — BAR0 MMIO 寄存器仿真
+//  Intel I211 Gigabit Ethernet Controller - BAR0 MMIO Register Emulation
 //
 // ===========================================================================
 //
-//  功能概述
+//  Overview
 //  --------
-//  模拟 Intel I211-AT 的 BAR0 MMIO 寄存器空间 (128KB), 包括:
-//    - 设备控制/状态寄存器 (CTRL, STATUS, EECD, CTRL_EXT)
-//    - 中断寄存器 (ICR, ICS, IMS, IMC)
-//    - 接收/发送控制寄存器 (RCTL, TCTL)
-//    - PHY/MDIC 接口仿真
-//    - EEPROM 仿真 (EERD — NVM Read)
-//    - MAC 地址寄存器 (RAL0, RAH0)
-//    - PCIe 相关寄存器
+//  Emulates Intel I211-AT BAR0 MMIO register space (128KB), including:
+//    - Device control/status registers (CTRL, STATUS, EECD, CTRL_EXT)
+//    - Interrupt registers (ICR, ICS, IMS, IMC)
+//    - RX/TX control registers (RCTL, TCTL)
+//    - PHY/MDIC interface emulation
+//    - EEPROM emulation (EERD - NVM Read)
+//    - MAC address registers (RAL0, RAH0)
+//    - PCIe related registers
 //
-//  TLP 处理:
-//    - 3DW / 4DW Memory Read  → CplD 回复
-//    - 3DW / 4DW Memory Write → 寄存器写入
-//    - 未知 Non-Posted TLP    → UR Completion
-//    - 未知 Posted TLP        → 静默丢弃
+//  TLP Handling:
+//    - 3DW / 4DW Memory Read  -> CplD response
+//    - 3DW / 4DW Memory Write -> Register write
+//    - Unknown Non-Posted TLP -> UR Completion
+//    - Unknown Posted TLP     -> Silently discard
 //
 //  Intel I211 Key IDs:
 //    Vendor ID  = 0x8086
@@ -36,13 +36,13 @@ module bar0_i211_sim (
     input  wire         clk,
     input  wire         rst_n,
 
-    // 配置信息 (从 PCIe IP 获取)
+    // Configuration info (from PCIe IP)
     input  wire [15:0]  completer_id,       // Bus/Dev/Func
 
-    // LFSR 种子 (来自顶层)
+    // LFSR seed (from top level)
     input  wire [15:0]  jitter_seed,
 
-    // RX AXI4-Stream (来自 TLP 路由器)
+    // RX AXI4-Stream (from TLP router)
     input  wire [63:0]  m_axis_rx_tdata,
     input  wire [ 7:0]  m_axis_rx_tkeep,
     input  wire         m_axis_rx_tlast,
@@ -50,7 +50,7 @@ module bar0_i211_sim (
     output reg          m_axis_rx_tready,
     input  wire [21:0]  m_axis_rx_tuser,
 
-    // TX AXI4-Stream (送往 TX 仲裁器)
+    // TX AXI4-Stream (to TX arbiter)
     output reg  [63:0]  s_axis_tx_tdata,
     output reg  [ 7:0]  s_axis_tx_tkeep,
     output reg          s_axis_tx_tlast,
@@ -60,11 +60,11 @@ module bar0_i211_sim (
 );
 
     // ===================================================================
-    //  I211 寄存器地址映射 (BAR0 偏移, 128KB = 0x00000 ~ 0x1FFFF)
+    //  I211 Register Address Map (BAR0 offset, 128KB = 0x00000 ~ 0x1FFFF)
     // ===================================================================
-    //  使用 DW offset (byte offset / 4)
+    //  Using DW offset (byte offset / 4)
 
-    // --- 通用控制寄存器 ---
+    // --- General Control Registers ---
     localparam DW_CTRL       = 15'h0000;  // 0x00000 Device Control
     localparam DW_STATUS     = 15'h0002;  // 0x00008 Device Status
     localparam DW_EECD       = 15'h0004;  // 0x00010 EEPROM/Flash Control
@@ -77,14 +77,14 @@ module bar0_i211_sim (
     localparam DW_FCT        = 15'h000C;  // 0x00030 Flow Control Type
     localparam DW_FCTTV      = 15'h0044;  // 0x00110 FC Transmit Timer Value
 
-    // --- 中断寄存器 ---
+    // --- Interrupt Registers ---
     localparam DW_ICR        = 15'h0030;  // 0x000C0 Interrupt Cause Read
     localparam DW_ITR        = 15'h0031;  // 0x000C4 Interrupt Throttling
     localparam DW_ICS        = 15'h0032;  // 0x000C8 Interrupt Cause Set
     localparam DW_IMS        = 15'h0034;  // 0x000D0 Interrupt Mask Set
     localparam DW_IMC        = 15'h0035;  // 0x000D4 Interrupt Mask Clear
 
-    // --- 接收控制 ---
+    // --- RX Control ---
     localparam DW_RCTL       = 15'h0040;  // 0x00100 Receive Control
     localparam DW_RDBAL0     = 15'h0B00;  // 0x02C00 RX Desc Base Low (queue 0)
     localparam DW_RDBAH0     = 15'h0B01;  // 0x02C04 RX Desc Base High
@@ -92,7 +92,7 @@ module bar0_i211_sim (
     localparam DW_RDH0       = 15'h0B04;  // 0x02C10 RX Desc Head
     localparam DW_RDT0       = 15'h0B06;  // 0x02C18 RX Desc Tail
 
-    // --- 发送控制 ---
+    // --- TX Control ---
     localparam DW_TCTL       = 15'h0100;  // 0x00400 Transmit Control
     localparam DW_TDBAL0     = 15'h0E00;  // 0x03800 TX Desc Base Low (queue 0)
     localparam DW_TDBAH0     = 15'h0E01;  // 0x03804 TX Desc Base High
@@ -100,11 +100,11 @@ module bar0_i211_sim (
     localparam DW_TDH0       = 15'h0E04;  // 0x03810 TX Desc Head
     localparam DW_TDT0       = 15'h0E06;  // 0x03818 TX Desc Tail
 
-    // --- MAC 地址 ---
+    // --- MAC Address ---
     localparam DW_RAL0       = 15'h1500;  // 0x05400 Receive Address Low
     localparam DW_RAH0       = 15'h1501;  // 0x05404 Receive Address High
 
-    // --- 统计寄存器 (部分) ---
+    // --- Statistics Registers (partial) ---
     localparam DW_GPRC       = 15'h1013;  // 0x0404C Good Packets Received Count
     localparam DW_GPTC       = 15'h1015;  // 0x04054 Good Packets Transmitted Count
     localparam DW_GORCL      = 15'h1022;  // 0x04088 Good Octets Received Count Low
@@ -112,12 +112,12 @@ module bar0_i211_sim (
     localparam DW_GOTCL      = 15'h1024;  // 0x04090 Good Octets Transmitted Count Low
     localparam DW_GOTCH      = 15'h1025;  // 0x04094 Good Octets Transmitted Count High
 
-    // --- Firmware 信号 ---
+    // --- Firmware ---
     localparam DW_FWSM       = 15'h1558;  // 0x05560 Firmware Semaphore
     localparam DW_SW_FW_SYNC = 15'h1560;  // 0x05580 SW-FW Synchronization
 
     // ===================================================================
-    //  可写寄存器
+    //  Writable Registers
     // ===================================================================
 
     reg [31:0] reg_ctrl;        // 0x00000 Device Control
@@ -155,7 +155,7 @@ module bar0_i211_sim (
     reg [31:0] reg_fct;
     reg [31:0] reg_fcttv;
 
-    // MAC 地址 (默认随机化, 基于 Intel OUI 00:1B:21)
+    // MAC Address (default randomized, based on Intel OUI 00:1B:21)
     reg [31:0] reg_ral0;        // RAL0: MAC[3:0] (bytes 0-3 of MAC)
     reg [31:0] reg_rah0;        // RAH0: MAC[5:4] + AV bit
 
@@ -163,12 +163,12 @@ module bar0_i211_sim (
     reg [31:0] reg_fwsm;
     reg [31:0] reg_sw_fw_sync;
 
-    // EEPROM 仿真延迟
+    // EEPROM emulation delay
     reg [7:0]  eerd_delay_cnt;
     reg        eerd_pending;
 
     // ===================================================================
-    //  LFSR (用于非标准区域混淆 + MAC 动态化)
+    //  LFSR (for non-standard area obfuscation + MAC randomization)
     // ===================================================================
 
     reg [15:0] jitter_lfsr;
@@ -183,51 +183,90 @@ module bar0_i211_sim (
     end
 
     // ===================================================================
-    //  EEPROM (NVM) 内容仿真
-    //  I211 内部 NVM 通过 EERD 寄存器按 word 地址访问
+    //  EEPROM (NVM) Content Emulation
+    //  I211 internal NVM accessed via EERD register by word address
     // ===================================================================
+
+    // =================================================================
+    //  EEPROM (NVM) Full Emulation - first 64 words (0x00~0x3F)
+    //  igb driver reads these 64 words during init and verifies:
+    //    sum(word[0x00] .. word[0x3F]) == 0xBABA
+    //  All undefined words return 0x0000 (not 0xFFFF!) to simplify
+    //  checksum calculation
+    // =================================================================
 
     function [15:0] eeprom_read;
         input [13:0] word_addr;
         begin
             case (word_addr[7:0])
-                // NVM Word 0x00-0x02: MAC Address (Intel OUI 00:1B:21 + 动态)
+                // --- MAC Address (Intel OUI 00:1B:21 + dynamic suffix) ---
                 8'h00: eeprom_read = reg_ral0[15:0];        // MAC bytes 1:0
                 8'h01: eeprom_read = reg_ral0[31:16];       // MAC bytes 3:2
                 8'h02: eeprom_read = reg_rah0[15:0];        // MAC bytes 5:4
 
-                // NVM Word 0x0A: Subsystem ID
+                // --- NVM Structure ---
+                8'h03: eeprom_read = 16'h0C00;  // Init Control 3 / NVM Structure Version
+                8'h05: eeprom_read = 16'h0200;  // Image Version Info (2.0)
+                8'h08: eeprom_read = 16'h0006;  // PBA Length (6 words)
+                8'h09: eeprom_read = 16'h0009;  // PBA pointer
+
+                // --- Subsystem IDs ---
                 8'h0A: eeprom_read = 16'h1539;  // Subsystem Device ID
+                8'h0B: eeprom_read = 16'h1849;  // Subsystem Vendor ID (ASRock)
 
-                // NVM Word 0x0B: Subsystem Vendor ID
-                8'h0B: eeprom_read = 16'h1849;  // ASRock
+                // --- Device ID in NVM ---
+                8'h0D: eeprom_read = 16'h1539;  // Device ID (must match PCI config!)
 
-                // NVM Word 0x0F: Initialization Control Word 1
-                8'h0F: eeprom_read = 16'h0E22;
+                // --- Initialization Control Words ---
+                8'h0F: eeprom_read = 16'h0E22;  // Init Control Word 1
+                8'h10: eeprom_read = 16'h0410;  // Init Control Word 2
+                8'h11: eeprom_read = 16'h0100;  // Init Control Word 3
+                8'h12: eeprom_read = 16'h8086;  // Vendor ID in NVM (Intel)
 
-                // NVM Word 0x10: Initialization Control Word 2
-                8'h10: eeprom_read = 16'h0410;
+                // --- LED & PHY Configuration ---
+                8'h1A: eeprom_read = 16'h0F07;  // LED Configuration
+                8'h1E: eeprom_read = 16'h0013;  // PHY ID Low
+                8'h1F: eeprom_read = 16'h0380;  // PHY ID High
 
-                // NVM Word 0x1A: LED Configuration
-                8'h1A: eeprom_read = 16'h0F07;
+                // --- Capability / Feature Words ---
+                8'h23: eeprom_read = 16'h0000;  // Capabilities word
+                8'h24: eeprom_read = 16'h0010;  // Feature config
 
-                // NVM Word 0x1E: PHY ID Low
-                8'h1E: eeprom_read = 16'h0013;
+                // --- Software-defined pins / Wake ---
+                8'h0E: eeprom_read = 16'h2580;  // Software Defined Pins Control
 
-                // NVM Word 0x1F: PHY ID High
-                8'h1F: eeprom_read = 16'h0380;
+                // --- NVM Checksum (word 0x3F) ---
+                // Checksum computed dynamically by EERD completion logic
+                // eeprom_read returns 0 as placeholder; real value via nvm_checksum_word
+                8'h3F: eeprom_read = 16'h0000;  // placeholder, actual uses nvm_checksum_word
 
-                // NVM Word 0x3E-0x3F: NVM Checksum
-                8'h3F: eeprom_read = 16'hBABA; // Checksum placeholder
-
-                default: eeprom_read = 16'hFFFF;
+                default: begin
+                    if (word_addr[7:0] <= 8'h3F)
+                        eeprom_read = 16'h0000;  // first 64 words default 0 (helps checksum)
+                    else
+                        eeprom_read = 16'hFFFF;  // out of range returns 0xFFFF
+                end
             endcase
         end
     endfunction
 
+    // =================================================================
+    //  NVM Checksum Runtime Calculation
+    //  igb driver requires: sum(word[0x00] .. word[0x3F]) == 0xBABA
+    //  word 0x3F = 0xBABA - sum(word[0x00] .. word[0x3E])
+    // =================================================================
+
+    // Sum of fixed word constants (excluding word 0x00~0x02 and 0x3F):
+    wire [15:0] nvm_mac_sum = reg_ral0[15:0] + reg_ral0[31:16] + reg_rah0[15:0];
+    wire [15:0] nvm_fixed_sum = 16'h0C00 + 16'h0200 + 16'h0006 + 16'h0009 +
+                                16'h1539 + 16'h1849 + 16'h1539 + 16'h2580 +
+                                16'h0E22 + 16'h0410 + 16'h0100 + 16'h8086 +
+                                16'h0F07 + 16'h0013 + 16'h0380 + 16'h0000 + 16'h0010;
+    wire [15:0] nvm_checksum_word = 16'hBABA - nvm_fixed_sum - nvm_mac_sum;
+
     // ===================================================================
-    //  MDIC (PHY 接口) 仿真
-    //  Windows igb/e1000e 驱动通过 MDIC 读 PHY 寄存器
+    //  MDIC (PHY Interface) Emulation
+    //  Windows igb/e1000e driver reads PHY registers via MDIC
     // ===================================================================
 
     function [15:0] phy_read;
@@ -237,8 +276,8 @@ module bar0_i211_sim (
                 // PHY Control Register (0)
                 5'h00: phy_read = 16'h1140; // Auto-neg, Full-duplex, 1000Mbps
 
-                // PHY Status Register (1) — 关键! 驱动据此判断链路
-                5'h01: phy_read = 16'h796D; // Link up, auto-neg complete, 能力位全开
+                // PHY Status Register (1) - critical! driver uses this for link state
+                5'h01: phy_read = 16'h796D; // Link up, auto-neg complete, all caps
 
                 // PHY ID 1 (2)
                 5'h02: phy_read = 16'h0141; // Intel PHY OUI high
@@ -258,13 +297,13 @@ module bar0_i211_sim (
                 // 1000BASE-T Control (9)
                 5'h09: phy_read = 16'h0300;
 
-                // 1000BASE-T Status (10) — 链路伙伴能力
+                // 1000BASE-T Status (10) - link partner capability
                 5'h0A: phy_read = 16'h7C00; // Partner capable 1000Mbps
 
                 // Extended Status (15)
                 5'h0F: phy_read = 16'h3000;
 
-                // PHY Specific Control (16) — I211 specific
+                // PHY Specific Control (16) - I211 specific
                 5'h10: phy_read = 16'h0068;
 
                 // PHY Specific Status (17)
@@ -279,27 +318,28 @@ module bar0_i211_sim (
     endfunction
 
     // ===================================================================
-    //  寄存器读取逻辑
+    //  Register Read Logic
     // ===================================================================
 
     function [31:0] read_register;
         input [14:0] dw_offset;  // 128KB = 32K DWORDs, 15-bit offset
         begin
             case (dw_offset)
-                // --- 通用控制 ---
+                // --- General Control ---
                 DW_CTRL:     read_register = reg_ctrl;
                 DW_STATUS:   read_register = reg_status;
                 DW_EECD:     read_register = reg_eecd;
                 DW_EERD:     read_register = reg_eerd;
                 DW_CTRL_EXT: read_register = reg_ctrl_ext;
                 DW_MDIC:     read_register = reg_mdic;
+                DW_FEXTNVM6: read_register = 32'h0000_0001; // I211 K1 config default
 
-                // --- 中断 ---
+                // --- Interrupts ---
                 DW_ICR:      read_register = reg_icr;
                 DW_ITR:      read_register = reg_itr;
                 DW_IMS:      read_register = reg_ims;
 
-                // --- RX/TX 控制 ---
+                // --- RX/TX Control ---
                 DW_RCTL:     read_register = reg_rctl;
                 DW_TCTL:     read_register = reg_tctl;
 
@@ -323,11 +363,11 @@ module bar0_i211_sim (
                 DW_TDH0:     read_register = reg_tdh0;
                 DW_TDT0:     read_register = reg_tdt0;
 
-                // --- MAC 地址 ---
+                // --- MAC Address ---
                 DW_RAL0:     read_register = reg_ral0;
                 DW_RAH0:     read_register = reg_rah0;
 
-                // --- 统计寄存器 (Read-Clear, 返回 0) ---
+                // --- Statistics Registers (Read-Clear, return 0) ---
                 DW_GPRC:     read_register = 32'h0;
                 DW_GPTC:     read_register = 32'h0;
                 DW_GORCL:    read_register = 32'h0;
@@ -339,21 +379,47 @@ module bar0_i211_sim (
                 DW_FWSM:       read_register = reg_fwsm;
                 DW_SW_FW_SYNC: read_register = reg_sw_fw_sync;
 
-                // --- 其他重要寄存器返回合理默认值 ---
-                // RXPBS (0x02404) — RX Packet Buffer Size
+                // --- Other important registers with reasonable defaults ---
+                // RXPBS (0x02404) - RX Packet Buffer Size
                 15'h0901: read_register = 32'h00000020; // 32KB
 
-                // TXPBS (0x03404) — TX Packet Buffer Size
+                // TXPBS (0x03404) - TX Packet Buffer Size
                 15'h0D01: read_register = 32'h00000020; // 32KB
 
-                // MANC (0x05820) — Management Control
+                // MANC (0x05820) - Management Control
                 15'h1608: read_register = 32'h0;
 
-                // SWSM (0x05B50) — Software Semaphore
+                // SWSM (0x05B50) - Software Semaphore
                 15'h16D4: read_register = 32'h0;
 
+                // --- I211 igb driver init required registers ---
+
+                // EEMNGCTL (0x12030) - checked before EERD NVM reads
+                15'h480C: read_register = 32'h0;
+
+                // MDICNFG (0x00E04) - MDI Configuration (I210/I211)
+                15'h0381: read_register = 32'h0000_0000;
+
+                // CONNSW (0x00034) - Copper/Fiber Switch
+                15'h000D: read_register = 32'h0;
+
+                // EEC (0x12010) - some igb code paths use this
+                15'h4804: read_register = 32'h0000_A110; // matches EECD
+
+                // EEARBC_I210 (0x12024)
+                15'h4809: read_register = 32'h0;
+
+                // BARCTRL (0x05BBC) - some paths check this
+                15'h16EF: read_register = 32'h0;
+
+                // TSYNCRXCTL (0x0B620) - Timestamp RX Control
+                15'h2D88: read_register = 32'h0;
+
+                // TSYNCTXCTL (0x0B614) - Timestamp TX Control
+                15'h2D85: read_register = 32'h0;
+
                 default: begin
-                    // 非标准区域: 返回 LFSR 混淆数据
+                    // Non-standard area: return LFSR obfuscated data
                     read_register = {jitter_lfsr, jitter_lfsr}
                                   ^ {dw_offset[14:0], dw_offset[14:0], 2'hA};
                 end
@@ -362,7 +428,7 @@ module bar0_i211_sim (
     endfunction
 
     // ===================================================================
-    //  寄存器写入逻辑
+    //  Register Write Logic
     // ===================================================================
 
     task write_register;
@@ -372,17 +438,17 @@ module bar0_i211_sim (
         begin
             case (dw_offset)
                 DW_CTRL: begin
-                    // Device Control — bit 26 (RST) 需特殊处理
+                    // Device Control - bit 26 (RST) needs special handling
                     if (be[0]) reg_ctrl[ 7: 0] <= data[ 7: 0];
                     if (be[1]) reg_ctrl[15: 8] <= data[15: 8];
                     if (be[2]) reg_ctrl[23:16] <= data[23:16];
                     if (be[3]) begin
                         reg_ctrl[31:24] <= data[31:24];
-                        // bit 26: Device Reset (RST) — 自清零
+                        // bit 26: Device Reset (RST) - self-clearing
                         if (data[26]) begin
                             reg_ctrl[26] <= 1'b0;
-                            // Reset 后恢复 STATUS
-                            reg_status <= 32'h0000_0083; // FD + LU + speed 1000
+                            // Restore STATUS after reset (including PF_RST_DONE)
+                            reg_status <= 32'h0020_0083; // FD + LU + speed 1000 + PF_RST_DONE
                         end
                     end
                 end
@@ -395,17 +461,17 @@ module bar0_i211_sim (
                 end
 
                 DW_EERD: begin
-                    // EEPROM Read: 写入触发 NVM 读操作
-                    // bit 0: Start (自清零)
+                    // EEPROM Read: write triggers NVM read operation
+                    // bit 0: Start (self-clearing)
                     // bit[15:2]: Address (word)
                     if (be[0]) begin
                         if (data[0]) begin
                             eerd_pending   <= 1'b1;
-                            eerd_delay_cnt <= 8'd4; // 模拟 NVM 读延迟
-                            reg_eerd       <= {16'h0, data[15:2], 2'b01}; // 保留地址, Start=1
+                            eerd_delay_cnt <= 8'd4; // emulate NVM read latency
+                            reg_eerd       <= {16'h0, data[15:2], 2'b01}; // keep addr, Start=1
                         end
                     end
-                    if (be[1]) reg_eerd[15: 8] <= data[15: 8]; // 写入地址高位
+                    if (be[1]) reg_eerd[15: 8] <= data[15: 8]; // write address high bits
                 end
 
                 DW_CTRL_EXT: begin
@@ -416,7 +482,7 @@ module bar0_i211_sim (
                 end
 
                 DW_MDIC: begin
-                    // MDI Control: 写入触发 PHY 读/写
+                    // MDI Control: write triggers PHY read/write
                     // bit[25:21]: PHY Register, bit[27:26]: Op (01=write, 10=read)
                     // bit[28]: Ready (set by HW), bit[29]: Error
                     reg_mdic <= data;
@@ -424,7 +490,7 @@ module bar0_i211_sim (
                         // PHY Read
                         reg_mdic <= {2'b00, 1'b1, 1'b0, data[27:16], phy_read(data[25:21])};
                     end else if (data[27:26] == 2'b01) begin
-                        // PHY Write — acknowledge
+                        // PHY Write - acknowledge
                         reg_mdic <= {2'b00, 1'b1, 1'b0, data[27:0]};
                     end
                 end
@@ -590,13 +656,13 @@ module bar0_i211_sim (
                     if (be[3]) reg_sw_fw_sync[31:24] <= data[31:24];
                 end
 
-                default: ; // 忽略未映射的写入
+                default: ; // ignore writes to unmapped registers
             endcase
         end
     endtask
 
     // ===================================================================
-    //  TLP 解析状态机 (复用 HDA 版本的框架)
+    //  TLP Parser State Machine (reuses HDA version framework)
     // ===================================================================
 
     localparam [4:0] ST_IDLE          = 5'd0,
@@ -615,7 +681,7 @@ module bar0_i211_sim (
 
     reg [4:0] state;
 
-    // 锁存的 TLP Header 字段
+    // Latched TLP Header fields
     reg [ 1:0] lat_fmt;
     reg [ 4:0] lat_type;
     reg [ 2:0] lat_tc;
@@ -636,7 +702,7 @@ module bar0_i211_sim (
     reg        rx_tlast_seen;
 
     // ===================================================================
-    //  CplD TLP 构造
+    //  CplD TLP Construction
     // ===================================================================
 
     wire [11:0] byte_count = (lat_length == 10'd1) ? 12'd4 : {lat_length, 2'b00};
@@ -682,7 +748,7 @@ module bar0_i211_sim (
     };
 
     // ===================================================================
-    //  主状态机
+    //  Main State Machine
     // ===================================================================
 
     always @(posedge clk) begin
@@ -697,21 +763,28 @@ module bar0_i211_sim (
             reg_rd_data      <= 32'h0;
             rx_tlast_seen    <= 1'b0;
 
-            // I211 寄存器初始化
-            // CTRL: 默认值 — FD (Full Duplex), ASDE, SLU (Set Link Up)
+            // I211 Register Initialization
+            // CTRL: default - FD (Full Duplex), ASDE, SLU (Set Link Up)
             reg_ctrl       <= 32'h0004_0040;
 
             // STATUS: FD=1, LU=1 (Link Up), Speed=10b (1000Mbps)
             // bit 0: FD, bit 1: LU, bit[7:6]: speed (10=1000)
-            reg_status     <= 32'h0000_0083;
+            // bit 10: PCI66 (reserved, 0)
+            // bit 19: phyra (PHY Reset Asserted, clear)
+            // bit 21: PF_RST_DONE = 1 (critical! driver polls this to confirm reset done)
+            reg_status     <= 32'h0020_0083;
 
-            // EECD: 初始状态 — Auto-Read Done, EEPROM Present
-            reg_eecd       <= 32'h0000_0110; // bit 8: Auto-RD Done, bit 4: EEPROM Present
+            // EECD: initial state - matching real I211
+            // bit 4: EEPROM Present = 1
+            // bit 8: Auto-Read Done = 1
+            // bit 13: NVM Present = 1
+            // bit 15: Flash Detected = 1 (I211 uses internal NVM)
+            reg_eecd       <= 32'h0000_A110;
 
             reg_eerd       <= 32'h0;
             reg_ctrl_ext   <= 32'h0004_0000; // DRV_LOAD
 
-            // MDIC: 初始空闲, Ready=1
+            // MDIC: initial idle, Ready=1
             reg_mdic       <= 32'h1000_0000; // bit 28: Ready
 
             reg_icr        <= 32'h0;
@@ -737,12 +810,12 @@ module bar0_i211_sim (
             reg_fct        <= 32'h0;
             reg_fcttv      <= 32'h0;
 
-            // MAC Address: Intel OUI 00:1B:21 + 随机后 3 字节
-            // 低 3 字节在链路建立后由 jitter_seed 动态化
+            // MAC Address: Intel OUI 00:1B:21 + random last 3 bytes
+            // Lower 3 bytes dynamized by jitter_seed after link up
             reg_ral0       <= {8'hA5, 8'h21, 8'h1B, 8'h00}; // MAC[3:0] = 00:1B:21:A5
             reg_rah0       <= 32'h8000_B6C7;                  // AV=1, MAC[5:4] = C7:B6
 
-            reg_fwsm       <= 32'h8000_0000; // bit 31: FWSM Valid
+            reg_fwsm       <= 32'h0000_00E0; // FW Mode = valid, FW Valid Done
             reg_sw_fw_sync <= 32'h0;
 
             eerd_pending   <= 1'b0;
@@ -934,20 +1007,24 @@ module bar0_i211_sim (
                 default: state <= ST_IDLE;
             endcase
 
-            // ---- EEPROM Read 仿真延迟 ----
+            // ---- EEPROM Read Emulation Delay ----
             if (eerd_pending) begin
                 if (eerd_delay_cnt > 8'd0) begin
                     eerd_delay_cnt <= eerd_delay_cnt - 8'd1;
                 end else begin
-                    // 读取完成: bit 1 (DONE) = 1, data in [31:16]
-                    reg_eerd <= {eeprom_read(reg_eerd[15:2]), reg_eerd[15:2], 1'b1, 1'b0};
+                    // Read complete: bit 1 (DONE) = 1, data in [31:16]
+                    // For word 0x3F (checksum) use dynamically computed value
+                    if (reg_eerd[15:2] == 14'h3F)
+                        reg_eerd <= {nvm_checksum_word, reg_eerd[15:2], 1'b1, 1'b0};
+                    else
+                        reg_eerd <= {eeprom_read(reg_eerd[15:2]), reg_eerd[15:2], 1'b1, 1'b0};
                     eerd_pending <= 1'b0;
                 end
             end
 
-            // ---- MAC 地址动态化 ----
-            // 使用 jitter_seed 在上电时产生唯一 MAC 后 3 字节
-            // (仅初始化一次, 保持 Intel OUI 00:1B:21)
+            // ---- MAC Address Randomization ----
+            // Uses jitter_seed to generate unique MAC last 3 bytes at power-on
+            // (initialized once, preserving Intel OUI 00:1B:21)
 
         end
     end
