@@ -99,6 +99,12 @@ module bar0_hda_sim (
     reg [15:0] reg_wakeen;      // 0x0C
     reg [15:0] reg_statests;    // 0x0E (W1C)
 
+    // CRST 退出复位后的 codec 检测延迟计数器
+    // HDA spec §4.3: 控制器在 CRST 0→1 后需要时间检测 SDI 线上的 codec
+    // 延迟约 25us @ 62.5 MHz ≈ 1563 周期，使用 2048 (~33us) 确保足够
+    reg [11:0] codec_detect_cnt;    // codec 检测延迟计数器
+    reg        codec_detect_active; // 正在进行 codec 检测
+
     reg [31:0] reg_intctl;      // 0x20
     reg [31:0] reg_intsts;      // 0x24
     reg [31:0] reg_ssync;       // 0x38
@@ -282,13 +288,15 @@ module bar0_hda_sim (
                     if (be[0]) begin
                         // 检测 CRST 从 1→0: 清零 STATESTS (驱动发起控制器复位)
                         if (reg_gctl[0] && !data[0]) begin
-                            reg_statests <= 16'h0000;
+                            reg_statests       <= 16'h0000;
+                            codec_detect_active <= 1'b0;
                         end
-                        // 检测 CRST 从 0→1: 控制器退出复位, 报告 codec 存在
-                        // HDA spec: 退出复位后, 控制器检测 SDI 线上的 codec
-                        // 并在 STATESTS 对应位置位 (bit 0 = SDI0 上有 codec)
+                        // 检测 CRST 从 0→1: 启动 codec 检测延迟
+                        // HDA spec §4.3: 退出复位后, 控制器需要时间检测 codec
+                        // 延迟 ~33us (2048 周期 @ 62.5 MHz) 后设置 STATESTS
                         if (!reg_gctl[0] && data[0]) begin
-                            reg_statests <= 16'h0001; // SDI0 检测到 CA0132 Codec
+                            codec_detect_cnt    <= 12'd2048;
+                            codec_detect_active <= 1'b1;
                         end
                         reg_gctl[ 7: 0] <= data[ 7: 0];
                     end
@@ -559,7 +567,9 @@ module bar0_hda_sim (
             // 寄存器初始化
             reg_gctl       <= 32'h0000_0000;  // CRST=0 (控制器上电处于复位状态, 符合 HDA spec)
             reg_wakeen     <= 16'h0;
-            reg_statests   <= 16'h0000;       // CRST=0 时无 codec (CRST 0→1 后自动置 bit 0)
+            reg_statests   <= 16'h0000;       // CRST=0 时无 codec (CRST 0→1 后延迟置 bit 0)
+            codec_detect_cnt    <= 12'd0;
+            codec_detect_active <= 1'b0;
             reg_intctl     <= 32'h0;
             reg_intsts     <= 32'h0;
             reg_ssync      <= 32'h0;
@@ -846,8 +856,22 @@ module bar0_hda_sim (
             // ---- GCTL CRST 说明 ----
             // CRST 完全由主机驱动控制:
             //   驱动写 CRST=0 → 控制器进入复位 (STATESTS 清零)
-            //   驱动写 CRST=1 → 控制器退出复位 (STATESTS[0]=1, 报告 SDI0 codec)
+            //   驱动写 CRST=1 → 启动 codec 检测延迟 (~33us)
+            //   延迟到期 → STATESTS[0]=1 (报告 SDI0 codec)
             // 不做自动恢复, 避免与驱动轮询 CRST 竞争
+
+            // ---- Codec 检测延迟 ----
+            // HDA spec §4.3: CRST 退出后, 控制器检测 SDI 线上的 codec
+            // 真实硬件需要约 25us, 这里用 2048 周期 (~33us @ 62.5 MHz)
+            if (codec_detect_active) begin
+                if (codec_detect_cnt > 12'd0) begin
+                    codec_detect_cnt <= codec_detect_cnt - 12'd1;
+                end else begin
+                    // 延迟到期: 设置 STATESTS 报告 codec 存在
+                    reg_statests        <= 16'h0001; // SDI0 检测到 CA0132 Codec
+                    codec_detect_active <= 1'b0;
+                end
+            end
 
             // ---- INTSTS 自动更新 ----
             reg_intsts[31] <= msi_irq_request;

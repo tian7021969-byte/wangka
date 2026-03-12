@@ -16,7 +16,7 @@
 //      Vendor ID       : 1102h   (Creative Technology Ltd)
 //      Device ID       : 0011h   (Sound Blaster AE-9)
 //      Subsystem VID   : 1102h   (Creative Technology Ltd)
-//      Subsystem DID   : 0080h
+//      Subsystem DID   : 0081h
 //      Class Code      : 040300h (Multimedia > HD Audio Controller)
 //      Revision ID     : 01h
 //
