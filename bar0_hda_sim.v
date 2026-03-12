@@ -75,8 +75,10 @@ module bar0_hda_sim (
     //  AE-9 HDA 寄存器默认值
     // ===================================================================
 
-    // GCAP: 4 output + 4 input + 1 bidi 流, 64-bit 地址, HDA 1.0
-    localparam [15:0] AE9_GCAP      = 16'h4409;
+    // GCAP: 真实 AE-9 GCAP = 0x4401
+    // bit[15]=0 (64OK, 但 AE-9 实际不声明), bit[14:12]=100 (NSDO=4)
+    // bit[11:8]=0100 (BSS=4), bit[7:4]=0000 (ISS=0), bit[3:0]=0001 (OSS=1)
+    localparam [15:0] AE9_GCAP      = 16'h4401;
     localparam [ 7:0] AE9_VMIN      = 8'h00;
     localparam [ 7:0] AE9_VMAJ      = 8'h01;
     localparam [15:0] AE9_OUTPAY    = 16'h003C;  // 60 bytes
