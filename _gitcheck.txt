@@ -1,0 +1,94 @@
+ M Audio_Controller_Logic/Audio_Controller_Logic.cache/wt/project.wpc
+ M Audio_Controller_Logic/Audio_Controller_Logic.cache/wt/synthesis.wdf
+ M Audio_Controller_Logic/Audio_Controller_Logic.cache/wt/webtalk_pa.xml
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/.init_design.begin.rst
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/.opt_design.begin.rst
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/.phys_opt_design.begin.rst
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/.place_design.begin.rst
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/.route_design.begin.rst
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/.vivado.begin.rst
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/.write_bitstream.begin.rst
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/gen_run.xml
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top.bin
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top.bit
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top.vdi
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_bus_skew_routed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_bus_skew_routed.rpx
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_clock_utilization_routed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_control_sets_placed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_drc_opted.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_drc_routed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_drc_routed.rpx
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_io_placed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_methodology_drc_routed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_methodology_drc_routed.rpx
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_opt.dcp
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_physopt.dcp
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_placed.dcp
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_power_routed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_power_routed.rpx
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_power_summary_routed.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_route_status.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_route_status.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_routed.dcp
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_timing_summary_routed.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_timing_summary_routed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_timing_summary_routed.rpx
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_utilization_placed.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_utilization_placed.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/init_design.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/opt_design.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/phys_opt_design.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/place_design.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/route_design.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/runme.log
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/vivado.jou
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/vivado.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/write_bitstream.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/.vivado.begin.rst
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/gen_run.xml
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/hda_pcie_top.dcp
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/hda_pcie_top.vds
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/hda_pcie_top_utilization_synth.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/hda_pcie_top_utilization_synth.rpt
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/runme.log
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/vivado.jou
+ M Audio_Controller_Logic/Audio_Controller_Logic.runs/synth_1/vivado.pb
+ M Audio_Controller_Logic/Audio_Controller_Logic.srcs/utils_1/imports/synth_1/hda_pcie_top.dcp
+ M _git_out2.txt
+?? 0081
+?? 0x4401
+?? Audio_Controller_Logic/Audio_Controller_Logic.runs/.jobs/vrs_config_119.xml
+?? Audio_Controller_Logic/Audio_Controller_Logic.runs/.jobs/vrs_config_120.xml
+?? Audio_Controller_Logic/Audio_Controller_Logic.runs/.jobs/vrs_config_121.xml
+?? Audio_Controller_Logic/Audio_Controller_Logic.runs/.jobs/vrs_config_122.xml
+?? Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/hda_pcie_top_3240.backup.vdi
+?? Audio_Controller_Logic/Audio_Controller_Logic.runs/impl_1/vivado_3240.backup.jou
+?? _ae9_report.txt
+?? _bin_st.txt
+?? _commit3.txt
+?? _commit_bin.txt
+?? _fetchout.txt
+?? _gitcheck.txt
+?? _push3.txt
+?? _push_bin.txt
+?? _pushout.txt
+?? _verify.txt
+?? bin_diff.txt
+?? bin_size.txt
+?? commit_out.txt
+?? git_add.txt
+?? git_bin_log.txt
+?? git_bin_push.txt
+?? git_bin_status.txt
+?? git_check.txt
+?? git_commit.txt
+?? git_diff_bin.txt
+?? git_ignore_check.txt
+?? git_log.txt
+?? git_push.txt
+?? git_push2.txt
+?? git_st.txt
+?? git_status_out.txt
+?? pre_commit.txt
+?? remote_log.txt

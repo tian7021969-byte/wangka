@@ -1,0 +1,5 @@
+cd8c761 Update bitstream: Device ID 0011, Subsystem ID 0081, IC interface
+f216e71 Fix Code 10: Device ID 7011-, Subsystem ID 0080-, add IC interface
+a16c5e6 Update bitstream and fix DMA/router handshake bugs for Code 10
+ee6e9fc Add generated bitstream files (bin/bit)
+f4091f6 fix(P0+P1+P2): ACE反检测修复 - MSI-X改为MSI匹配IP核, 移除Expansion ROM, 添加Gen1降速脚本

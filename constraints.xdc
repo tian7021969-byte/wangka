@@ -1,13 +1,13 @@
 # ===========================================================================
 #
 #  constraints.xdc
-#  Creative Sound Blaster AE-9 — Xilinx Artix-7 Captain DMA 75T V3.0
+#  Intel I211 Gigabit Ethernet Controller — Xilinx Artix-7 Captain DMA 75T V3.0
 #  引脚分配与时序约束
 #
 # ===========================================================================
 #
 #  目标器件 : XC7A75T-FGG484
-#  PCIe 配置 : Gen1 x1 (2.5 GT/s, 单 GTP 通道, 匹配真实 AE-9)
+#  PCIe 配置 : Gen1 x1 (2.5 GT/s, 单 GTP 通道)
 #  参考时钟 : 来自 PCIe 连接器的 100 MHz 差分时钟
 #  GTP Bank  : Bank 216
 #
@@ -124,33 +124,9 @@ set_false_path -from [get_ports pcie_rst_n]
 set_false_path -to [get_ports led_status]
 
 # ---------------------------------------------------------------------------
-#  异步时钟域隔离 — userclk1 (62.5 MHz) vs clk_24m (24 MHz)
+#  注: I211 设计不使用 MMCM，无异步时钟域约束需求
+#  所有逻辑运行在 PCIe user_clk (62.5 MHz) 单时钟域
 # ---------------------------------------------------------------------------
-#  PCIe IP 内部派生时钟 userclk1 (62.5 MHz) 与 MMCM 产生的 clk_24m
-#  (24 MHz) 是异步时钟域。RTL 中使用 toggle + 3 级同步器跨域处理。
-#
-#  注意: 必须直接引用 userclk1 而非 pcie_sys_clk，因为 Vivado 的
-#  set_clock_groups 在引用源时钟时不一定传播到所有派生时钟。
-#  使用 get_clocks -include_generated_clocks 确保覆盖所有派生时钟。
-
-set_clock_groups -asynchronous \
-    -group [get_clocks -include_generated_clocks pcie_sys_clk] \
-    -group [get_clocks -of_objects [get_pins u_mmcm_walclk/CLKOUT0]]
-
-# ---------------------------------------------------------------------------
-#  跨域同步器路径约束 (CDC) — 补充保护
-# ---------------------------------------------------------------------------
-#  即使 set_clock_groups 已覆盖，仍显式约束 CDC 同步器路径，
-#  确保 Vivado 不会对这些路径做 setup/hold 检查。
-#
-#  1. clk24_toggle → clk24_sync[0]: 跨域 toggle 同步器
-#  2. user_reset → rst_24m_sync[*]/PRE: 异步复位跨域
-
-set_false_path -from [get_cells clk24_toggle_reg*] \
-              -to   [get_cells clk24_sync_reg[0]]
-
-set_false_path -from [get_pins u_pcie_ep/inst/inst/user_reset_out_reg/C] \
-              -to   [get_cells rst_24m_sync_reg*]
 
 
 # ===========================================================================

@@ -40,4 +40,4 @@ EAStep()
      fi
 }
 
-EAStep vivado -log hda_pcie_top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source hda_pcie_top.tcl
+EAStep vivado -log i211_pcie_top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source i211_pcie_top.tcl

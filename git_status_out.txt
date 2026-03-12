@@ -1,0 +1,20 @@
+On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+	modified:   Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/pcie_7x_0.xml
+	modified:   Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/sim/pcie_7x_0.v
+	modified:   Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/source/pcie_7x_0_core_top.v
+	modified:   Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/synth/pcie_7x_0.v
+	modified:   Audio_Controller_Logic/Audio_Controller_Logic.srcs/sources_1/ip/pcie_7x_0/pcie_7x_0.xci
+	modified:   bar0_hda_sim.v
+	modified:   fix_pcie_ip_gen1.tcl
+	modified:   pcileech_pcie_cfg_a7.v
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+	git_status_out.txt
+
+no changes added to commit (use "git add" and/or "git commit -a")

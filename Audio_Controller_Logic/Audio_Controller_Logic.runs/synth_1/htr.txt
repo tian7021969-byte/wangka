@@ -6,4 +6,4 @@ REM          to be invoked for Vivado to track run status.
 REM Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 REM
 
-vivado -log hda_pcie_top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source hda_pcie_top.tcl
+vivado -log i211_pcie_top.vds -m64 -product Vivado -mode batch -messageDb vivado.pb -notrace -source i211_pcie_top.tcl

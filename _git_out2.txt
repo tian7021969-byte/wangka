@@ -1,8 +1,5 @@
-﻿git : To https://github.com/tian7021969-byte/amd.git
-所在位置 行:1 字符: 36
-+ cd 'c:\Users\dukehhu\Desktop\amd'; git push origin main 2>&1 | Out-Fi ...
-+                                    ~~~~~~~~~~~~~~~~~~~~~~~~~
-    + CategoryInfo          : NotSpecified: (To https://gith...69-byte/amd.git:String) [], RemoteException
-    + FullyQualifiedErrorId : NativeCommandError
- 
-   0e3ff55..f4091f6  main -> main
+ad011f2 Fix Code 10: Add codec detection delay after CRST exit (HDA spec 4.3 compliance)
+b903d49 Update bitstream: GCAP fix 0x4401 (OSS=1,ISS=0,BSS=4)
+eaf3d2f Fix Code 10 root cause: GCAP 0x4409- to match real AE-9 (OSS=1,ISS=0,BSS=4)
+6f7cf6b Rebuild bitstream with updated PCIe IP (Device ID 0011, SSID 0081, IC interface)
+cd8c761 Update bitstream: Device ID 0011, Subsystem ID 0081, IC interface

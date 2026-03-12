@@ -1,52 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773313317" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/hda_pcie_top.dcp">
-  <File Type="PA-TCL" Name="hda_pcie_top.tcl"/>
-  <File Type="RDS-PROPCONSTRS" Name="hda_pcie_top_drc_synth.rpt"/>
-  <File Type="REPORTS-TCL" Name="hda_pcie_top_reports.tcl"/>
-  <File Type="RDS-RDS" Name="hda_pcie_top.vds"/>
-  <File Type="RDS-UTIL" Name="hda_pcie_top_utilization_synth.rpt"/>
-  <File Type="RDS-UTIL-PB" Name="hda_pcie_top_utilization_synth.pb"/>
-  <File Type="RDS-DCP" Name="hda_pcie_top.dcp"/>
-  <File Type="VDS-TIMINGSUMMARY" Name="hda_pcie_top_timing_summary_synth.rpt"/>
-  <File Type="VDS-TIMING-PB" Name="hda_pcie_top_timing_summary_synth.pb"/>
+<GenRun Id="synth_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773315794" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/hda_pcie_top.dcp">
+  <File Type="PA-TCL" Name="i211_pcie_top.tcl"/>
+  <File Type="RDS-PROPCONSTRS" Name="i211_pcie_top_drc_synth.rpt"/>
+  <File Type="REPORTS-TCL" Name="i211_pcie_top_reports.tcl"/>
+  <File Type="RDS-RDS" Name="i211_pcie_top.vds"/>
+  <File Type="RDS-UTIL" Name="i211_pcie_top_utilization_synth.rpt"/>
+  <File Type="RDS-UTIL-PB" Name="i211_pcie_top_utilization_synth.pb"/>
+  <File Type="RDS-DCP" Name="i211_pcie_top.dcp"/>
+  <File Type="VDS-TIMINGSUMMARY" Name="i211_pcie_top_timing_summary_synth.rpt"/>
+  <File Type="VDS-TIMING-PB" Name="i211_pcie_top_timing_summary_synth.pb"/>
   <FileSet Name="sources" Type="DesignSrcs" RelSrcDir="$PSRCDIR/sources_1" RelGenDir="$PGENDIR/sources_1">
     <Filter Type="Srcs"/>
-    <File Path="$PPRDIR/../bar0_hda_sim.v">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PPRDIR/../pcileech_pcie_cfg_a7.v">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
     <File Path="$PPRDIR/../tlp_tag_randomizer.v">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PPRDIR/../hda_pcie_top.v">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PPRDIR/../hda_codec_engine.v">
-      <FileInfo>
-        <Attr Name="UsedIn" Val="synthesis"/>
-        <Attr Name="UsedIn" Val="implementation"/>
-        <Attr Name="UsedIn" Val="simulation"/>
-      </FileInfo>
-    </File>
-    <File Path="$PPRDIR/../hda_dma_engine.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>
@@ -67,10 +32,23 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
+    <File Path="$PPRDIR/../bar0_i211_sim.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
+    <File Path="$PPRDIR/../i211_pcie_top.v">
+      <FileInfo>
+        <Attr Name="UsedIn" Val="synthesis"/>
+        <Attr Name="UsedIn" Val="implementation"/>
+        <Attr Name="UsedIn" Val="simulation"/>
+      </FileInfo>
+    </File>
     <Config>
       <Option Name="DesignMode" Val="RTL"/>
-      <Option Name="TopModule" Val="hda_pcie_top"/>
-      <Option Name="TopAutoSet" Val="TRUE"/>
+      <Option Name="TopModule" Val="i211_pcie_top"/>
     </Config>
   </FileSet>
   <FileSet Name="constrs_in" Type="Constrs" RelSrcDir="$PSRCDIR/constrs_1">

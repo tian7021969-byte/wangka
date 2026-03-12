@@ -25,7 +25,7 @@ eval( EAInclude(ISEJScriptLib) );
 // pre-commands:
 ISETouchFile( "write_bitstream", "begin" );
 ISEStep( "vivado",
-         "-log hda_pcie_top.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source hda_pcie_top.tcl -notrace" );
+         "-log i211_pcie_top.vdi -applog -m64 -product Vivado -messageDb vivado.pb -mode batch -source i211_pcie_top.tcl -notrace" );
 
 
 
