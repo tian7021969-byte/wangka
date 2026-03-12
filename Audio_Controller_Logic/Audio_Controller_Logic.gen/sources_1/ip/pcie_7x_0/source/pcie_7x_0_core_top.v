@@ -64,10 +64,10 @@ VC0_TX_LASTPACKET=29,VC0_RX_RAM_LIMIT=7FF,VC0_TOTAL_CREDITS_PH=32,VC0_TOTAL_CRED
 (* DowngradeIPIdentifiedWarnings = "yes" *)
 module pcie_7x_0_core_top # (
   parameter         CFG_VEND_ID        = 16'h1102,
-  parameter         CFG_DEV_ID         = 16'h7011,
+  parameter         CFG_DEV_ID         = 16'h0011,
   parameter         CFG_REV_ID         =  8'h01,
   parameter         CFG_SUBSYS_VEND_ID = 16'h1102,
-  parameter         CFG_SUBSYS_ID      = 16'h0080,
+  parameter         CFG_SUBSYS_ID      = 16'h0081,
   parameter         PCIE_ID_IF         ="TRUE", 
 
   parameter         EXT_PIPE_SIM = "FALSE",

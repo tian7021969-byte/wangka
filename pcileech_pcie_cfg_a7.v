@@ -137,7 +137,7 @@ module pcileech_pcie_cfg_a7 #(
     localparam [15:0] CFG_VENDOR_ID       = 16'h1102;   // Creative Technology
     localparam [15:0] CFG_DEVICE_ID       = 16'h0011;   // Sound Blaster AE-9
     localparam [15:0] CFG_SUBSYS_VENDOR   = 16'h1102;
-    localparam [15:0] CFG_SUBSYS_DEVICE   = 16'h0080;
+    localparam [15:0] CFG_SUBSYS_DEVICE   = 16'h0081;
 
     // Command register power-on default:
     //   Bit 1 = Memory Space Enable

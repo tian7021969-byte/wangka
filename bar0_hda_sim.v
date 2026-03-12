@@ -122,6 +122,14 @@ module bar0_hda_sim (
     reg [31:0] reg_dpiblbase;   // 0x70
     reg [31:0] reg_dpibubase;   // 0x74
 
+    // Immediate Command 接口 (ICW/IRR/ICS)
+    // HDA spec §4.5: 驱动可能在 CORB/RIRB 之前用这个接口测试 codec
+    reg [31:0] reg_icw;         // 0x60 Immediate Command Write
+    reg [31:0] reg_irr;         // 0x64 Immediate Response Read
+    reg [15:0] reg_ics;         // 0x68 Immediate Command Status
+    reg        ic_pending;      // IC 命令待处理标志
+    reg [7:0]  ic_delay_cnt;    // IC 处理延迟计数器
+
     // ===================================================================
     //  流描述符寄存器 (8 streams × 8 DWORDs = 64 DWORD)
     // ===================================================================
@@ -232,6 +240,11 @@ module bar0_hda_sim (
                 8'h15: read_register = reg_rirbubase;
                 8'h16: read_register = {reg_rintcnt, reg_rirbwp};
                 8'h17: read_register = {8'h0, AE9_RIRBSIZE, reg_rirbsts, reg_rirbctl};
+
+                // Immediate Command 接口 (0x60-0x6B)
+                8'h18: read_register = reg_icw;         // 0x60 ICW
+                8'h19: read_register = reg_irr;         // 0x64 IRR
+                8'h1A: read_register = {16'h0, reg_ics}; // 0x68 ICS
 
                 // DMA Position (0x70-0x77)
                 8'h1C: read_register = reg_dpiblbase;
@@ -361,6 +374,29 @@ module bar0_hda_sim (
                 8'h17: begin // RIRBCTL / RIRBSTS / RIRBSIZE
                     if (be[0]) reg_rirbctl <= data[ 7:0];
                     if (be[1]) reg_rirbsts <= reg_rirbsts & ~data[15:8]; // W1C
+                end
+
+                // Immediate Command 接口
+                8'h18: begin // ICW (0x60) — 写入触发 Immediate Command
+                    if (be[0]) reg_icw[ 7: 0] <= data[ 7: 0];
+                    if (be[1]) reg_icw[15: 8] <= data[15: 8];
+                    if (be[2]) reg_icw[23:16] <= data[23:16];
+                    if (be[3]) begin
+                        reg_icw[31:24] <= data[31:24];
+                        // 写完整 ICW 后标记命令待处理
+                        ic_pending    <= 1'b1;
+                        ic_delay_cnt  <= 8'd12; // 模拟 ~12 周期处理延迟
+                        reg_ics       <= {reg_ics[15:2], 1'b1, 1'b0}; // ICB=1, IRV=0
+                    end
+                end
+                8'h1A: begin // ICS (0x68)
+                    if (be[0]) begin
+                        // Bit 0 (ICB): 写 1 清除
+                        // Bit 1 (IRV): 只读, 由硬件管理
+                        if (data[0]) begin
+                            reg_ics[0] <= 1'b0; // 清除 ICB
+                        end
+                    end
                 end
 
                 // DMA Position
@@ -539,6 +575,11 @@ module bar0_hda_sim (
             reg_rirbsts    <= 8'h0;
             reg_dpiblbase  <= 32'h0;
             reg_dpibubase  <= 32'h0;
+            reg_icw        <= 32'h0;
+            reg_irr        <= 32'h0;
+            reg_ics        <= 16'h0;
+            ic_pending     <= 1'b0;
+            ic_delay_cnt   <= 8'h0;
 
             lat_fmt          <= 2'b0;
             lat_type         <= 5'b0;
@@ -821,6 +862,52 @@ module bar0_hda_sim (
             //   - 且当前周期状态机不在写寄存器 (避免覆盖主机的 CORBRP reset 操作)
             if (reg_corbctl[1] && !(reg_corbrp[15]) && (state != ST_RX_DATA)) begin
                 reg_corbrp[7:0] <= codec_corb_rp[7:0];
+            end
+
+            // ---- Immediate Command 处理 ----
+            // HDA spec §4.5: IC 接口提供无需 CORB/RIRB 的直接 Verb 通道
+            // Windows hdaudbus.sys 可能在启用 CORB/RIRB 之前通过 IC 接口测试 codec
+            if (ic_pending) begin
+                if (ic_delay_cnt > 8'd0) begin
+                    ic_delay_cnt <= ic_delay_cnt - 8'd1;
+                end else begin
+                    // 处理 Immediate Command — 使用与 codec engine 相同的解码
+                    // ICW 格式同 CORB entry: [31:28]=Codec, [27:20]=NID, [19:0]=Verb
+                    // 简化处理: 返回基本的 codec 响应
+                    case (reg_icw[19:8])
+                        12'hF00: begin // Get Parameter
+                            case (reg_icw[7:0])
+                                8'h00: reg_irr <= 32'h11020011; // Vendor ID
+                                8'h02: reg_irr <= 32'h00100400; // Revision
+                                8'h04: begin // Subordinate Node Count
+                                    case (reg_icw[27:20])
+                                        8'h00: reg_irr <= {16'h0001, 16'h0001}; // Root
+                                        8'h01: reg_irr <= {16'h0002, 16'h0008}; // AFG
+                                        default: reg_irr <= 32'h0;
+                                    endcase
+                                end
+                                8'h05: reg_irr <= (reg_icw[27:20] == 8'h01) ? 32'h0000_0001 : 32'h0; // FG Type
+                                8'h09: begin // Widget Type
+                                    case (reg_icw[27:20])
+                                        8'h02: reg_irr <= {4'h0, 28'h000_0041};
+                                        8'h03: reg_irr <= {4'h1, 28'h010_0B41};
+                                        8'h04: reg_irr <= {4'h4, 28'h000_0010};
+                                        8'h05: reg_irr <= {4'h4, 28'h002_0010};
+                                        8'h06: reg_irr <= {4'h4, 28'h000_0010};
+                                        8'h07: reg_irr <= {4'h4, 28'h002_0010};
+                                        8'h08: reg_irr <= {4'h0, 28'h000_0041};
+                                        8'h09: reg_irr <= {4'h2, 28'h020_0001};
+                                        default: reg_irr <= 32'h0;
+                                    endcase
+                                end
+                                default: reg_irr <= 32'h0;
+                            endcase
+                        end
+                        default: reg_irr <= 32'h0; // 其他 Verb: 返回 0
+                    endcase
+                    reg_ics    <= {reg_ics[15:2], 1'b0, 1'b1}; // ICB=0 (done), IRV=1 (valid)
+                    ic_pending <= 1'b0;
+                end
             end
         end
     end
