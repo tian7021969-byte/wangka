@@ -164,10 +164,10 @@ module pcileech_pcie_cfg_a7 #(
     // Interrupt Pin: INTA# (01h)
     localparam [ 7:0] CFG_INT_PIN         = 8'h01;
 
-    // BAR0 sizing mask — 16 KB region
-    //   Bits [31:14] writable → size = 2^14 = 16384 = 16 KB
-    //   Bits [13:0]  hardwired to 0 (memory, 32-bit, non-prefetchable)
-    localparam [31:0] BAR0_SIZE_MASK      = 32'hFFFF_C000;
+    // BAR0 sizing mask — 128 KB region (Intel I211)
+    //   Bits [31:17] writable → size = 2^17 = 131072 = 128 KB
+    //   Bits [16:0]  hardwired to 0 (memory, 32-bit, non-prefetchable)
+    localparam [31:0] BAR0_SIZE_MASK      = 32'hFFFE_0000;
 
     // Expansion ROM - Disabled (matches PCIe IP core configuration)
     // DWORD 12 (30h) hardwired to 0, no Expansion ROM support
@@ -441,8 +441,8 @@ module pcileech_pcie_cfg_a7 #(
     //
     //   DWORD  4 (10h) — BAR0
     //     Host writes FFFFFFFFh to determine BAR size, then programs the
-    //     base address.  The AND with BAR0_SIZE_MASK enforces the 16 KB
-    //     alignment and ensures bits [13:0] always read as the memory
+    //     base address.  The AND with BAR0_SIZE_MASK enforces the 128 KB
+    //     alignment and ensures bits [16:0] always read as the memory
     //     type indicator (32-bit, non-prefetchable).
     //
     //   DWORD 15 (3Ch) — Interrupt Line [7:0]

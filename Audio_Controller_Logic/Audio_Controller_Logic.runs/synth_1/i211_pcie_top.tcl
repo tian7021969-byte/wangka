@@ -110,8 +110,6 @@ foreach dcp [get_files -quiet -all -filter file_type=="Design\ Checkpoint"] {
 read_xdc C:/Users/dukehhu/Desktop/1121/constraints.xdc
 set_property used_in_implementation false [get_files C:/Users/dukehhu/Desktop/1121/constraints.xdc]
 
-read_xdc dont_touch.xdc
-set_property used_in_implementation false [get_files dont_touch.xdc]
 set_param ips.enableIPCacheLiteLoad 1
 
 read_checkpoint -auto_incremental -incremental C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.srcs/utils_1/imports/synth_1/hda_pcie_top.dcp
