@@ -169,6 +169,12 @@ module bar0_i211_sim (
     reg [31:0] reg_fwsm;
     reg [31:0] reg_sw_fw_sync;
 
+    // SWSM (0x05B50) - Software Semaphore
+    // igb driver acquires SW semaphore before NVM operations
+    // bit 0: SMBI (SW Mailbox Indicator) - write 1 to acquire, read to check
+    // bit 1: SWESMBI (SW/FW semaphore) - write 1 to acquire
+    reg [31:0] reg_swsm;
+
     // EEPROM emulation delay
     reg [7:0]  eerd_delay_cnt;
     reg        eerd_pending;
@@ -444,7 +450,13 @@ module bar0_i211_sim (
                 15'h1608: read_register = 32'h0;
 
                 // SWSM (0x05B50) - Software Semaphore
-                15'h16D4: read_register = 32'h0;
+                // igb driver uses e1000_get_hw_semaphore_82575() which:
+                //   1. Writes SWSM.SMBI (bit 0) = 1
+                //   2. Reads back SWSM.SMBI - if 1, semaphore acquired
+                //   3. Then writes SWSM.SWESMBI (bit 1) = 1
+                //   4. Reads back - if 1, FW semaphore acquired
+                // If reads back 0 on either, driver retries then fails -> Code 10!
+                15'h16D4: read_register = reg_swsm;
 
                 // --- I211 igb driver init required registers ---
 
@@ -539,7 +551,23 @@ module bar0_i211_sim (
                 end
 
                 DW_EECD: begin
-                    if (be[0]) reg_eecd[ 7: 0] <= data[ 7: 0];
+                    // EECD Write with EE_REQ/EE_GNT semaphore emulation
+                    // igb driver: e1000_acquire_nvm_82575() writes EE_REQ=1 (bit 6)
+                    // then polls EE_GNT (bit 7) until it becomes 1
+                    // If GNT never comes, driver times out -> Code 10!
+                    //
+                    // Also: igb_init_nvm_params_i210 checks FLASH_DETECTED (bit 19)
+                    // to select NVM read path (EERD vs iNVM)
+                    if (be[0]) begin
+                        reg_eecd[7:0] <= data[7:0];
+                        // Auto-grant: when driver writes EE_REQ (bit 6) = 1,
+                        // immediately set EE_GNT (bit 7) = 1 on next cycle
+                        if (data[6])
+                            reg_eecd[7] <= 1'b1;  // Grant EEPROM access immediately
+                        // When driver clears EE_REQ (bit 6) = 0, clear GNT too
+                        if (!data[6])
+                            reg_eecd[7] <= 1'b0;
+                    end
                     if (be[1]) reg_eecd[15: 8] <= data[15: 8];
                     if (be[2]) reg_eecd[23:16] <= data[23:16];
                     if (be[3]) reg_eecd[31:24] <= data[31:24];
@@ -768,6 +796,20 @@ module bar0_i211_sim (
                     if (be[2]) reg_fwsm[23:16] <= data[23:16];
                     if (be[3]) reg_fwsm[31:24] <= data[31:24];
                 end
+
+                // SWSM (0x05B50) - Software Semaphore Write
+                // igb driver: e1000_get_hw_semaphore_82575()
+                //   - Writes SMBI (bit 0) = 1, reads back, expects 1
+                //   - Writes SWESMBI (bit 1) = 1, reads back, expects 1
+                // We immediately accept whatever the driver writes, so
+                // the read-back will always succeed (semaphore always granted)
+                15'h16D4: begin
+                    if (be[0]) reg_swsm[ 7: 0] <= data[ 7: 0];
+                    if (be[1]) reg_swsm[15: 8] <= data[15: 8];
+                    if (be[2]) reg_swsm[23:16] <= data[23:16];
+                    if (be[3]) reg_swsm[31:24] <= data[31:24];
+                end
+
                 DW_SW_FW_SYNC: begin
                     if (be[0]) reg_sw_fw_sync[ 7: 0] <= data[ 7: 0];
                     if (be[1]) reg_sw_fw_sync[15: 8] <= data[15: 8];
@@ -940,6 +982,7 @@ module bar0_i211_sim (
 
             reg_fwsm       <= 32'h0000_00E0; // FW Mode = valid, FW Valid Done
             reg_sw_fw_sync <= 32'h0;
+            reg_swsm       <= 32'h0;  // Semaphore initially free
 
             eerd_pending   <= 1'b0;
             eerd_delay_cnt <= 8'h0;

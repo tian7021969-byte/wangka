@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-| Date         : Thu Mar 12 21:24:44 2026
+| Date         : Thu Mar 12 21:39:28 2026
 | Host         : DUKEHHU-PC0 running 64-bit major release  (build 9200)
 | Command      : report_utilization -file i211_pcie_top_utilization_synth.rpt -pb i211_pcie_top_utilization_synth.pb
 | Design       : i211_pcie_top
@@ -31,14 +31,14 @@ Table of Contents
 +-------------------------+------+-------+------------+-----------+-------+
 |        Site Type        | Used | Fixed | Prohibited | Available | Util% |
 +-------------------------+------+-------+------------+-----------+-------+
-| Slice LUTs*             | 1554 |     0 |          0 |     47200 |  3.29 |
-|   LUT as Logic          | 1554 |     0 |          0 |     47200 |  3.29 |
+| Slice LUTs*             | 1611 |     0 |          0 |     47200 |  3.41 |
+|   LUT as Logic          | 1611 |     0 |          0 |     47200 |  3.41 |
 |   LUT as Memory         |    0 |     0 |          0 |     19000 |  0.00 |
-| Slice Registers         | 1231 |     0 |          0 |     94400 |  1.30 |
-|   Register as Flip Flop | 1231 |     0 |          0 |     94400 |  1.30 |
+| Slice Registers         | 1262 |     0 |          0 |     94400 |  1.34 |
+|   Register as Flip Flop | 1262 |     0 |          0 |     94400 |  1.34 |
 |   Register as Latch     |    0 |     0 |          0 |     94400 |  0.00 |
-| F7 Muxes                |  177 |     0 |          0 |     31700 |  0.56 |
-| F8 Muxes                |   64 |     0 |          0 |     15850 |  0.40 |
+| F7 Muxes                |   84 |     0 |          0 |     31700 |  0.26 |
+| F8 Muxes                |   33 |     0 |          0 |     15850 |  0.21 |
 +-------------------------+------+-------+------------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
 Warning! LUT value is adjusted to account for LUT combining.
@@ -59,7 +59,7 @@ Warning! LUT value is adjusted to account for LUT combining.
 | 0     |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
 | 73    |          Yes |         Set |            - |
-| 1158  |          Yes |       Reset |            - |
+| 1189  |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -151,15 +151,15 @@ Warning! LUT value is adjusted to account for LUT combining.
 +-------------+------+---------------------+
 |   Ref Name  | Used | Functional Category |
 +-------------+------+---------------------+
-| FDRE        | 1158 |        Flop & Latch |
-| LUT6        |  854 |                 LUT |
-| LUT5        |  368 |                 LUT |
-| LUT4        |  280 |                 LUT |
-| LUT3        |  185 |                 LUT |
-| MUXF7       |  177 |               MuxFx |
+| FDRE        | 1189 |        Flop & Latch |
+| LUT6        |  985 |                 LUT |
+| LUT5        |  332 |                 LUT |
+| LUT4        |  212 |                 LUT |
+| LUT3        |  195 |                 LUT |
+| MUXF7       |   84 |               MuxFx |
 | FDSE        |   73 |        Flop & Latch |
-| MUXF8       |   64 |               MuxFx |
-| LUT2        |   51 |                 LUT |
+| LUT2        |   58 |                 LUT |
+| MUXF8       |   33 |               MuxFx |
 | LUT1        |   19 |                 LUT |
 | CARRY4      |   12 |          CarryLogic |
 | IBUF        |    5 |                  IO |
