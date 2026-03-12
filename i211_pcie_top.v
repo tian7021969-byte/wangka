@@ -386,10 +386,10 @@ module i211_pcie_top (
     assign user_rst_n = ~user_reset;
 
     // ===================================================================
-    //  BAR0 I211 Core Register Logic
+    //  BAR0 I211 Handshake Logic (fixes 0xC0000001 / 0x38)
     // ===================================================================
 
-    i211_core_logic u_bar0_sim (
+    i211_handshake_logic u_bar0_sim (
         .clk                (user_clk),
         .rst_n              (user_rst_n),
         .completer_id       (completer_id),

@@ -24,7 +24,7 @@ else
 fi
 export LD_LIBRARY_PATH
 
-HD_PWD='C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.runs/pcie_7x_0_synth_1'
+HD_PWD='C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.runs/pcie_7x_0_synth_1'
 cd "$HD_PWD"
 
 HD_LOG=runme.log

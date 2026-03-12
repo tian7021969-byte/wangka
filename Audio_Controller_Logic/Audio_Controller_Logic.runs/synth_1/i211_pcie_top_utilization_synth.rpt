@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-| Date         : Thu Mar 12 23:06:26 2026
+| Date         : Fri Mar 13 00:17:41 2026
 | Host         : DUKEHHU-PC0 running 64-bit major release  (build 9200)
 | Command      : report_utilization -file i211_pcie_top_utilization_synth.rpt -pb i211_pcie_top_utilization_synth.pb
 | Design       : i211_pcie_top
@@ -31,13 +31,13 @@ Table of Contents
 +-------------------------+------+-------+------------+-----------+-------+
 |        Site Type        | Used | Fixed | Prohibited | Available | Util% |
 +-------------------------+------+-------+------------+-----------+-------+
-| Slice LUTs*             | 3098 |     0 |          0 |     47200 |  6.56 |
-|   LUT as Logic          | 3098 |     0 |          0 |     47200 |  6.56 |
+| Slice LUTs*             | 3075 |     0 |          0 |     47200 |  6.51 |
+|   LUT as Logic          | 3075 |     0 |          0 |     47200 |  6.51 |
 |   LUT as Memory         |    0 |     0 |          0 |     19000 |  0.00 |
-| Slice Registers         | 2540 |     0 |          0 |     94400 |  2.69 |
-|   Register as Flip Flop | 2540 |     0 |          0 |     94400 |  2.69 |
+| Slice Registers         | 2542 |     0 |          0 |     94400 |  2.69 |
+|   Register as Flip Flop | 2542 |     0 |          0 |     94400 |  2.69 |
 |   Register as Latch     |    0 |     0 |          0 |     94400 |  0.00 |
-| F7 Muxes                |  354 |     0 |          0 |     31700 |  1.12 |
+| F7 Muxes                |  398 |     0 |          0 |     31700 |  1.26 |
 | F8 Muxes                |    1 |     0 |          0 |     15850 | <0.01 |
 +-------------------------+------+-------+------------+-----------+-------+
 * Warning! The Final LUT count, after physical optimizations and full implementation, is typically lower. Run opt_design after synthesis, if not already completed, for a more realistic count.
@@ -59,7 +59,7 @@ Warning! LUT value is adjusted to account for LUT combining.
 | 0     |          Yes |           - |          Set |
 | 0     |          Yes |           - |        Reset |
 | 87    |          Yes |         Set |            - |
-| 2453  |          Yes |       Reset |            - |
+| 2455  |          Yes |       Reset |            - |
 +-------+--------------+-------------+--------------+
 
 
@@ -151,12 +151,12 @@ Warning! LUT value is adjusted to account for LUT combining.
 +-------------+------+---------------------+
 |   Ref Name  | Used | Functional Category |
 +-------------+------+---------------------+
-| FDRE        | 2453 |        Flop & Latch |
-| LUT6        | 1794 |                 LUT |
-| LUT5        |  802 |                 LUT |
-| LUT3        |  393 |                 LUT |
-| MUXF7       |  354 |               MuxFx |
-| LUT4        |  303 |                 LUT |
+| FDRE        | 2455 |        Flop & Latch |
+| LUT6        | 1788 |                 LUT |
+| LUT5        |  818 |                 LUT |
+| MUXF7       |  398 |               MuxFx |
+| LUT4        |  349 |                 LUT |
+| LUT3        |  292 |                 LUT |
 | LUT2        |  105 |                 LUT |
 | FDSE        |   87 |        Flop & Latch |
 | LUT1        |   33 |                 LUT |

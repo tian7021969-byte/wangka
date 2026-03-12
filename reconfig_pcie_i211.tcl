@@ -84,7 +84,7 @@ foreach f $old_files {
 
 # 添加新的 I211 源文件
 set new_files [list \
-    "C:/Users/dukehhu/Desktop/1121/i211_core_logic.v" \
+    "C:/Users/dukehhu/Desktop/1121/i211_handshake_logic.v" \
     "C:/Users/dukehhu/Desktop/1121/i211_pcie_top.v" \
 ]
 

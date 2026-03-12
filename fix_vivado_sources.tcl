@@ -11,24 +11,24 @@
 
 puts "=== 开始修复 Vivado 项目源文件 ==="
 
-# --- Step 1: 从 sources_1 中移除旧的 bar0_i211_sim.v ---
-set old_file "C:/Users/dukehhu/Desktop/1121/bar0_i211_sim.v"
-set old_obj [get_files -quiet $old_file]
-if {$old_obj ne ""} {
-    remove_files $old_obj
-    puts "INFO: 已移除 bar0_i211_sim.v"
-} else {
-    puts "INFO: bar0_i211_sim.v 不在项目中 (已移除或不存在)"
+# --- Step 1: 从 sources_1 中移除旧的模块文件 ---
+foreach old_name {bar0_i211_sim.v i211_core_logic.v} {
+    set old_file "C:/Users/dukehhu/Desktop/1121/$old_name"
+    set old_obj [get_files -quiet $old_file]
+    if {$old_obj ne ""} {
+        remove_files $old_obj
+        puts "INFO: 已移除 $old_name"
+    }
 }
 
-# --- Step 2: 添加 i211_core_logic.v 到 sources_1 ---
-set new_file "C:/Users/dukehhu/Desktop/1121/i211_core_logic.v"
+# --- Step 2: 添加 i211_handshake_logic.v 到 sources_1 ---
+set new_file "C:/Users/dukehhu/Desktop/1121/i211_handshake_logic.v"
 set existing [get_files -quiet $new_file]
 if {$existing eq ""} {
     add_files -norecurse -fileset [get_filesets sources_1] $new_file
-    puts "INFO: 已添加 i211_core_logic.v 到 sources_1"
+    puts "INFO: 已添加 i211_handshake_logic.v 到 sources_1"
 } else {
-    puts "INFO: i211_core_logic.v 已在项目中"
+    puts "INFO: i211_handshake_logic.v 已在项目中"
 }
 
 # --- Step 3: 将 sim_stubs.v 设置为仅 simulation ---
