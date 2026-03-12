@@ -2,8 +2,8 @@
 # Vivado v2022.2 (64-bit)
 # SW Build 3671981 on Fri Oct 14 05:00:03 MDT 2022
 # IP Build 3669848 on Fri Oct 14 08:30:02 MDT 2022
-# Start of session at: Thu Mar 12 00:14:14 2026
-# Process ID: 37428
+# Start of session at: Thu Mar 12 17:28:44 2026
+# Process ID: 70920
 # Current directory: C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.runs/pcie_7x_0_synth_1
 # Command line: vivado.exe -log pcie_7x_0.vds -product Vivado -mode batch -messageDb vivado.pb -notrace -source pcie_7x_0.tcl
 # Log file: C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.runs/pcie_7x_0_synth_1/pcie_7x_0.vds
@@ -19,10 +19,10 @@ INFO: [Common 17-349] Got license for feature 'Synthesis' and/or device 'xc7a75t
 INFO: [Device 21-403] Loading part xc7a75tfgg484-2
 INFO: [Synth 8-7079] Multithreading enabled for synth_design using a maximum of 2 processes.
 INFO: [Synth 8-7078] Launching helper process for spawning children vivado processes
-INFO: [Synth 8-7075] Helper process launched with PID 62016
+INFO: [Synth 8-7075] Helper process launched with PID 72784
 INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
 ---------------------------------------------------------------------------------
-Starting RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:04 . Memory (MB): peak = 1225.449 ; gain = 406.934
+Starting RTL Elaboration : Time (s): cpu = 00:00:01 ; elapsed = 00:00:04 . Memory (MB): peak = 1227.016 ; gain = 407.086
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-6157] synthesizing module 'pcie_7x_0' [c:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/synth/pcie_7x_0.v:53]
 INFO: [Synth 8-6157] synthesizing module 'pcie_7x_0_pcie2_top' [c:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/source/pcie_7x_0_pcie2_top.v:58]
@@ -236,18 +236,18 @@ WARNING: [Synth 8-7129] Port pipe_tx2_char_is_k[1] in module pcie_7x_0_gt_top is
 WARNING: [Synth 8-7129] Port pipe_tx2_char_is_k[0] in module pcie_7x_0_gt_top is either unconnected or has no load
 INFO: [Common 17-14] Message 'Synth 8-7129' appears 100 times and further instances of the messages will be disabled. Use the Tcl command set_msg_config to change the current settings.
 ---------------------------------------------------------------------------------
-Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 1366.527 ; gain = 548.012
+Finished RTL Elaboration : Time (s): cpu = 00:00:02 ; elapsed = 00:00:06 . Memory (MB): peak = 1368.316 ; gain = 548.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:03 ; elapsed = 00:00:07 . Memory (MB): peak = 1366.527 ; gain = 548.012
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:02 ; elapsed = 00:00:07 . Memory (MB): peak = 1368.316 ; gain = 548.387
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:03 ; elapsed = 00:00:07 . Memory (MB): peak = 1366.527 ; gain = 548.012
+Finished RTL Optimization Phase 1 : Time (s): cpu = 00:00:02 ; elapsed = 00:00:07 . Memory (MB): peak = 1368.316 ; gain = 548.387
 ---------------------------------------------------------------------------------
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.092 . Memory (MB): peak = 1372.211 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.089 . Memory (MB): peak = 1369.137 ; gain = 0.000
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'inst/inst/gt_top_i/pipe_wrapper_i/pipe_clock_int.pipe_clock_i/pclk_i1_bufgctrl.pclk_i1' of type 'BUFGCTRL' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'inst/inst/gt_top_i/pipe_wrapper_i/pipe_clock_int.pipe_clock_i/pclk_slave_bufgctrl.pclk_slave' of type 'BUFGCTRL' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 INFO: [Netlist 29-17] Analyzing 9 Unisim elements for replacement
@@ -270,22 +270,22 @@ Resolution: To avoid this warning, move constraints listed in [.Xil/pcie_7x_0_pr
 INFO: [Project 1-1714] 2 XPM XDC files have been applied to the design.
 Completed Processing XDC Constraints
 
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.002 . Memory (MB): peak = 1459.863 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.001 . Memory (MB): peak = 1456.504 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.056 . Memory (MB): peak = 1459.895 ; gain = 0.031
+Constraint Validation Runtime : Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.052 . Memory (MB): peak = 1456.504 ; gain = 0.000
 INFO: [Designutils 20-5008] Incremental synthesis strategy off
 INFO: [Synth 8-11241] undeclared symbol 'REGCCE', assumed default net type 'wire' [C:/Xilinx/Vivado/2022.2/data/verilog/src/unimacro/BRAM_SINGLE_MACRO.v:2170]
 ---------------------------------------------------------------------------------
-Finished Constraint Validation : Time (s): cpu = 00:00:06 ; elapsed = 00:00:14 . Memory (MB): peak = 1459.895 ; gain = 641.379
+Finished Constraint Validation : Time (s): cpu = 00:00:05 ; elapsed = 00:00:14 . Memory (MB): peak = 1456.504 ; gain = 636.574
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Loading Part and Timing Information
 ---------------------------------------------------------------------------------
 Loading part: xc7a75tfgg484-2
 ---------------------------------------------------------------------------------
-Finished Loading Part and Timing Information : Time (s): cpu = 00:00:06 ; elapsed = 00:00:14 . Memory (MB): peak = 1459.895 ; gain = 641.379
+Finished Loading Part and Timing Information : Time (s): cpu = 00:00:05 ; elapsed = 00:00:14 . Memory (MB): peak = 1456.504 ; gain = 636.574
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying 'set_property' XDC Constraints
@@ -296,7 +296,7 @@ Applied set_property KEEP_HIERARCHY = SOFT for inst. (constraint file  C:/Users/
 Applied set_property KEEP_HIERARCHY = SOFT for inst/inst/phy_lnk_up_cdc. (constraint file  auto generated constraint).
 Applied set_property KEEP_HIERARCHY = SOFT for inst/inst/pl_received_hot_rst_cdc. (constraint file  auto generated constraint).
 ---------------------------------------------------------------------------------
-Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:06 ; elapsed = 00:00:14 . Memory (MB): peak = 1459.895 ; gain = 641.379
+Finished applying 'set_property' XDC Constraints : Time (s): cpu = 00:00:05 ; elapsed = 00:00:14 . Memory (MB): peak = 1456.504 ; gain = 636.574
 ---------------------------------------------------------------------------------
 INFO: [Synth 8-802] inferred FSM for state register 'reg_state_eios_det_reg' in module 'pcie_7x_0_gt_rx_valid_filter_7x'
 INFO: [Synth 8-802] inferred FSM for state register 'fsm_reg' in module 'pcie_7x_0_gtp_pipe_reset'
@@ -445,7 +445,7 @@ INFO: [Synth 8-3354] encoded FSM with state register 'resetovrd.fsm_reg' using e
 ---------------------------------------------------------------------------------------------------
 INFO: [Synth 8-3354] encoded FSM with state register 'txsync_fsm.fsm_tx_reg' using encoding 'one-hot' in module 'pcie_7x_0_pipe_sync'
 ---------------------------------------------------------------------------------
-Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:06 ; elapsed = 00:00:15 . Memory (MB): peak = 1459.895 ; gain = 641.379
+Finished RTL Optimization Phase 2 : Time (s): cpu = 00:00:05 ; elapsed = 00:00:15 . Memory (MB): peak = 1456.504 ; gain = 636.574
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start RTL Component Statistics 
@@ -561,25 +561,25 @@ INFO: [Synth 8-3332] Sequential element (inst/gt_top_i/pipe_wrapper_i/pipe_lane[
 INFO: [Synth 8-3332] Sequential element (inst/gt_top_i/pipe_wrapper_i/pipe_lane[0].pipe_eq.pipe_eq_i/FSM_onehot_fsm_rx_reg[0]) is unused and will be removed from module pcie_7x_0_pcie2_top.
 INFO: [Synth 8-3332] Sequential element (inst/gt_top_i/pipe_wrapper_i/pipe_lane[0].pipe_sync_i/FSM_onehot_txsync_fsm.fsm_tx_reg[0]) is unused and will be removed from module pcie_7x_0_pcie2_top.
 ---------------------------------------------------------------------------------
-Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:07 ; elapsed = 00:00:19 . Memory (MB): peak = 1459.895 ; gain = 641.379
+Finished Cross Boundary and Area Optimization : Time (s): cpu = 00:00:06 ; elapsed = 00:00:19 . Memory (MB): peak = 1456.504 ; gain = 636.574
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Applying XDC Timing Constraints
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:09 ; elapsed = 00:00:23 . Memory (MB): peak = 1459.895 ; gain = 641.379
+Finished Applying XDC Timing Constraints : Time (s): cpu = 00:00:07 ; elapsed = 00:00:23 . Memory (MB): peak = 1456.504 ; gain = 636.574
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Timing Optimization
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Timing Optimization : Time (s): cpu = 00:00:09 ; elapsed = 00:00:24 . Memory (MB): peak = 1465.898 ; gain = 647.383
+Finished Timing Optimization : Time (s): cpu = 00:00:08 ; elapsed = 00:00:24 . Memory (MB): peak = 1470.539 ; gain = 650.609
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Technology Mapping
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Technology Mapping : Time (s): cpu = 00:00:10 ; elapsed = 00:00:25 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Finished Technology Mapping : Time (s): cpu = 00:00:08 ; elapsed = 00:00:25 . Memory (MB): peak = 1470.871 ; gain = 650.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start IO Insertion
@@ -597,37 +597,37 @@ Start Final Netlist Cleanup
 Finished Final Netlist Cleanup
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished IO Insertion : Time (s): cpu = 00:00:11 ; elapsed = 00:00:28 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Finished IO Insertion : Time (s): cpu = 00:00:09 ; elapsed = 00:00:28 . Memory (MB): peak = 1470.871 ; gain = 650.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Instances
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Instances : Time (s): cpu = 00:00:11 ; elapsed = 00:00:28 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Finished Renaming Generated Instances : Time (s): cpu = 00:00:09 ; elapsed = 00:00:28 . Memory (MB): peak = 1470.871 ; gain = 650.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Rebuilding User Hierarchy
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:11 ; elapsed = 00:00:28 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Finished Rebuilding User Hierarchy : Time (s): cpu = 00:00:09 ; elapsed = 00:00:28 . Memory (MB): peak = 1470.871 ; gain = 650.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Ports
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Ports : Time (s): cpu = 00:00:11 ; elapsed = 00:00:28 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Finished Renaming Generated Ports : Time (s): cpu = 00:00:09 ; elapsed = 00:00:28 . Memory (MB): peak = 1470.871 ; gain = 650.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Handling Custom Attributes
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Handling Custom Attributes : Time (s): cpu = 00:00:11 ; elapsed = 00:00:28 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Finished Handling Custom Attributes : Time (s): cpu = 00:00:09 ; elapsed = 00:00:28 . Memory (MB): peak = 1470.871 ; gain = 650.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start Renaming Generated Nets
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
-Finished Renaming Generated Nets : Time (s): cpu = 00:00:11 ; elapsed = 00:00:28 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Finished Renaming Generated Nets : Time (s): cpu = 00:00:09 ; elapsed = 00:00:28 . Memory (MB): peak = 1470.871 ; gain = 650.941
 ---------------------------------------------------------------------------------
 ---------------------------------------------------------------------------------
 Start ROM, RAM, DSP, Shift Register and Retiming Reporting
@@ -681,31 +681,31 @@ Report Cell Usage:
 |20    |FDSE          |    36|
 +------+--------------+------+
 ---------------------------------------------------------------------------------
-Finished Writing Synthesis Report : Time (s): cpu = 00:00:11 ; elapsed = 00:00:28 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Finished Writing Synthesis Report : Time (s): cpu = 00:00:10 ; elapsed = 00:00:28 . Memory (MB): peak = 1470.871 ; gain = 650.941
 ---------------------------------------------------------------------------------
 Synthesis finished with 0 errors, 0 critical warnings and 731 warnings.
-Synthesis Optimization Runtime : Time (s): cpu = 00:00:07 ; elapsed = 00:00:25 . Memory (MB): peak = 1465.949 ; gain = 554.066
-Synthesis Optimization Complete : Time (s): cpu = 00:00:11 ; elapsed = 00:00:28 . Memory (MB): peak = 1465.949 ; gain = 647.434
+Synthesis Optimization Runtime : Time (s): cpu = 00:00:07 ; elapsed = 00:00:26 . Memory (MB): peak = 1470.871 ; gain = 562.754
+Synthesis Optimization Complete : Time (s): cpu = 00:00:10 ; elapsed = 00:00:28 . Memory (MB): peak = 1470.871 ; gain = 650.941
 INFO: [Project 1-571] Translating synthesized netlist
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.059 . Memory (MB): peak = 1465.949 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00.051 . Memory (MB): peak = 1470.871 ; gain = 0.000
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'inst/inst/gt_top_i/pipe_wrapper_i/pipe_clock_int.pipe_clock_i/pclk_i1_bufgctrl.pclk_i1' of type 'BUFGCTRL' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 WARNING: [Netlist 29-345] The value of SIM_DEVICE on instance 'inst/inst/gt_top_i/pipe_wrapper_i/pipe_clock_int.pipe_clock_i/pclk_slave_bufgctrl.pclk_slave' of type 'BUFGCTRL' is 'ULTRASCALE'; it is being changed to match the current FPGA architecture, '7SERIES'. For functional simulation to match hardware behavior, the value of SIM_DEVICE should be changed in the source netlist. 
 INFO: [Netlist 29-17] Analyzing 21 Unisim elements for replacement
 INFO: [Netlist 29-28] Unisim Transformation completed in 0 CPU seconds
 INFO: [Project 1-570] Preparing netlist for logic optimization
 INFO: [Opt 31-138] Pushed 0 inverter(s) to 0 load pin(s).
-Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1483.266 ; gain = 0.000
+Netlist sorting complete. Time (s): cpu = 00:00:00 ; elapsed = 00:00:00 . Memory (MB): peak = 1484.363 ; gain = 0.000
 INFO: [Project 1-111] Unisim Transformation Summary:
 No Unisim elements were transformed.
 
-Synth Design complete, checksum: b5f79a4
+Synth Design complete, checksum: 5e2a5bb5
 INFO: [Common 17-83] Releasing license: Synthesis
 150 Infos, 118 Warnings, 0 Critical Warnings and 0 Errors encountered.
 synth_design completed successfully
-synth_design: Time (s): cpu = 00:00:13 ; elapsed = 00:00:32 . Memory (MB): peak = 1483.266 ; gain = 1061.695
+synth_design: Time (s): cpu = 00:00:10 ; elapsed = 00:00:32 . Memory (MB): peak = 1484.363 ; gain = 1061.949
 INFO: [Common 17-1381] The checkpoint 'C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.runs/pcie_7x_0_synth_1/pcie_7x_0.dcp' has been generated.
-INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP pcie_7x_0, cache-ID = 6997f7a0a57a459e
+INFO: [Coretcl 2-1648] Added synthesis output to IP cache for IP pcie_7x_0, cache-ID = fa70ddbbfcfe8d0b
 INFO: [Coretcl 2-1174] Renamed 10 cell refs.
 INFO: [Common 17-1381] The checkpoint 'C:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.runs/pcie_7x_0_synth_1/pcie_7x_0.dcp' has been generated.
 INFO: [runtcl-4] Executing : report_utilization -file pcie_7x_0_utilization_synth.rpt -pb pcie_7x_0_utilization_synth.pb
-INFO: [Common 17-206] Exiting Vivado at Thu Mar 12 00:14:57 2026...
+INFO: [Common 17-206] Exiting Vivado at Thu Mar 12 17:29:27 2026...

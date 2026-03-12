@@ -1,7 +1,7 @@
 // Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 // --------------------------------------------------------------------------------
 // Tool Version: Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
-// Date        : Thu Mar 12 00:14:57 2026
+// Date        : Thu Mar 12 17:29:27 2026
 // Host        : DUKEHHU-PC0 running 64-bit major release  (build 9200)
 // Command     : write_verilog -force -mode funcsim
 //               c:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/pcie_7x_0_sim_netlist.v
@@ -901,7 +901,7 @@ module pcie_7x_0
   (* cost_table = "1" *) 
   (* d1_sup = "0" *) 
   (* d2_sup = "0" *) 
-  (* dev_id = "7011" *) 
+  (* dev_id = "0011" *) 
   (* dev_port_type = "0000" *) 
   (* dis_scl_fctr_d0_state = "0" *) 
   (* dis_scl_fctr_d1_state = "0" *) 
@@ -931,7 +931,7 @@ module pcie_7x_0
   (* pwr_dis_d3_state = "00" *) 
   (* rev_id = "01" *) 
   (* slot_clk = "TRUE" *) 
-  (* subsys_id = "0080" *) 
+  (* subsys_id = "0081" *) 
   (* subsys_ven_id = "1102" *) 
   (* ven_id = "1102" *) 
   (* xrom_bar = "00000000" *) 
@@ -10548,7 +10548,7 @@ endmodule
 (* class_code = "040300" *) (* cmps = "2" *) (* con_scl_fctr_d0_state = "0" *) 
 (* con_scl_fctr_d1_state = "0" *) (* con_scl_fctr_d2_state = "0" *) (* con_scl_fctr_d3_state = "0" *) 
 (* cost_table = "1" *) (* d1_sup = "0" *) (* d2_sup = "0" *) 
-(* dev_id = "7011" *) (* dev_port_type = "0000" *) (* dis_scl_fctr_d0_state = "0" *) 
+(* dev_id = "0011" *) (* dev_port_type = "0000" *) (* dis_scl_fctr_d0_state = "0" *) 
 (* dis_scl_fctr_d1_state = "0" *) (* dis_scl_fctr_d2_state = "0" *) (* dis_scl_fctr_d3_state = "0" *) 
 (* dsi = "0" *) (* ep_l0s_accpt_lat = "000" *) (* ep_l1_accpt_lat = "111" *) 
 (* ext_tag_fld_sup = "FALSE" *) (* int_pin = "1" *) (* intx = "TRUE" *) 
@@ -10558,7 +10558,7 @@ endmodule
 (* pwr_con_d1_state = "00" *) (* pwr_con_d2_state = "00" *) (* pwr_con_d3_state = "00" *) 
 (* pwr_dis_d0_state = "00" *) (* pwr_dis_d1_state = "00" *) (* pwr_dis_d2_state = "00" *) 
 (* pwr_dis_d3_state = "00" *) (* rev_id = "01" *) (* slot_clk = "TRUE" *) 
-(* subsys_id = "0080" *) (* subsys_ven_id = "1102" *) (* ven_id = "1102" *) 
+(* subsys_id = "0081" *) (* subsys_ven_id = "1102" *) (* ven_id = "1102" *) 
 (* xrom_bar = "00000000" *) 
 module pcie_7x_0_pcie2_top
    (pci_exp_txn,
@@ -13391,7 +13391,7 @@ module pcie_7x_0_pcie_7x
         .CFGDEVCONTROLNOSNOOPEN(cfg_dcommand[11]),
         .CFGDEVCONTROLPHANTOMEN(cfg_dcommand[9]),
         .CFGDEVCONTROLURERRREPORTINGEN(cfg_dcommand[3]),
-        .CFGDEVID({1'b0,1'b1,1'b1,1'b1,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b1,1'b0,1'b0,1'b0,1'b1}),
+        .CFGDEVID({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b1,1'b0,1'b0,1'b0,1'b1}),
         .CFGDEVSTATUSCORRERRDETECTED(cfg_dstatus[0]),
         .CFGDEVSTATUSFATALERRDETECTED(cfg_dstatus[2]),
         .CFGDEVSTATUSNONFATALERRDETECTED(cfg_dstatus[1]),
@@ -13500,7 +13500,7 @@ module pcie_7x_0_pcie_7x
         .CFGROOTCONTROLSYSERRFATALERREN(cfg_root_control_syserr_fatal_err_en),
         .CFGROOTCONTROLSYSERRNONFATALERREN(cfg_root_control_syserr_non_fatal_err_en),
         .CFGSLOTCONTROLELECTROMECHILCTLPULSE(cfg_slot_control_electromech_il_ctl_pulse),
-        .CFGSUBSYSID({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b1,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0}),
+        .CFGSUBSYSID({1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b1,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b1}),
         .CFGSUBSYSVENDID({1'b0,1'b0,1'b0,1'b1,1'b0,1'b0,1'b0,1'b1,1'b0,1'b0,1'b0,1'b0,1'b0,1'b0,1'b1,1'b0}),
         .CFGTRANSACTION(pcie_block_i_n_84),
         .CFGTRANSACTIONADDR({pcie_block_i_n_1097,pcie_block_i_n_1098,pcie_block_i_n_1099,pcie_block_i_n_1100,pcie_block_i_n_1101,pcie_block_i_n_1102,pcie_block_i_n_1103}),

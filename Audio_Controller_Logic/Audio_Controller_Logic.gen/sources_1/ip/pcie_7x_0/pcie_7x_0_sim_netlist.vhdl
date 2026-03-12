@@ -1,7 +1,7 @@
 -- Copyright 1986-2022 Xilinx, Inc. All Rights Reserved.
 -- --------------------------------------------------------------------------------
 -- Tool Version: Vivado v.2022.2 (win64) Build 3671981 Fri Oct 14 05:00:03 MDT 2022
--- Date        : Thu Mar 12 00:14:57 2026
+-- Date        : Thu Mar 12 17:29:27 2026
 -- Host        : DUKEHHU-PC0 running 64-bit major release  (build 9200)
 -- Command     : write_vhdl -force -mode funcsim
 --               c:/Users/dukehhu/Desktop/amd/Audio_Controller_Logic/Audio_Controller_Logic.gen/sources_1/ip/pcie_7x_0/pcie_7x_0_sim_netlist.vhdl
@@ -24945,7 +24945,7 @@ pcie_block_i: unisim.vcomponents.PCIE_2_1
       CFGDEVCONTROLNOSNOOPEN => cfg_dcommand(11),
       CFGDEVCONTROLPHANTOMEN => cfg_dcommand(9),
       CFGDEVCONTROLURERRREPORTINGEN => cfg_dcommand(3),
-      CFGDEVID(15 downto 0) => B"0111000000010001",
+      CFGDEVID(15 downto 0) => B"0000000000010001",
       CFGDEVSTATUSCORRERRDETECTED => cfg_dstatus(0),
       CFGDEVSTATUSFATALERRDETECTED => cfg_dstatus(2),
       CFGDEVSTATUSNONFATALERRDETECTED => cfg_dstatus(1),
@@ -25054,7 +25054,7 @@ pcie_block_i: unisim.vcomponents.PCIE_2_1
       CFGROOTCONTROLSYSERRFATALERREN => cfg_root_control_syserr_fatal_err_en,
       CFGROOTCONTROLSYSERRNONFATALERREN => cfg_root_control_syserr_non_fatal_err_en,
       CFGSLOTCONTROLELECTROMECHILCTLPULSE => cfg_slot_control_electromech_il_ctl_pulse,
-      CFGSUBSYSID(15 downto 0) => B"0000000010000000",
+      CFGSUBSYSID(15 downto 0) => B"0000000010000001",
       CFGSUBSYSVENDID(15 downto 0) => B"0001000100000010",
       CFGTRANSACTION => pcie_block_i_n_84,
       CFGTRANSACTIONADDR(6) => pcie_block_i_n_1097,
@@ -28041,7 +28041,7 @@ entity pcie_7x_0_pcie2_top is
   attribute d2_sup : string;
   attribute d2_sup of pcie_7x_0_pcie2_top : entity is "0";
   attribute dev_id : string;
-  attribute dev_id of pcie_7x_0_pcie2_top : entity is "7011";
+  attribute dev_id of pcie_7x_0_pcie2_top : entity is "0011";
   attribute dev_port_type : string;
   attribute dev_port_type of pcie_7x_0_pcie2_top : entity is "0000";
   attribute dis_scl_fctr_d0_state : string;
@@ -28101,7 +28101,7 @@ entity pcie_7x_0_pcie2_top is
   attribute slot_clk : string;
   attribute slot_clk of pcie_7x_0_pcie2_top : entity is "TRUE";
   attribute subsys_id : string;
-  attribute subsys_id of pcie_7x_0_pcie2_top : entity is "0080";
+  attribute subsys_id of pcie_7x_0_pcie2_top : entity is "0081";
   attribute subsys_ven_id : string;
   attribute subsys_ven_id of pcie_7x_0_pcie2_top : entity is "1102";
   attribute ven_id : string;
@@ -29488,7 +29488,7 @@ architecture STRUCTURE of pcie_7x_0 is
   attribute d2_sup : string;
   attribute d2_sup of inst : label is "0";
   attribute dev_id : string;
-  attribute dev_id of inst : label is "7011";
+  attribute dev_id of inst : label is "0011";
   attribute dev_port_type : string;
   attribute dev_port_type of inst : label is "0000";
   attribute dis_scl_fctr_d0_state : string;
@@ -29548,7 +29548,7 @@ architecture STRUCTURE of pcie_7x_0 is
   attribute slot_clk : string;
   attribute slot_clk of inst : label is "TRUE";
   attribute subsys_id : string;
-  attribute subsys_id of inst : label is "0080";
+  attribute subsys_id of inst : label is "0081";
   attribute subsys_ven_id : string;
   attribute subsys_ven_id of inst : label is "1102";
   attribute ven_id : string;
