@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="synth_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773324968" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/hda_pcie_top.dcp">
+<GenRun Id="synth_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773327867" LaunchIncrCheckpoint="$PSRCDIR/utils_1/imports/synth_1/hda_pcie_top.dcp">
   <File Type="PA-TCL" Name="i211_pcie_top.tcl"/>
   <File Type="RDS-PROPCONSTRS" Name="i211_pcie_top_drc_synth.rpt"/>
   <File Type="REPORTS-TCL" Name="i211_pcie_top_reports.tcl"/>
@@ -32,7 +32,7 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PPRDIR/../bar0_i211_sim.v">
+    <File Path="$PPRDIR/../i211_core_logic.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>

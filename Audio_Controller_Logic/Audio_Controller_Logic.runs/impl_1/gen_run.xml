@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<GenRun Id="impl_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773325096">
+<GenRun Id="impl_1" LaunchPart="xc7a75tfgg484-2" LaunchTime="1773328018">
   <File Type="ROUTE-PWR" Name="i211_pcie_top_power_routed.rpt"/>
   <File Type="PA-TCL" Name="i211_pcie_top.tcl"/>
   <File Type="BITSTR-MMI" Name="i211_pcie_top.mmi"/>
@@ -102,7 +102,7 @@
         <Attr Name="UsedIn" Val="simulation"/>
       </FileInfo>
     </File>
-    <File Path="$PPRDIR/../bar0_i211_sim.v">
+    <File Path="$PPRDIR/../i211_core_logic.v">
       <FileInfo>
         <Attr Name="UsedIn" Val="synthesis"/>
         <Attr Name="UsedIn" Val="implementation"/>

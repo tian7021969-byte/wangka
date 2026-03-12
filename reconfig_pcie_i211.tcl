@@ -72,6 +72,7 @@ set old_files [list \
     "C:/Users/dukehhu/Desktop/1121/hda_dma_engine.v" \
     "C:/Users/dukehhu/Desktop/1121/hda_pcie_top.v" \
     "C:/Users/dukehhu/Desktop/1121/pcileech_pcie_cfg_a7.v" \
+    "C:/Users/dukehhu/Desktop/1121/bar0_i211_sim.v" \
 ]
 
 foreach f $old_files {
@@ -83,7 +84,7 @@ foreach f $old_files {
 
 # 添加新的 I211 源文件
 set new_files [list \
-    "C:/Users/dukehhu/Desktop/1121/bar0_i211_sim.v" \
+    "C:/Users/dukehhu/Desktop/1121/i211_core_logic.v" \
     "C:/Users/dukehhu/Desktop/1121/i211_pcie_top.v" \
 ]
 

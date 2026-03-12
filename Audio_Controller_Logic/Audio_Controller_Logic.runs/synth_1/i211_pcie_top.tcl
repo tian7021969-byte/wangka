@@ -70,7 +70,6 @@ proc create_report { reportName command } {
   }
 }
 OPTRACE "synth_1" START { ROLLUP_AUTO }
-set_param chipscope.maxJobs 6
 OPTRACE "Creating in-memory project" START { }
 create_project -in_memory -part xc7a75tfgg484-2
 
@@ -91,7 +90,7 @@ read_verilog -library xil_defaultlib {
   C:/Users/dukehhu/Desktop/1121/tlp_tag_randomizer.v
   C:/Users/dukehhu/Desktop/1121/tx_arbiter.v
   C:/Users/dukehhu/Desktop/1121/tlp_rx_router.v
-  C:/Users/dukehhu/Desktop/1121/bar0_i211_sim.v
+  C:/Users/dukehhu/Desktop/1121/i211_core_logic.v
   C:/Users/dukehhu/Desktop/1121/i211_pcie_top.v
 }
 read_ip -quiet C:/Users/dukehhu/Desktop/1121/Audio_Controller_Logic/Audio_Controller_Logic.srcs/sources_1/ip/pcie_7x_0/pcie_7x_0.xci

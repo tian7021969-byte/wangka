@@ -386,10 +386,10 @@ module i211_pcie_top (
     assign user_rst_n = ~user_reset;
 
     // ===================================================================
-    //  BAR0 I211 Register Emulation
+    //  BAR0 I211 Core Register Logic
     // ===================================================================
 
-    bar0_i211_sim u_bar0_sim (
+    i211_core_logic u_bar0_sim (
         .clk                (user_clk),
         .rst_n              (user_rst_n),
         .completer_id       (completer_id),
