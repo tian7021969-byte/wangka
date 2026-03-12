@@ -40,6 +40,10 @@ module i211_handshake_logic (
     // Configuration info (from PCIe IP)
     input  wire [15:0]  completer_id,       // Bus/Dev/Func
 
+    // Power Management state (from PCIe IP via top)
+    // 2'b00 = D0 (fully active), 2'b11 = D3
+    input  wire [ 1:0]  cfg_pmcsr_powerstate,
+
     // LFSR seed (from top level)
     input  wire [15:0]  jitter_seed,
 
@@ -324,6 +328,13 @@ module i211_handshake_logic (
     //
     //  During RST: bit 21 (PF_RST_DONE) = 0 -> 32'h80080303
     //  Normal:     bit 21 = 1             -> 32'h80280303
+    //
+    //  Power State awareness:
+    //  The status register always reports Link Up (0x80080303 / 0x80280303)
+    //  regardless of PMCSR power state, because:
+    //    1. We force D0 via cfg_pm_force_state in i211_pcie_top.v
+    //    2. The driver expects Link Up after writing PMCSR to D0
+    //    3. If we returned 0 during D3, the driver would see a dead device
     // ===================================================================
     wire [31:0] reg_status = rst_active ?
         32'h8008_0303 :    // During reset: PF_RST_DONE=0
